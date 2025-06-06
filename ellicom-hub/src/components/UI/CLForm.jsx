@@ -52,7 +52,7 @@ const CLForm = () => {
         <div className='flex flex-col items-center justify-center  mt-20'>
           <button
             type="submit"
-            className="flex p-6 bg-sea hover:bg-high text-ground font-bold py-2 rounded-lg transition-all ease-in-out duration-200"
+            className="flex p-6 bg-sea hover:bg-high text-ground font-bold py-2 rounded-lg transition-all ease-in-out duration-200 -mt-6"
             >
             Enter
           </button>

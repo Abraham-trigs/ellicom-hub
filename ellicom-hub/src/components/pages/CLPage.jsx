@@ -1,6 +1,7 @@
 import React from 'react'
 import Logo from '../UI/logo';
 import CLForm from '../UI/CLForm';
+import SocialLoginButtons from '../UI/SocialLoginButtons';
 
 const CLPage = () => {
   return (
@@ -37,8 +38,13 @@ const CLPage = () => {
             User Login </p>
         </div>
 
-        <div className='mt-10'>
+        <div className='mt-3'>
             <CLForm />
+        </div>
+
+        <div className='flex flex-col justify-center items-center scale-70 -mt-4 '>
+          <p className='text-head text-2xl scale-93 mb-8'>or</p>
+            <SocialLoginButtons />
         </div>
 
         <div className='mt-10'>
