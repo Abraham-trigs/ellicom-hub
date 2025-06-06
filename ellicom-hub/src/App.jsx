@@ -1,19 +1,16 @@
-import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import WelcomPage from './components/pages/WelcomPage';
+import CLPage from './components/pages/CLPage';
 
 function App() {
-
   return (
-    <>
-    <div>
-      <WelcomPage />
-    </div>
-    {/* <div className=' flex items-center justify-center  px-4 p-4 bg-sea'>
-      <Logo />
-      <h1 className='font-semibold'>Heloo</h1>
-    </div> */}
-    </>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<WelcomPage />} />
+        <Route path="/Login" element={<CLPage />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

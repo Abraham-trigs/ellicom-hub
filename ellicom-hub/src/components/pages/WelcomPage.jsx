@@ -30,27 +30,27 @@ const WelcomPage = () => {
         </div>
       </div>
       
-      <div className='scale-80 -mt-5'>
+      <div className='scale-60 -mt-5'>
         <NewJobButton />
       </div>
 
-      <div className='py-5'>
+      <div className='py-2 scale-90'>
         <ClientLoginButton />
       </div>
       
       <div>
-        <p className='text-head text-(0.7rem) font-light text-center -mt-1 '> 
+        <p className='text-head text-(0.7rem) font-light text-center mt-1 '> 
           Admin / Staff 
         </p>
       </div>
 
-      <div className="mt-4 flex flex-col items-center justify-center">
-        <div className="-mb-14 scale-80">
+      <div className="mt-6 flex flex-col items-center justify-center">
+        <div className="-mb-12">
           <AvailableNow />
         </div>
       </div>
 
-      <div className='mt-14'>
+      <div className='mt-17'>
         <p className='text-gold text-(0.7rem) font-light text-center -mt-1 '> 
           Contact Us
         </p>
