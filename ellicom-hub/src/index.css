@@ -5,7 +5,7 @@
   --color-gold: #F8E539;
   --color-high: #FFB300;
   --color-highGold: #FFFB72;
-  --color-ground: #040627;
+  --color-ground: #000321;
   --color-container: #010210;
   --color-inactive: #B6AE46;
   --color-head: #FFFFFF;
@@ -19,5 +19,5 @@
 }
 
  body {
-    @apply m-0 bg-ground m-3;
+    @apply m-0 bg-ground m-2;
   }
