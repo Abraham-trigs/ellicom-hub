@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
+import ellicom_logo from '@/assets/images/ellicom_logo.svg';
 
-const logo = () => {
-  return (
-    <div><img src="/assets/images/ellicom-logo.svg" alt="ellicom_logo" /></div>
-  )
-}
+const Logo = () => {
+  return <img src={ellicom_logo} alt="Ellicom Logo" />;
+};
 
-export default logo
+export default Logo;

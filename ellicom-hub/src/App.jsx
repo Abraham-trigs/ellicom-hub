@@ -1,13 +1,15 @@
-import { useState } from 'react'
-import Homepage from './components/UI/Homepage'
+import { useState } from 'react';
+import Logo from './components/UI/logo';
 
 function App() {
 
   return (
     <>
-    <Homepage />
+    <div className=' w-3xs h-auto flex-col items-center bg-sea'>
+      <Logo />
+    </div>
     </>
   )
 }
 
-export default App
+export default App;
