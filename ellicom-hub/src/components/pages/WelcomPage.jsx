@@ -2,7 +2,8 @@ import React from 'react';
 import Logo from '../UI/logo';
 import NewJobButton from '../UI/NewJobButton';
 import ClientLoginButton from '../UI/ClientLoginButton';
-import AvailableButton from '../UI/AvailableButton';
+import AvailableButton from '../UI/AvailableNow';
+import AvailableNow from '../UI/AvailableNow';
 
 const WelcomPage = () => {
   return (
@@ -43,19 +44,13 @@ const WelcomPage = () => {
         </p>
       </div>
 
-      <div className="mt-8 flex flex-col items-center justify-center">
+      <div className="mt-4 flex flex-col items-center justify-center">
         <div className="-mb-14 scale-80">
-          <AvailableButton />
-        </div>
-
-        <div className="flex flex-wrap justify-center items-center gap-4 mt-5 w-full h-40 border-y-2 border-sea">
-          <div className="w-20 h-25 rounded-lg border-2 border-sea bg-head -mb-5"></div>
-          <div className="w-20 h-25 rounded-lg border-2 border-sea bg-head -mb-5"></div>
-          <div className="w-20 h-25 rounded-lg border-2 border-sea bg-head -mb-5"></div>
+          <AvailableNow />
         </div>
       </div>
 
-      <div className='mt-4'>
+      <div className='mt-14'>
         <p className='text-gold text-(0.7rem) font-light text-center -mt-1 '> 
           Contact Us
         </p>
