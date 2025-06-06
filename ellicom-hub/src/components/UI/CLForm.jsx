@@ -29,7 +29,7 @@ const CLForm = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            className="w-full px-4 py-2 rounded-lg border-b-2 border-inactive text-head focus:outline-none focus:ring-2 focus:ring-sea"
+            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-2 focus:ring-sea"
           />
         </div>
 
@@ -45,11 +45,11 @@ const CLForm = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            className="w-full px-4 py-2 rounded-lg border-b-2 border-inactive text-head focus:outline-none focus:ring-2 focus:ring-sea"
+            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-2 focus:ring-sea"
           />
         </div>
 
-        <div className='flex flex-col items-center justify-center mt-20'>
+        <div className='flex flex-col items-center justify-center  mt-20'>
           <button
             type="submit"
             className="flex p-6 bg-sea hover:bg-high text-ground font-bold py-2 rounded-lg transition-all ease-in-out duration-200"

@@ -37,11 +37,11 @@ const CLPage = () => {
             User Login </p>
         </div>
 
-        <div className='mt-20'>
+        <div className='mt-10'>
             <CLForm />
         </div>
 
-        <div className='mt-17'>
+        <div className='mt-10'>
           <p className='text-gold text-(0.7rem) font-light text-center -mt-1 '> 
             Contact Us
           </p>
