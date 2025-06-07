@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import Logo from './logo';
 import useMediaQuery from '../hooks/MediaQuery';
+
+
 // Animation variants
 const fadeSlide = {
   hidden: { opacity: 0, y: 10 },
@@ -78,8 +80,8 @@ const NavBar = () => {
                 )}
               </AnimatePresence>
             </Link>
-
-            {/* Separator for desktop */}
+{/* 
+            Separator for desktop
             <AnimatePresence mode="wait">
               {isDesktop && index !== navItems.length - 1 && (
                 <motion.span
@@ -90,10 +92,10 @@ const NavBar = () => {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
                 >
-                  |
+                  
                 </motion.span>
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
           </div>
         ))}
       </div>

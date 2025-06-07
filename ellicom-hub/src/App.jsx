@@ -8,7 +8,6 @@ import Home from './components/pages/Home';
 function App() {
   return (
     <>
-    <router>
         <LayoutWithNav>
           <Routes>
             <Route path="/" element={<WelcomPage />} />
@@ -17,7 +16,6 @@ function App() {
             <Route path="/Home" element={<Home />} />
           </Routes>
         </LayoutWithNav>
-      </router>
     </>
   )
 }
