@@ -11,7 +11,9 @@ const LayoutWithNav = ({ children }) => {
   return (
     <>
       {!shouldHideNav && <NavBar />}
-      <main>{children}</main>
+      <main className={!shouldHideNav ? 'pt-10' : ''}>
+        {children}
+      </main>
     </>
   );
 };

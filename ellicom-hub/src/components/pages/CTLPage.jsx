@@ -1,6 +1,6 @@
 import React from 'react'
 import Logo from '../UI/logo';
-import CLForm from '../UI/CLForm';
+import CLForm from '../UI/CTLForm';
 import SocialLoginButtons from '../UI/SocialLoginButtons';
 
 const CLPage = () => {
