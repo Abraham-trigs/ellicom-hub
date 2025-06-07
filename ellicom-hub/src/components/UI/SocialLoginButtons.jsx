@@ -25,20 +25,17 @@ const providers = [
     bg: 'bg-blue-400',
   },
   {
-    name: 'GitHub',
-    icon: <FaGithub className="text-2xl text-gold" />,
-    bg: 'bg-gray-800',
+    name: 'Apple',
+    icon: <FaApple className="text-2xl text-gold" />,
+    bg: 'bg-black',
   },
+
   {
     name: 'Microsoft',
     icon: <FaMicrosoft className="text-2xl text-gold" />,
     bg: 'bg-blue-700',
   },
-  {
-    name: 'Apple',
-    icon: <FaApple className="text-2xl text-gold" />,
-    bg: 'bg-black',
-  },
+  
 ];
 
 const SocialLoginButtons = () => {
@@ -53,7 +50,7 @@ const SocialLoginButtons = () => {
         <button
           key={provider.name}
           onClick={() => handleLogin(provider.name)}
-          className={`px-3 py-2 shadow-md hover:scale-110 transition-all duration-200`}
+          className={`px-3 py-2 shadow-md hover:scale-110 hover:scale- transition-all duration-200`}
           aria-label={`Login with ${provider.name}`}
         >
           {provider.icon}

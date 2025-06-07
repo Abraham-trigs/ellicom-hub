@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useCLStore from '../store/CLStore';
+import useSLStore from '../store/SLStore';
 
-const CLForm = () => {
-  const { name, password, setName, setPassword, login } = useCLStore();
+const SLForm = () => {
+  const { name, password, setName, setPassword, login } = useSLStore();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -56,4 +56,4 @@ const CLForm = () => {
   );
 };
 
-export default CLForm;
+export default SLForm;

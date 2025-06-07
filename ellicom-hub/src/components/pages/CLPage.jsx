@@ -27,12 +27,7 @@ const CLPage = () => {
           </div>
 
         </div>
-
-
-        <div>
-
-        </div>
-
+        
         <div>
           <p className='text-head font-normal text-center mt-(-4) '> 
             User Login </p>
@@ -47,7 +42,7 @@ const CLPage = () => {
             <SocialLoginButtons />
         </div>
 
-        <div className='mt-10'>
+        <div className='mt-3'>
           <p className='text-gold text-(0.7rem) font-light text-center -mt-1 '> 
             Contact Us
           </p>

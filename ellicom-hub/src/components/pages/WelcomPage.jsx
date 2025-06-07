@@ -1,27 +1,35 @@
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Logo from '../UI/logo';
 import NewJobButton from '../UI/NewJobButton';
 import ClientLoginButton from '../UI/ClientLoginButton';
-import AvailableButton from '../UI/AvailableNow';
 import AvailableNow from '../UI/AvailableNow';
 
-const WelcomPage = () => {
+const WelcomePage = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/Staff-Login');
+  };
+
   return (
     <>
       <div>
-        <p className='text-head font-normal italic text-center mt-10 '> 
-          Welcome to</p>
+        <p className="text-head font-normal italic text-center mt-10"> 
+          Welcome to
+        </p>
       </div>
 
       <div>
-        <h1 className='text-gold font-black text-5xl text-center mt-2 '>
+        <h1 className="text-gold font-black text-5xl text-center mt-2">
           ELLICOM
         </h1>
       </div>
 
       <div>
-        <p className='text-head font-normal text-center mt-(-4) '> 
-          Advertising Ghana Ltd </p>
+        <p className="text-head font-normal text-center "> 
+          Advertising Ghana Ltd
+        </p>
       </div>
 
       <div className="flex items-center justify-center">
@@ -29,18 +37,21 @@ const WelcomPage = () => {
           <Logo />
         </div>
       </div>
-      
-      <div className='scale-60 -mt-5'>
+
+      <div className="scale-60 -mt-5">
         <NewJobButton />
       </div>
 
-      <div className='py-2 scale-90'>
+      <div className="py-2 scale-90">
         <ClientLoginButton />
       </div>
-      
+
       <div>
-        <p className='text-head text-(0.7rem) font-light text-center mt-1 '> 
-          Admin / Staff 
+        <p 
+          onClick={handleClick} 
+          className="cursor-pointer text-head text-[0.7rem] font-light text-center mt-1"
+        >
+          Admin / Staff
         </p>
       </div>
 
@@ -50,14 +61,13 @@ const WelcomPage = () => {
         </div>
       </div>
 
-      <div className='mt-17'>
-        <p className='text-gold text-(0.7rem) font-light text-center -mt-1 '> 
+      <div className="mt-17">
+        <p className="text-gold text-[0.7rem] font-light text-center -mt-1"> 
           Contact Us
         </p>
       </div>
-      
     </>
-  )
-}
+  );
+};
 
-export default WelcomPage;
+export default WelcomePage;
