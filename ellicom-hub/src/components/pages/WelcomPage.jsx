@@ -62,7 +62,7 @@ const WelcomePage = () => {
       </div>
 
       <div className="mt-17">
-        <p className="text-gold text-[0.7rem] font-light text-center -mt-1"> 
+        <p className="text-gold text-[0.9rem] font-light text-center -mt-1"> 
           Contact Us
         </p>
       </div>

@@ -1,17 +1,17 @@
 import React from 'react';
 import Logo from './logo';
 
-const Header = () => {
+const Head = () => {
   return (
-    <div className="   w-full h-auto  ">
+    <div className="flex flex-col justify-center items-center">
       <div className="flex items-center justify-center ">
-        <div className="px-4 py-9 w-40 md:w-60 lg:w-72 mt-15 object-contain">
+        <div className=" w-40 md:w-60 lg:w-72 mt-15 object-contain">
           <Logo />
         </div>
       </div>
 
       <div>
-        <h1 className="text-gold font-black text-5xl text-center -mt-8">
+        <h1 className="text-gold font-black text-5xl text-center">
           ELLICOM
         </h1>
       </div>
@@ -27,4 +27,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Head;

@@ -38,7 +38,7 @@ const CLPage = () => {
         </div>
 
         <div className='flex flex-col justify-center items-center scale-70 -mt-4 '>
-          <p className='text-head text-2xl scale-93 mb-8'>or</p>
+          <p className='text-head text-2xl scale-93 mb-8'>- or -</p>
             <SocialLoginButtons />
         </div>
 

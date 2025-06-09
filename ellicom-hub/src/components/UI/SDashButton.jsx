@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const CTDashButton = () => {
+const SDashButton = () => {
   return (
     <div className='items-center justify-center'>
       <Link to="/User-Dashboard">
@@ -14,4 +14,4 @@ const CTDashButton = () => {
   )
 }
 
-export default CTDashButton;
+export default SDashButton;
