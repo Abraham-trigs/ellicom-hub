@@ -6,6 +6,7 @@ import SLpage from './components/pages/SLPage';
 import Home from './components/pages/Home';
 import SDashboard from './components/pages/SDashboard';
 import CTDashboard from './components/pages/CTDashboard';
+import AddJob from './components/pages/AddJob';
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <Route path="/Home" element={<Home />} />
             <Route path="/Staff-Dashboard" element={<SDashboard />} />
             <Route path="/User-Dashboard" element={<CTDashboard />} />
-
+            <Route path="/AddJob" element={<AddJob />} />
           </Routes>
         </LayoutWithNav>
     </>

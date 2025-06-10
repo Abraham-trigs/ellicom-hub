@@ -2,7 +2,7 @@ import React from 'react'
 import NewJobButton from '../UI/NewJobButton';
 import CTSideBar from '../UI/CTSideBar';
 import Head from '../UI/Head';
-import SJobHolder from '../UI/SJobHolder';
+import CTJobHolder from '../UI/CTJobholder';
 
 const CTDashboard = () => {
   return (
@@ -29,11 +29,11 @@ const CTDashboard = () => {
         </div>
       </div>
 
-      <div>
-      </div>
+      {/* <div>
+      </div> */}
 
       <div>
-        <SJobHolder />
+        <CTJobHolder />
       </div>
 
     </>
