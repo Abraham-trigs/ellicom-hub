@@ -1,88 +1,60 @@
-import React from 'react'
+import React from 'react';
+import Logo from '../UI/logo';
+import NewJobButton from '../UI/NewJobButton';
 import CTSideBar from '../UI/CTSideBar';
 import Head from '../UI/Head';
-import Logo from '../UI/logo';
 
-const AddJob = () => {
+const  CTAddJob= () => {
   return (
     <>
-    <div>
-      <div className='border-gold border-b-1 h-25 mb-5'>
-        <div className=" mt-20 flex flex-row-reverse justify-between  items-center   ">
-          <div className="">
-            <div className=' -mt-30'>
-              <CTSideBar />
-            </div>
-          </div>
-          <div className='scale-50 -mt-37 ml-20'>
-            <Head />
+      <div className='border-gold border-b-1 h-23 mb-5'>
+        <div className=" mt-10 flex flex-col justify-end">
+
+        <div className="w-full ">
+
+          {/* <div className='scale-50'>
+            <NewJobButton />
+          </div> */}
+
+          <div className=' flex flex-row justify-end'>
+            <CTSideBar />
           </div>
         </div>
 
       </div>
+
+    <div className='scale-50 -mt-27'>
+      <Head />
     </div>
+      </div>
 
-    <div className='ml-3'>
-        <div className='mb-1 font-bold text-center'>ID-EAG095</div>
-
-        <div className='w-45 h-25 bg-power rounded-2xl mb-2'>
-          <div className='flex flex-col justify-center item-center'>
-            <button className='text-head font-bold text-center p-1 px-2 '>Status</button>
-          </div>
-
-          <div className='flex flex-col items-center'>;
-
-            {/* pecentage Gauge */}
-            <div className=' bg-head w-40 h-10 -my-4 rounded-2xl '></div>
-          </div>
-
-        </div>
-
-        {/* Name of Job Supevisor */}
-        <div className='w-full h-auto flex flex-row  '>
-          <div className='bg-ground rounded-md w-30 text-center text-head '>Supervisor</div>  
-          <div className='text-ground ml-1'>Ebenezer  </div>
-        </div>
-    </div>
-
-    <div className='-ml-3'>
-
-        <div className=' -ml-6 flex flex-row justify-center items-center'>
-
-          <div className='flex w-12 h-20 bg-power rounded-b-2xl mb-4 '>
-
-            <div className='scale-75 '>
-              <Logo />
-              <p className='text-gold text-center  '>
-                Print
-              </p>
-            </div>
-
-          </div>
-        </div>
-
-        <div className='flex flex-col justify-center items-center '>
-
-          <button className='bg-high p-1 rounded-sm px-3 font-medium ml-3'>
-            Details
+      <div className=" w-full  h-100 rounded-2xl flex flex-col items-center justify-center border-1 border-sea -mt-4">
+        {/* Scaled Button */}
+        <div className="-mt-57 flex flex-col justify-center items-center object-contain">
+          <button className="bg-sea rounded-b-2xl p-2 px-5 font-bold scale-75 text-Ground mb-3 object-contain">
+            My Jobs
           </button>
-        
+          
+          {/* Job Card */}
+          <div className="">
+            {/* main Add Job Container */}
+            <div className="flex flex-row justify-between items-center  w-70 h-35 rounded-3xl border-2 bg-container -mt-3 ">
+              <div className=" w-35 h-30 rounded-3xl border-2 border-sea bg-NeonSea "></div>
+              <div className=" w-35 h-30 rounded-3xl border-2 border-sea bg-NeonSea "></div>
+            </div>
+          </div>
+
         </div>
 
-    </div>
-
-
-    
-
-
+      </div>
     </>
 
-  
+
+  );
+};
+
+export default CTAddJob;
 
 
 
 
-  )
-}
-
-export default AddJob;
