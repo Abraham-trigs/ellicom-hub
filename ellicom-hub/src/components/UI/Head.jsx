@@ -5,7 +5,7 @@ const Head = () => {
   return (
     <div className="flex flex-col justify-center items-center">
       <div className="flex items-center justify-center ">
-        <div className=" w-40 md:w-60 lg:w-72 mt-15 object-contain">
+        <div className=" w-30 h-auto md:w-60 lg:w-72 object-contain">
           <Logo />
         </div>
       </div>
@@ -18,7 +18,7 @@ const Head = () => {
 
       <div>
         {/* Correct negative margin */}
-        <p className="text-head font-normal text-center ">
+        <p className="text-head font-normal text-center text-2xl">
           Advertising Ghana Ltd
         </p>
       </div>
