@@ -6,20 +6,31 @@ import SLpage from './components/pages/SLPage';
 import Home from './components/pages/Home';
 import SDashboard from './components/pages/SDashboard';
 import CTDashboard from './components/pages/CTDashboard';
-import AddJob from './components/pages/AddJob';
+import CTJobCard from './components/UI/CTJobCard';
+import CTJobList from './components/UI/CTJobList';
+
 
 function App() {
   return (
     <>
         <LayoutWithNav>
           <Routes>
+            
+            {/* Admin */}
+
+            {/*Guest Routes  */}
             <Route path="/" element={<WelcomPage />} />
-            <Route path="/User-login" element={<CTLPage />} />
-            <Route path="/Staff-Login" element={<SLpage />} />
+
+            {/* Staff Routes */}
+            <Route path="Staff/Login" element={<SLpage />} />
             <Route path="/Home" element={<Home />} />
-            <Route path="/Staff-Dashboard" element={<SDashboard />} />
-            <Route path="/User-Dashboard" element={<CTDashboard />} />
-            <Route path="/AddJob" element={<AddJob />} />
+            <Route path="/Staff/Dashboard" element={<SDashboard />} />
+
+            {/* Client Routes */}
+            <Route path="Client/login" element={<CTLPage />} />
+            <Route path="/Client/JobCard" element={<CTJobCard />} />
+            <Route path="/Client/Dashboard" element={<CTDashboard/>} />
+            <Route path="/Client/JobCard/Joblist" element={<CTJobList/>} />
           </Routes>
         </LayoutWithNav>
     </>

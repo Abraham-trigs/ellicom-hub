@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const NewJobButton = () => {
+const JobCardButton = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/AddJob');
+    navigate('/JobCard');
   };
 
   return (
@@ -21,4 +21,4 @@ const NewJobButton = () => {
   );
 };
 
-export default NewJobButton;
+export default JobCardButton;

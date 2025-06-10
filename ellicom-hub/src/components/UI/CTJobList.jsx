@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from './logo';
 
-const  CTJobHolder= () => {
+const  CTJobList= () => {
   return (
     <div className=" w-full  h-100 rounded-2xl flex flex-col items-center justify-center border-1 border-sea mt-3">
       {/* Scaled Button */}
@@ -71,4 +71,4 @@ const  CTJobHolder= () => {
   );
 };
 
-export default CTJobHolder;
+export default CTJobList;
