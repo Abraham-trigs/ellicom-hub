@@ -30,9 +30,6 @@ const SDashboard = () => {
       </div>
 
       <div>
-      </div>
-
-      <div>
         <SJobHolder />
       </div>
 

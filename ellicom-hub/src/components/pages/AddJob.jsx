@@ -1,7 +1,7 @@
 import React from 'react'
 import CTSideBar from '../UI/CTSideBar';
 import Head from '../UI/Head';
-job
+import Logo from '../UI/logo';
 
 const AddJob = () => {
   return (

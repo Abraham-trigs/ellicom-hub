@@ -5,9 +5,10 @@ const ClientLoginButton = () => {
   return (
     <div className='flex flex-col items-center justify-center'>
       <Link to="Client/login">
-        <button className='bg-sea p-2 px-7 py-1 rounded-lg text-2xl text-center mb-0 text-ground 
-        transition ease-in-out duration-100 hover:bg-high hover:scale-95'>
-          Client Login
+        <button className='bg-sea px-15 py-4 rounded-lg text-center mb-0 text-ground 
+        transition ease-in-out duration-100 hover:bg-high hover:scale-95
+        font-bold text-2xl'>
+          <span className=''>Client Login</span>
         </button>
       </Link>
     </div>

@@ -5,9 +5,9 @@ import CTLPage from './components/pages/CTLPage'
 import SLpage from './components/pages/SLPage';
 import Home from './components/pages/Home';
 import SDashboard from './components/pages/SDashboard';
-import CTDashboard from './components/pages/CTDashboard';
 import CTJobCard from './components/UI/CTJobCard';
-import CTJobList from './components/UI/CTJobList';
+import CTJobList from './components/pages/CTJobList';
+import AddJob from './components/pages/AddJob';
 
 
 function App() {
@@ -15,7 +15,7 @@ function App() {
     <>
         <LayoutWithNav>
           <Routes>
-            
+
             {/* Admin */}
 
             {/*Guest Routes  */}
@@ -29,8 +29,9 @@ function App() {
             {/* Client Routes */}
             <Route path="Client/login" element={<CTLPage />} />
             <Route path="/Client/JobCard" element={<CTJobCard />} />
-            <Route path="/Client/Dashboard" element={<CTDashboard/>} />
-            <Route path="/Client/JobCard/Joblist" element={<CTJobList/>} />
+            <Route path="/Client/Dashboard" element={<CTJobList/>} />
+            <Route path="/Client/JobList" element={<CTJobList/>} />
+            <Route path="/Client/Add-Job" element={<AddJob/>} />
           </Routes>
         </LayoutWithNav>
     </>
