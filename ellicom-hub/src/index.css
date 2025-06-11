@@ -3,13 +3,15 @@
 @theme {
   --color-sea: #1BD2EB;
   --color-gold: #F8E539;
-  --color-NeonSea: #041225;
+  --color-neonSea: #041225;
   --color-high: #FFB300;
   --color-highGold: #FFFB72;
   --color-ground: #000321;
   --color-container: #010210;
   --color-inactive: #B6AE46;
   --color-head: #FFFFFF;
+  --color-coHead: #E0E0E0;
+  --color-darkSea: #2C2748;
   --color-power: #000000;
 }
 
@@ -20,5 +22,5 @@
 }
 
  body {
-    @apply m-0 bg-ground m-2;
+    @apply bg-ground m-2;
   }
