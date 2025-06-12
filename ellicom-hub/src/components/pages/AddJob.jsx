@@ -7,7 +7,7 @@ import Head from '../UI/Head';
 const  CTAddJob= () => {
   return (
     <>
-      <div className=' fixed border-gold border-b-1 h-23 mb-5'>
+      <div className='border-gold border-b-1 h-23 mb-5'>
         <div className=" mt-10 flex flex-col justify-end">
 
           <div className="w-full ">
@@ -24,7 +24,7 @@ const  CTAddJob= () => {
 
       <div className=" w-full  h-130 rounded-2xl flex flex-col items-center justify-center border-1 border-sea -mt-4">
         {/* main Job Card with details  */}
-        <div className=" flex flex-col justify-center items-center object-contain mb-2">
+        <div className="-mt-10 flex flex-col justify-center items-center object-contain mb-2">
           <button className="bg-sea rounded-b-2xl p-2 px-5 font-bold scale-75 text-Ground mb-3 object-contain">
             Job Card
           </button>
@@ -68,7 +68,7 @@ const  CTAddJob= () => {
                 <div className="flex- flex-col justify-center items-center w-30 h-25 rounded-2xl bg-highGold drop-shadow-sm shadow shadow-2xl">
                   {/* Color, f/b and other selectors  */}
                   <div className='flex flex-row gap-x-2 justify-center items-center scale-90  mb-2 mt-3'>
-                    <div className='w-18 h-8 rounded-md bg-high text-center flex flex-row justify-center items-center font-semibold'> 
+                     <div className='w-18 h-8 rounded-md bg-container text-center text-coHead flex flex-row justify-center items-center font-semibold'> 
                       Color
                     </div>
                     <div className='w-18 h-8 rounded-md bg-inactive text-center flex flex-row justify-center items-center font-semibold'> 
@@ -81,8 +81,8 @@ const  CTAddJob= () => {
                     justify-center items-center'> 
                       F / B 
                     </div>
-                    <div className='w-18 h-8 rounded-md bg-sea text-center flex flex-row justify-center items-center font-semibold'> 
-                     Add <span>+</span>
+                    <div className='w-18 h-8 rounded-md bg-sea text-center flex flex-row justify-center items-center font-bold'> 
+                     File <span className='text-red-600 scale-120'> +</span>
                     </div>
                   </div>
                 </div>
@@ -97,12 +97,19 @@ const  CTAddJob= () => {
           </div>
         {/* dividing line */}
         </div>
-        <div className='w-full border border-t-0.5 border-sea'></div>
-        <div className='w-full h-50 border-2 border-inactive'>
-          <button className="bg-sea rounded-b-2xl p-2 px-5 font-bold scale-75 text-Ground mb-3 object-contain">
-            Job Card
-          </button>
-        </div>
+        <div className='w-50 border border-t-0.5 border-sea mb-2'></div>
+        
+        <div className=' ml-2 mr-2 w-full h-70 border-2 border-inactive  rounded-2xl'>
+          <div className='flex flex-col justify-center items-center'>
+            <button className="text flex items-center -mt-1 bg-sea rounded-b-2xl p-2 px-5 font-bold scale-90 text-Ground mb-3 object-contain">
+                Job Record
+              </button>
+            </div>
+            {/* Job Details Holder */}
+            <div className='w-contain ml-3 mr-3 h-50 bg-contain border-2 border-high rounded-2xl'>
+
+            </div>
+          </div>
 
       </div>
 

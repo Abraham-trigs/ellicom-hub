@@ -13,27 +13,28 @@ import AddJob from './components/pages/AddJob';
 function App() {
   return (
     <>
-        <LayoutWithNav>
-          <Routes>
+      <LayoutWithNav>
+        <Routes>
+          {/* Operator Routes  */}
 
-            {/* Admin */}
+          {/* Admin */}
 
-            {/*Guest Routes  */}
-            <Route path="/" element={<WelcomPage />} />
+          {/*Guest Routes  */}
+          <Route path="/" element={<WelcomPage />} />
 
-            {/* Staff Routes */}
-            <Route path="Staff/Login" element={<SLpage />} />
-            <Route path="/Home" element={<Home />} />
-            <Route path="/Staff/Dashboard" element={<SDashboard />} />
+          {/* Staff Routes */}
+          <Route path="Staff/Login" element={<SLpage />} />
+          <Route path="/Home" element={<Home />} />
+          <Route path="/Staff/Dashboard" element={<SDashboard />} />
 
-            {/* Client Routes */}
-            <Route path="Client/login" element={<CTLPage />} />
-            <Route path="/Client/JobCard" element={<CTJobCard />} />
-            <Route path="/Client/Dashboard" element={<CTJobList/>} />
-            <Route path="/Client/JobList" element={<CTJobList/>} />
-            <Route path="/Client/Add-Job" element={<AddJob/>} />
-          </Routes>
-        </LayoutWithNav>
+          {/* Client Routes */}
+          <Route path="Client/login" element={<CTLPage />} />
+          <Route path="/Client/JobCard" element={<CTJobCard />} />
+          <Route path="/Client/Dashboard" element={<CTJobList/>} />
+          <Route path="/Client/JobList" element={<CTJobList/>} />
+          <Route path="/Client/Add-Job" element={<AddJob/>} />
+        </Routes>
+      </LayoutWithNav>
     </>
   )
 }
