@@ -33,6 +33,9 @@ function App() {
           <Route path="/Client/Dashboard" element={<CTJobList/>} />
           <Route path="/Client/JobList" element={<CTJobList/>} />
           <Route path="/Client/Add-Job" element={<AddJob/>} />
+          <Route path="/Client/JobList" element={<CTJobList/>} />
+          <Route path="/Client/Job-Details" element={<AddJob/>} />
+
         </Routes>
       </LayoutWithNav>
     </>
