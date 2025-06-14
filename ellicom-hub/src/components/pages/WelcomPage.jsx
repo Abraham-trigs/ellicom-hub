@@ -15,7 +15,7 @@ const WelcomePage = () => {
   return (
     <>
       <div>
-        <p className="text-head font-normal italic text-center mt-10"> 
+        <p className="text-gold font-normal italic text-center mt-10"> 
           Welcome to
         </p>
       </div>
@@ -34,23 +34,34 @@ const WelcomePage = () => {
           <Logo />
         </div>
       </div>
-      <div className='w-full flex flex-row justify-between items-center scale-50 gap-12 -mt-8'>
-        <div className="scale-95 -mt-5">
-          <NewJobButton />
+
+      <div className=''>
+        <div className='flex flex-row justify-evenly gap-0'>
+        <button className='bg-sea font-medium px-3 py-3 rounded-md mb-10 '>New Job+</button>
+        <button className='bg-gold font-medium px-8 py-3 rounded-md mb-10'>Client</button>
         </div>
-        <div className=" scale-125 -mt-5">
-          <ClientLoginButton />
+
+        {/* <div className=" w-30 h-10 bg-gold  rounded-2xl mb-3  mt-2">
+         <p className='font- text-center px-20 text'>
+          AddJob+</p>
         </div>
+
+        <div className=" w-30 h-10 bg-sea  rounded-2xl mb-3 mt-2
+        ">
+          <p className='font  text-center px-20 text-inline'>
+            Client Login</p>
+        </div> */}
+
       </div>
       <div>
         <p 
           onClick={handleClick} 
-          className="cursor-pointer text-head text-[0.7rem] font-light text-center -mt-3"
+          className="cursor-pointer text-head text-2xl font-light text-center -mt-3 scale-75"
         >
           Admin / Staff
         </p>
       </div>
-      <div className="mt-6 flex flex-col items-center justify-center">
+      <div className="mt-4 flex flex-col items-center justify-center">
         <div className="-mb-12">
           <AvailableNow />
         </div>

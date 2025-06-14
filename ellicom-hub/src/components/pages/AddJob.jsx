@@ -3,6 +3,7 @@ import Logo from '../UI/logo';
 import NewJobButton from '../UI/NewJobButton';
 import CTSideBar from '../UI/CTSideBar';
 import Head from '../UI/Head';
+import CTLargeFormat from '../UI/CTLargeFormat';
 
 const  CTAddJob= () => {
   return (
@@ -23,7 +24,7 @@ const  CTAddJob= () => {
       </div>
 
       <div className=" w-full  h-130 rounded-2xl flex flex-col items-center justify-center border-1 border-sea -mt-4">
-        {/* main Job Card with details  */}
+        {/* main Job Card with Details  */}
         <div className="-mt-10 flex flex-col justify-center items-center object-contain mb-2">
           <button className="bg-sea rounded-b-2xl p-2 px-5 font-bold scale-75 text-Ground mb-3 object-contain">
             Job Card
@@ -32,12 +33,12 @@ const  CTAddJob= () => {
           {/* Job Card */}
           <div className="">
             {/* main Add Job Container */}
-            <div className="flex flex-col justify-evenly items-center  w-75 h-43 rounded-3xl border-2 bg-gold -mt-3 object-contain">
-              <div className='flex flex-row justify-between items-center gap-x-2 '>
-                <div className=" flex flex-row justify-evenly items-center gap-x-2 w-42 h-30 rounded-xl  bg-highGold drop-shadow-sm shadow shadow-2xl ">
+            <div className="flex flex-col justify-evenly items-center w-72 h-43 border-2 border-high rounded-3xl bg-darkSea  -mt-3 object-contain">
+              <div className='flex flex-row justify-between items-center -gap-x-1  mt-3 '>
+                <div className=" flex flex-row justify-between items-center gap-x-1 w-39 h-30 rounded-xl  bg-highGold drop-shadow-sm shadow shadow-2xl scale-95 ">
                   
                  {/* Paper size */}
-                  <div className='flex flex-row justify-center items-center ml-1 w-18 h-26 rounded-md bg-ground border-1 drop-shadow-sm shadow shadow-md'>
+                  <div className='flex flex-row justify-center items-center m-1 w-18 h-26 rounded-md bg-ground border-1 drop-shadow-sm shadow shadow-md'>
                     <div className='flex flex-col justify-evenly items-center'>
                       {/* Size Selection */}
                       <div className='text-center scale-130 mb-1 border-b-2  border-b-coHead text-coHead'>
@@ -50,16 +51,20 @@ const  CTAddJob= () => {
                   </div>
 
                   {/* Job Type and Quantity Container */}
-                  <div className='flex flex-col gap-3 mr-1 drop-shadow-sm shadow shadow-md'>
+                  <div className='flex flex-col gap-3 mr-2 drop-shadow-sm shadow shadow-md'>
                     <div className='w-18 h-8 rounded-md bg-ground text-center text-coHead flex flex-row justify-center items-center font-semibold drop-shadow-sm shadow shadow-md'> 
                       Job Type
                     </div>
                     {/* Quantity button & display Container */}
                     <div className=' flex flex-row justify-between items-center w-18 h-10 rounded-md bg-coHead'>
                       <div className='flex flex-row -ml-1 items-center w-10 h-12 rounded-md scale-75  font-bold bg-ground '> 
-                        <div className='mr-0.5 ml-1 text-coHead'>QTY</div>
+                        <div className='mr-0.5 ml-1 text-coHead'>
+                          QTY
+                        </div>
                       </div>
-                      <div className='text-center mr-1 font-bold text-red-600'>00</div>
+                      <div className='text-center text-2xl mr-1 font- text-red-600'>
+                        000
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -81,16 +86,21 @@ const  CTAddJob= () => {
                     justify-center items-center'> 
                       F / B 
                     </div>
-                    <div className='w-18 h-8 rounded-md bg-sea text-center flex flex-row justify-center items-center font-bold'> 
-                     File <span className='text-red-600 scale-120'> +</span>
+                    <div className='w-18 h-8 rounded-md bg-green-500 text-highGold
+                    
+                    // if file is selected successfully turn bg color to green//.............
+
+                    text-center flex flex-row justify-center items-center font-bold'> 
+                     File <span className='font-bolder scale-120'> +</span> 
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className='flex flex-row justify-evenly gap-3 scale-90'>
-                <button className='bg-ground text-coHead px-4 py-1 rounded-md drop-shadow-sm shadow shadow-2xl'>check</button>
-                <button className='bg-neonSea text-coHead px-4 py-1 rounded-md drop-shadow-sm shadow shadow-2xl'>save order</button>
+                <button className='bg-neonSea text-container px-4 py-1 rounded-md drop-shadow-sm shadow shadow-2xl'>
+                  Save order
+                </button>
               </div>
 
             </div>
@@ -99,19 +109,28 @@ const  CTAddJob= () => {
         </div>
         <div className='w-50 border border-t-0.5 border-sea mb-2'></div>
         
+        {/* Job Details */}
         <div className=' ml-2 mr-2 w-full h-70 border-2 border-inactive  rounded-2xl'>
           <div className='flex flex-col justify-center items-center'>
             <button className="text flex items-center -mt-1 bg-sea rounded-b-2xl p-2 px-5 font-bold scale-90 text-Ground mb-3 object-contain">
-                Job Record
+                Job Details              
               </button>
             </div>
-            {/* Job Details Holder */}
+            {/* Newly Saved, Job Details Holder */}
             <div className='w-contain ml-3 mr-3 h-50 bg-contain border-2 border-high rounded-2xl'>
+              {/* Job Recorder */}
+              
+              {/* Details of all saved Job */}
+
+              {/* Large Format Job Recorder */}
+            <div>
+              <CTLargeFormat />
+            </div>
 
             </div>
           </div>
 
-      </div>
+        </div>
 
     </>
 

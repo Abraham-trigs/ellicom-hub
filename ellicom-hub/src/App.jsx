@@ -16,8 +16,10 @@ function App() {
       <LayoutWithNav>
         <Routes>
           {/* Operator Routes  */}
-
+          <Route path="/" element={<WelcomPage />} />
+          
           {/* Admin */}
+          <Route path="/" element={<WelcomPage />} />d
 
           {/*Guest Routes  */}
           <Route path="/" element={<WelcomPage />} />
