@@ -1,31 +1,10 @@
-import React from 'react';
-import Logo from '../UI/logo';
-import NewJobButton from '../UI/NewJobButton';
-import CTSideBar from '../UI/CTSideBar';
-import Head from '../UI/Head';
-import CTLargeFormat from '../UI/CTLargeFormat';
+import React from 'react'
 
-const  CTAddJob= () => {
+const JobCard = () => {
   return (
-    <>
-      <div className='border-gold border-b-1 h-23 mb-5'>
-        <div className=" mt-10 flex flex-col justify-end">
-
-          <div className="w-full ">
-            <div className=' flex flex-row justify-end'>
-              <CTSideBar />
-            </div>
-          </div>
-        </div>
-
-      <div className='scale-50 -mt-26'>
-        <Head />
-      </div>
-      </div>
-
-      <div className=" w-full  h-130 rounded-2xl flex flex-col items-center justify-center border-1 border-sea -mt-4">
+      <div className="">
         {/* main Job Card with Details  */}
-        <div className="-mt-10 flex flex-col justify-center items-center object-contain mb-2">
+        <div className="-mt-5 flex flex-col justify-center items-center object-contain mb-2">
           <button className="bg-sea rounded-b-2xl p-2 px-5 font-bold scale-75 text-Ground mb-3 object-contain">
             Job Card
           </button>
@@ -86,19 +65,19 @@ const  CTAddJob= () => {
                     justify-center items-center drop-shadow-sm shadow shadow-md'> 
                       F / B 
                     </div>
-                    <div className='w-18 h-8 rounded-md bg-green-500 text-highGold
+                    <div className='w-18 h-8 rounded-md bg-green-500 text-container
                     
                     // if file is selected successfully turn bg color to green//.............
 
-                    text-center flex flex-row justify-center items-center font-bold'> 
-                     File <span className='font-bolder scale-120 drop-shadow-sm shadow shadow-md'> +</span> 
+                    text-center flex flex-row justify-center items-center font-bold '> 
+                     File <span className='font-bolder  scale-120 drop-shadow-sm shadow shadow-md'> +</span> 
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className='flex flex-row justify-evenly gap-3 scale-90'>
-                <button className='bg-neonSea text-container px-4 py-1 rounded-md drop-shadow-sm shadow shadow-2xl'>
+                <button className='bg-gold hover:bg-high text-container px-4 py-1 font-bold rounded-md drop-shadow-sm shadow shadow-2xl'>
                   Save order
                 </button>
               </div>
@@ -107,39 +86,11 @@ const  CTAddJob= () => {
           </div>
         {/* dividing line */}
         </div>
-        <div className='w-50 border border-t-0.5 border-sea mb-2'></div>
         
         {/* Job Details */}
-        <div className=' ml-2 mr-2 w-full h-70 border-2 border-inactive  rounded-2xl'>
-          <div className='flex flex-col justify-center items-center'>
-            <button className="text flex items-center -mt-1 bg-sea rounded-b-2xl p-2 px-5 font-bold scale-90 text-Ground mb-3 object-contain">
-                Job Details              
-              </button>
-            </div>
-            {/* Newly Saved, Job Details Holder */}
-            <div className='w-contain ml-3 mr-3 h-50 bg-contain border-2 border-high rounded-2xl'>
-              {/* Job Recorder */}
-              
-              {/* Details of all saved Job */}
-
-              {/* Large Format Job Recorder */}
-            <div>
-              <CTLargeFormat />
-            </div>
-
-            </div>
-          </div>
 
         </div>
+  )
+}
 
-    </>
-
-
-  );
-};
-
-export default CTAddJob;
-
-
-
-
+export default JobCard;

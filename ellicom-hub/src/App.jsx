@@ -7,7 +7,7 @@ import Home from './components/pages/Home';
 import SDashboard from './components/pages/SDashboard';
 import CTJobCard from './components/UI/CTJobCard';
 import CTJobList from './components/pages/CTJobList';
-import AddJob from './components/pages/AddJob';
+import AddJobPage from './components/pages/AddJobPage';
 
 
 function App() {
@@ -34,9 +34,8 @@ function App() {
           <Route path="/Client/JobCard" element={<CTJobCard />} />
           <Route path="/Client/Dashboard" element={<CTJobList/>} />
           <Route path="/Client/JobList" element={<CTJobList/>} />
-          <Route path="/Client/Add-Job" element={<AddJob/>} />
+          <Route path="/Client/Add-Job" element={<AddJobPage/>} />
           <Route path="/Client/JobList" element={<CTJobList/>} />
-          <Route path="/Client/Job-Details" element={<AddJob/>} />
 
         </Routes>
       </LayoutWithNav>
