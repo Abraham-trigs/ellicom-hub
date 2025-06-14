@@ -58,12 +58,12 @@ const  CTAddJob= () => {
                     {/* Quantity button & display Container */}
                     <div className=' flex flex-row justify-between items-center w-18 h-10 rounded-md bg-coHead'>
                       <div className='flex flex-row -ml-1 items-center w-10 h-12 rounded-md scale-75  font-bold bg-ground '> 
-                        <div className='mr-0.5 ml-1 text-coHead'>
+                        <div className='mr-0.5 ml-1 text-coHead drop-shadow-sm shadow shadow-md'>
                           QTY
                         </div>
                       </div>
-                      <div className='text-center text-2xl mr-1 font- text-red-600'>
-                        000
+                      <div className='text-center text-2xl  font-bold text-red-600 scale-90 mr-3'>
+                        50
                       </div>
                     </div>
                   </div>
@@ -73,17 +73,17 @@ const  CTAddJob= () => {
                 <div className="flex- flex-col justify-center items-center w-30 h-25 rounded-2xl bg-highGold drop-shadow-sm shadow shadow-2xl">
                   {/* Color, f/b and other selectors  */}
                   <div className='flex flex-row gap-x-2 justify-center items-center scale-90  mb-2 mt-3'>
-                     <div className='w-18 h-8 rounded-md bg-container text-center text-coHead flex flex-row justify-center items-center font-semibold'> 
+                     <div className='w-18 h-8 rounded-md bg-container text-center text-coHead flex flex-row justify-center items-center font-semibold drop-shadow-sm shadow shadow-md'> 
                       Color
                     </div>
-                    <div className='w-18 h-8 rounded-md bg-inactive text-center flex flex-row justify-center items-center font-semibold'> 
+                    <div className='w-18 h-8 rounded-md bg-inactive text-center flex flex-row justify-center items-center font-semibold drop-shadow-sm shadow shadow-md'> 
                      Black
                     </div>
                   </div>
                   {/* Color and Black selectors  */}
                   <div className='flex flex-row gap-x-2 justify-center items-center scale-90'>
                     <div className='w-18 h-8 rounded-md bg-inactive font-bold text-center flex flex-row 
-                    justify-center items-center'> 
+                    justify-center items-center drop-shadow-sm shadow shadow-md'> 
                       F / B 
                     </div>
                     <div className='w-18 h-8 rounded-md bg-green-500 text-highGold
@@ -91,7 +91,7 @@ const  CTAddJob= () => {
                     // if file is selected successfully turn bg color to green//.............
 
                     text-center flex flex-row justify-center items-center font-bold'> 
-                     File <span className='font-bolder scale-120'> +</span> 
+                     File <span className='font-bolder scale-120 drop-shadow-sm shadow shadow-md'> +</span> 
                     </div>
                   </div>
                 </div>

@@ -5,12 +5,16 @@ import NewJobButton from '../UI/NewJobButton';
 import ClientLoginButton from '../UI/CTLoginButton';
 import AvailableNow from '../UI/AvailableNow';
 
+
 const WelcomePage = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('/Staff/Login');
+    navigate('/Client/Add-Job');
   };
+  
+
+
 
   return (
     <>
@@ -37,8 +41,10 @@ const WelcomePage = () => {
 
       <div className=''>
         <div className='flex flex-row justify-evenly gap-0'>
-        <button className='bg-sea font-medium px-3 py-3 rounded-md mb-10 '>New Job+</button>
-        <button className='bg-gold font-medium px-8 py-3 rounded-md mb-10'>Client</button>
+        <button className='bg-sea font-medium px-3 py-3 rounded-md mb-10 '
+        onClick={handleClick}>New Job+</button>
+        <button className='bg-gold font-medium px-8 py-3 rounded-md mb-10'
+        onClick={handleClick}>Client</button>
         </div>
 
         {/* <div className=" w-30 h-10 bg-gold  rounded-2xl mb-3  mt-2">
