@@ -18,7 +18,7 @@ const JobRecorder = () => {
       {/* Large Format Job Recorder */}
       <div>
         {/* Large Format Job Recorder */}
-        {/* <LargeFormatRecorder /> */}
+        <LargeFormatRecorder />
         <PapperPrintingRecorder />
       </div>
     </div>
