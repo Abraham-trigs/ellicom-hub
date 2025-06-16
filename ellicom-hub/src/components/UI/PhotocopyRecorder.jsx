@@ -30,14 +30,14 @@ const PhotocopyRecorder = () => {
             {/* Job Number .....on reciept */}
             <div className='flex flex-row justify-between gap-5 scale-75 object-contain'>
               <div className='text-ground font-bold text-2xl w-15 h-12 text-center'>
-                Color
+                Black
               </div>
               {/* JOb Height */}
               <div className='text-ground  text-2xl w-15 h-12 text-center'>
                 F/B
               </div> 
               <div className='text-container font-bold text-2xl w-15 h-12 text-center'>
-                File
+                {/* File */}
               </div>
             </div>
 
