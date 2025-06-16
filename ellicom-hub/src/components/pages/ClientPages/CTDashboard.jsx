@@ -1,10 +1,10 @@
 import React from 'react'
-import NewJobButton from '../UI/NewJobButton';
-import CTSideBar from '../UI/CTSideBar';
-import Head from '../UI/Head';
-import SJobHolder from '../UI/SJobHolder';
+import NewJobButton from '../../UI/NewJobButton';
+import CTSideBar from '../../UI/CLIENT UI/CTSideBar';
+import Head from '../../UI/Head';
+import CTJobList from './CTJobList';
 
-const SDashboard = () => {
+const CTDashboard = () => {
   return (
     <>
       <div className='border-gold border-b-1 h-35 mb-5'>
@@ -29,9 +29,12 @@ const SDashboard = () => {
         </div>
       </div>
 
-      <div>
-        <SJobHolder />
-      </div>
+      {/* <div>
+      </div> */}
+
+      {/* <div>
+        <CTJobList />
+      </div> */}
 
     </>
 
@@ -39,4 +42,4 @@ const SDashboard = () => {
   )
 }
 
-export default SDashboard;
+export default CTDashboard;

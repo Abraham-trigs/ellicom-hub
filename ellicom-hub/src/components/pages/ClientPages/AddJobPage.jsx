@@ -1,11 +1,10 @@
 import React from 'react';
-import Logo from '../UI/logo';
-import NewJobButton from '../UI/NewJobButton';
-import CTSideBar from '../UI/CTSideBar';
-import Head from '../UI/Head';
-import CTLargeFormat from '../UI/CTLargeFormat';
-import JobCard from '../UI/JobCard';
-import JobRecorder from '../UI/JobRecorder';
+import Logo from '../../UI/logo';
+import NewJobButton from '../../UI/JobCardButton';
+import CTSideBar from '../../UI/CLIENT-UI/CTSideBar';
+import Head from '../../UI/Head';
+import CTLargeFormat from '../../UI/CLIENT-UI/CTLargeFormat';
+import JobCard from '../../UI/CLIENT-UI/JobCard';
 
 const  CTAddJob= () => {
   return (
@@ -34,8 +33,6 @@ const  CTAddJob= () => {
           <JobRecorder />
         </div>
       </div>
-
-
     </>
 
 

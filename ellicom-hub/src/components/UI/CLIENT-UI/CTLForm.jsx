@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useCLStore from '../store/CLStore';
+import useCLStore from '../../store/CLStore';
 
 const CLForm = () => {
   const { name, password, setName, setPassword, login } = useCLStore();

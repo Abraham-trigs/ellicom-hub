@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useCLStore from '../store/CLStore';
-import Logo from '../UI/logo';
-import SLForm from '../UI/SLForm';
+import useCLStore from '../../store/CTLStore';
+import Logo from '../../UI/logo';
+import SLForm from '../../UI/Staff-UI/SLForm';
 
 const SLPage = () => {
   const { name, password, setName, setPassword, login } = useCLStore();

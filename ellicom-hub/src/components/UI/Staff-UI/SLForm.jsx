@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useSLStore from '../store/SLStore';
+import useSLStore from '../../store/SLStore';
 
 const SLForm = () => {
   const { name, password, setName, setPassword, login } = useSLStore();

@@ -1,13 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import LayoutWithNav from './components/UI/LayoutWithNavBar';
 import WelcomPage from './components/pages/WelcomPage'
-import CTLPage from './components/pages/CTLPage'
-import SLpage from './components/pages/SLPage';
-import Home from './components/pages/Home';
-import SDashboard from './components/pages/SDashboard';
-import CTJobCard from './components/UI/CTJobCard';
-import CTJobList from './components/pages/CTJobList';
-import AddJobPage from './components/pages/AddJobPage';
+import CTLPage from './components/pages/ClientPages/CTLPage';
+import SLpage from './components/pages/StaffPages/SLPage';
+import Home from './components/pages/StaffPages/Home';
+import SDashboard from './components/pages/STaffPages/SDashboard';
+import CTJobCard from './components/UI/CLIENT-UI/CTJobCard';
+import AddJobPage from './components/pages/ClientPages/AddJobPage';
+import JobCard from './components/UI/CLIENT-UI/JobCard';
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
           <Route path="/" element={<WelcomPage />} />
           
           {/* Admin */}
-          <Route path="/" element={<WelcomPage />} />d
+          <Route path="/" element={<WelcomPage />} />
 
           {/*Guest Routes  */}
           <Route path="/" element={<WelcomPage />} />

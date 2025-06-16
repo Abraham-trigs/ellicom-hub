@@ -1,9 +1,9 @@
 import React from 'react'
-import Logo from '../UI/logo';
-import CLForm from '../UI/CTLForm';
-import SocialLoginButtons from '../UI/SocialLoginButtons';
+import Logo from '../../UI/logo';
+import CLForm from '../UI/Client-UI/CTLForm';
+import SocialLoginButtons from '../../UI/SocialLoginButtons';
 
-const CLPage = () => {
+const CTLPage = () => {
   return (
     <>
       {/* <div> */}
@@ -63,4 +63,4 @@ const CLPage = () => {
   )
 }
 
-export default CLPage;
+export default CTLPage;

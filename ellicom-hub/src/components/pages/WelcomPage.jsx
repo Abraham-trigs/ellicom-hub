@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import Logo from '../UI/logo';
-import NewJobButton from '../UI/NewJobButton';
-import ClientLoginButton from '../UI/CTLoginButton';
+import NewJobButton from '../UI/JobCardButton';
+import ClientLoginButton from '../UI/CLIENT-UI/CTLoginButton';
 import AvailableNow from '../UI/AvailableNow';
 
 

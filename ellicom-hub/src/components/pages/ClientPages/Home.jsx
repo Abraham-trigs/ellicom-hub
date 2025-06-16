@@ -1,6 +1,6 @@
 import React from 'react';
 import NewJobButton from '../UI/NewJobButton';
-import CTDashButton from '../UI/CTDashbutton';
+import CTDashButton from '../../UI/CLIENT-UI/CTDashButton';
 import CTSideBar from '../UI/CTSideBar';
 import AvailableNow from '../UI/AvailableNow';
 
