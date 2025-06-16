@@ -1,7 +1,7 @@
 import React from 'react';
 import JobCardButton from '../../UI/JobCardButton';
 import CTDashButton from '../../UI/CLIENT-UI/CTDashButton';
-import CTSideBar from '../UI/CTSideBar';
+import SSideBar from '../../UI/Staff-UI/SSideBar';
 import AvailableNow from '../UI/AvailableNow';
 
 const Home = () => {
@@ -17,7 +17,7 @@ const Home = () => {
           </div>
 
           <div>
-            <CTSideBar />
+            <SSideBar />
           </div>
         </div>
 
