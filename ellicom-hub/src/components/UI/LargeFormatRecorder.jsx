@@ -3,7 +3,7 @@ import React from 'react'
 const LargeFormatRecorder = () => {
   return (
     <>
-    <div className='w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-high rounded-2xl'>
+    <div className='mb-2 w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-high rounded-2xl'>
       <div>
 
       {/* Job Type here */}
@@ -49,7 +49,7 @@ const LargeFormatRecorder = () => {
                 QTY: <span className='text-high'>6</span>
               </div>
               {/* JOb Height */}
-              <div className='text-sea text-right font-bold text-2xl  h-12  w-1/2 w-contain mr-4'>
+              <div className='text-sea text-right font-bold text-2xl  h-12  w-1/2 w-contain -mr-3'>
                 20000.00
               </div>
             </div>

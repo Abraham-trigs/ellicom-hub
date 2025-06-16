@@ -12,9 +12,9 @@ const JobCard = () => {
           {/* Job Card */}
           <div className="">
             {/* main Add Job Container */}
-            <div className="flex flex-col justify-evenly items-center w-72 h-43 border-2 border-high rounded-3xl bg-darkSea  -mt-3 object-contain">
+            <div className="flex flex-col justify-evenly items-center w-72 h-43 border-2 border-container rounded-3xl bg-coHead  -mt-3 object-contain">
               <div className='flex flex-row justify-between items-center -gap-x-1  mt-3 '>
-                <div className=" flex flex-row justify-between items-center gap-x-1 w-39 h-30 rounded-xl  bg-highGold drop-shadow-sm shadow shadow-2xl scale-95 ">
+                <div className=" flex flex-row justify-between items-center gap-x-1 w-39 h-30 rounded-xl  bg-high drop-shadow-sm shadow shadow-2xl scale-95 ">
                   
                  {/* Paper size */}
                   <div className='flex flex-row justify-center items-center m-1 w-18 h-26 rounded-md bg-ground border-1 drop-shadow-sm shadow shadow-md'>
@@ -49,19 +49,19 @@ const JobCard = () => {
                 </div>
 
                 {/* Color and Option section */}
-                <div className="flex- flex-col justify-center items-center w-30 h-25 rounded-2xl bg-highGold drop-shadow-sm shadow shadow-2xl">
+                <div className="flex- flex-col justify-center items-center w-30 h-25 rounded-2xl bg-high drop-shadow-sm shadow shadow-2xl">
                   {/* Color, f/b and other selectors  */}
                   <div className='flex flex-row gap-x-2 justify-center items-center scale-90  mb-2 mt-3'>
                      <div className='w-18 h-8 rounded-md bg-container text-center text-coHead flex flex-row justify-center items-center font-semibold drop-shadow-sm shadow shadow-md'> 
                       Color
                     </div>
-                    <div className='w-18 h-8 rounded-md bg-inactive text-center flex flex-row justify-center items-center font-semibold drop-shadow-sm shadow shadow-md'> 
+                    <div className='w-18 h-8 rounded-md bg-coHead text-center flex flex-row justify-center items-center font-semibold drop-shadow-sm shadow shadow-md'> 
                      Black
                     </div>
                   </div>
                   {/* Color and Black selectors  */}
                   <div className='flex flex-row gap-x-2 justify-center items-center scale-90'>
-                    <div className='w-18 h-8 rounded-md bg-inactive font-bold text-center flex flex-row 
+                    <div className='w-18 h-8 rounded-md bg-coHead font-bold text-center flex flex-row 
                     justify-center items-center drop-shadow-sm shadow shadow-md'> 
                       F / B 
                     </div>
@@ -77,7 +77,7 @@ const JobCard = () => {
               </div>
 
               <div className='flex flex-row justify-evenly gap-3 scale-90'>
-                <button className='bg-gold hover:bg-high text-container px-4 py-1 font-bold rounded-md drop-shadow-sm shadow shadow-2xl'>
+                <button className='bg-container hover:bg-high hover:text-container text-coHead px-4 py-1 font-bold rounded-md drop-shadow-sm shadow shadow-2xl'>
                   Save order
                 </button>
               </div>
