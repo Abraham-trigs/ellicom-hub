@@ -2,8 +2,7 @@ import React from 'react';
 import JobCardButton from '../../UI/JobCardButton';
 import CTDashButton from '../../UI/CLIENT-UI/CTDashButton';
 import SSideBar from '../../UI/Staff-UI/SSideBar';
-import AvailableNow from '../UI/AvailableNow';
-
+import AvailableNow from '../../UI/AvailableNow';
 const Home = () => {
   return (
     <>

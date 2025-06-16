@@ -1,12 +1,13 @@
 import React from 'react';
-import Logo from '../../UI/logo';
-import NewJobButton from '../../UI/JobCardButton';
-import CTSideBar from '../../UI/CLIENT-UI/CTSideBar';
-import Head from '../../UI/Head';
-import CTLargeFormat from '../../UI/CLIENT-UI/CTLargeFormat';
-import JobCard from '../../UI/CLIENT-UI/JobCard';
+import Logo from '../UI/logo';
+import NewJobButton from '../UI/JobCardButton';
+import CTSideBar from '../UI/CLIENT-UI/CTSideBar';
+import Head from '../UI/Head';
+import CTLargeFormat from '../UI/CLIENT-UI/CTLargeFormat';
+import JobCard from '../UI/CLIENT-UI/JobCard';
+import JobRecorder from '../UI/JobRecorder';
 
-const  CTAddJob= () => {
+const  AddJobPage= () => {
   return (
     <>
       <div className='border-gold border-b-1 h-23 mb-5'>
@@ -39,7 +40,7 @@ const  CTAddJob= () => {
   );
 };
 
-export default CTAddJob;
+export default AddJobPage;
 
 
 

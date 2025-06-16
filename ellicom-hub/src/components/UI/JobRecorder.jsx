@@ -1,5 +1,5 @@
 import React from 'react'
-import CTLargeFormat from './CTLargeFormat';
+import CTLargeFormat from './CLIENT-UI/CTLargeFormat';
 
 const JobRecorder = () => {
   return (

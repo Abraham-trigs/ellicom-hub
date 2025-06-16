@@ -1,6 +1,6 @@
 import React from 'react'
 import NewJobButton from '../../UI/JobCardButton';
-import CTSideBar from '../UI/CTSideBar';
+import SSideBar from '../../UI/Staff-UI/SSideBar';
 import Head from '../../UI/Head';
 import SJobHolder from '../../UI/Staff-UI/SJobHolder';
 
@@ -18,7 +18,7 @@ const SDashboard = () => {
             </div>
 
             <div className='-mr-10'>
-              <CTSideBar />
+              <SSideBar />
             </div>
           </div>
       

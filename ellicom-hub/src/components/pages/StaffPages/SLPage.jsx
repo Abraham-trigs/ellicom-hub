@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useCLStore from '../../store/CTLStore';
+import useSLStore from '../../store/SLStore';
 import Logo from '../../UI/logo';
 import SLForm from '../../UI/Staff-UI/SLForm';
 
 const SLPage = () => {
-  const { name, password, setName, setPassword, login } = useCLStore();
+  const { name, password, setName, setPassword, login } = useSLStore();
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {

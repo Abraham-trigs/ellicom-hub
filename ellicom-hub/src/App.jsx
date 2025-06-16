@@ -6,8 +6,9 @@ import SLpage from './components/pages/StaffPages/SLPage';
 import Home from './components/pages/StaffPages/Home';
 import SDashboard from './components/pages/STaffPages/SDashboard';
 import CTJobCard from './components/UI/CLIENT-UI/CTJobCard';
-import AddJobPage from './components/pages/ClientPages/AddJobPage';
+import AddJobPage from './components/pages/AddJobPage';
 import JobCard from './components/UI/CLIENT-UI/JobCard';
+import CTJobList from './components/pages/ClientPages/CTJobList';
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
 
           {/*Guest Routes  */}
           <Route path="/" element={<WelcomPage />} />
+          <Route path="/Guest/Add-Job" element={<AddJobPage/>} />
+
 
           {/* Staff Routes */}
           <Route path="Staff/Login" element={<SLpage />} />

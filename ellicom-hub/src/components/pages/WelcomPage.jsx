@@ -9,9 +9,18 @@ import AvailableNow from '../UI/AvailableNow';
 const WelcomePage = () => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
-    navigate('/Client/Add-Job');
+  const ClientLogin = () => {
+    navigate('/Client/login');
   };
+
+  const StaffLogin = () => {
+    navigate('/Staff/login');
+  };
+  
+   const GuestAddJob = () => {
+    navigate('/Guest/Add-Job');
+  };
+  
   
 
 
@@ -42,26 +51,16 @@ const WelcomePage = () => {
       <div className=''>
         <div className='flex flex-row justify-evenly gap-0'>
         <button className='bg-sea font-medium px-3 py-3 rounded-md mb-10 '
-        onClick={handleClick}>New Job+</button>
+        onClick={GuestAddJob}>New Job+</button>
+
         <button className='bg-gold font-medium px-8 py-3 rounded-md mb-10'
-        onClick={handleClick}>Client</button>
+        onClick={ClientLogin}>Client</button>
         </div>
-
-        {/* <div className=" w-30 h-10 bg-gold  rounded-2xl mb-3  mt-2">
-         <p className='font- text-center px-20 text'>
-          AddJob+</p>
-        </div>
-
-        <div className=" w-30 h-10 bg-sea  rounded-2xl mb-3 mt-2
-        ">
-          <p className='font  text-center px-20 text-inline'>
-            Client Login</p>
-        </div> */}
 
       </div>
       <div>
         <p 
-          onClick={handleClick} 
+          onClick={StaffLogin} 
           className="cursor-pointer text-head text-2xl font-light text-center -mt-3 scale-75"
         >
           Admin / Staff

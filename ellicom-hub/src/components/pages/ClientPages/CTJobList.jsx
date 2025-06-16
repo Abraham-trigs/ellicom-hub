@@ -1,7 +1,7 @@
 import React from 'react';
 import Logo from '../../UI/logo';
-import NewJobButton from '../../UI/NewJobButton';
-import CTSideBar from '../UI/CTSideBar';
+import JobCardButton from '../../UI/JobCardButton';
+import CTSideBar from '../../UI/CLIENT-UI/CTSideBar';
 import Head from '../../UI/Head';
 
 
@@ -12,7 +12,7 @@ const  CTJobList= () => {
         <div className=" mt-10 flex flex-col items-center justify-between g  ">
           <div className="w-full flex flex-row justify-between -ml-20 -mt-4">
             <div className='scale-50'>
-              <NewJobButton />
+              <JobCardButton />
             </div>
             <div className='-mr-10'>
               <CTSideBar />

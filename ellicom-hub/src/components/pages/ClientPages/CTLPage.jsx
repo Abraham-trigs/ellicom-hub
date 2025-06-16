@@ -1,6 +1,6 @@
 import React from 'react'
 import Logo from '../../UI/logo';
-import CLForm from '../UI/Client-UI/CTLForm';
+import CTLForm from '../../UI/CLIENT-UI/CTLForm';
 import SocialLoginButtons from '../../UI/SocialLoginButtons';
 
 const CTLPage = () => {
@@ -34,7 +34,7 @@ const CTLPage = () => {
         </div>
 
         <div className='mt-3'>
-            <CLForm />
+            <CTLForm />
         </div>
 
         <div className='flex flex-col justify-center items-center scale-70 -mt-4 '>
