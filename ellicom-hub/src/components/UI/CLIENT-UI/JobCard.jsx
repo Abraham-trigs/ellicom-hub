@@ -12,7 +12,7 @@ const JobCard = () => {
           {/* Job Card */}
           <div className="">
             {/* main Add Job Container */}
-            <div className="flex flex-col justify-evenly items-center w-72 h-43 border-2 border-container rounded-3xl bg-coHead -mt-3 object-contain">
+            <div className="flex flex-col justify-evenly items-center w-72 h-43 border-2 border-sea bg-darkSea rounded-3xl bg- -mt-3 object-contain">
               <div className='flex flex-row justify-between items-center ml-1  mt-3 '>
                 <div className=" flex flex-row justify-between items-center gap-x-1 w-39 h-30 rounded-xl -ml-2  bg-high drop-shadow-sm shadow shadow-2xl scale-95 ">
                   

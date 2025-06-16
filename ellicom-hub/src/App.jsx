@@ -9,6 +9,7 @@ import CTJobCard from './components/UI/CLIENT-UI/CTJobCard';
 import AddJobPage from './components/pages/AddJobPage';
 import JobCard from './components/UI/CLIENT-UI/JobCard';
 import CTJobList from './components/pages/ClientPages/CTJobList';
+import JobDetailsPage from './components/pages/JobDetailsPage';
 
 
 function App() {
@@ -39,6 +40,7 @@ function App() {
           <Route path="/Client/JobList" element={<CTJobList/>} />
           <Route path="/Client/Add-Job" element={<AddJobPage/>} />
           <Route path="/Client/JobList" element={<CTJobList/>} />
+          <Route path="/client/JobID/JobDetails" element={<JobDetailsPage />} />
 
         </Routes>
       </LayoutWithNav>

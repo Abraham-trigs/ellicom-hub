@@ -26,11 +26,11 @@ const  AddJobPage= () => {
       </div>
 
       {/* JOB CARD and Job Recoder Holder */}
-      <div className=' w-full  h-130 rounded-2xl flex flex-col justify-center items-center  border-1 border-sea -mt-4'>
+      <div className=' w-full  h-130 rounded-2xl flex flex-col justify-center items-center  border- border-sea -mt-4'>
      
         <div>
           < JobCard />
-          <div className=' flex flex-col w-contain border border-t-0.5 border-sea mb-2 '></div>
+          {/* <div className=' flex flex-col w-contain border border-t-0.5 border-sea mb-2 '></div> */}
           <JobRecorder />
         </div>
       </div>
