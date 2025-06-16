@@ -3,7 +3,7 @@ import Logo from '../UI/logo';
 import NewJobButton from '../UI/JobCardButton';
 import CTSideBar from '../UI/CLIENT-UI/CTSideBar';
 import Head from '../UI/Head';
-import CTLargeFormat from '../UI/CLIENT-UI/CTLargeFormat';
+import CTLargeFormat from '../UI/LargeFormatRecorder';
 import JobCard from '../UI/CLIENT-UI/JobCard';
 import JobRecorder from '../UI/JobRecorder';
 

@@ -1,11 +1,15 @@
 import React from 'react'
 
-const CTLargeFormat = () => {
+const LargeFormatRecorder = () => {
   return (
     <>
-    <div>
-      <div></div>
-        <div className='flex flex-row justify-center items-center scale-90'>
+    <div className='w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-high rounded-2xl'>
+      <div>
+
+      {/* Job Type here */}
+      <div className='text-center text-coHead font-bold'>LARGE-FORMAT</div>
+
+      <div className='flex flex-row justify-center items-center scale-90'>
 
           <div className='flex flex-col justify-center items-center w-20 h-18 mt-2 bg-container rounded-bl-2xl'>
             <div className='scale-90'>
@@ -58,6 +62,9 @@ const CTLargeFormat = () => {
     </div>
 
 
+    </div>
+
+
 
 
     </>
@@ -66,4 +73,4 @@ const CTLargeFormat = () => {
   )
 }
 
-export default CTLargeFormat
+export default LargeFormatRecorder;
