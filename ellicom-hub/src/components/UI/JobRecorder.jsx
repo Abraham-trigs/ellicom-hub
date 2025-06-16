@@ -2,6 +2,7 @@ import React from 'react'
 import LargeFormatRecorder from './LargeFormatRecorder';
 import PapperPrintingRecorder from './PapperPrintingRecorder';
 import ScanningRecorder from './ScanningRecorder';
+import PhotocopyRecorder from './PhotocopyRecorder';
 
 const JobRecorder = () => {
   return (
@@ -18,10 +19,10 @@ const JobRecorder = () => {
 
       {/* Large Format Job Recorder */}
       <div>
-        {/* Large Format Job Recorder */}
         {/* <LargeFormatRecorder /> */}
-        <PapperPrintingRecorder />
+        {/* <PapperPrintingRecorder /> */}
         <ScanningRecorder />
+        <PhotocopyRecorder />
       </div>
     </div>
   )

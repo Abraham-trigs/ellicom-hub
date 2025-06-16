@@ -1,13 +1,13 @@
 import React from 'react'
 
-const ScanningRecorder = () => {
+const PhotocopyRecorder = () => {
   return (
     <>
-    <div className='mb-2 w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-coHead rounded-2xl'>
+    <div className='mb-2 w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-sea rounded-2xl'>
       <div>
 
       {/* Job Type here */}
-      <div className='text-center text-coHead font-bold'>SCANNING</div>
+      <div className='text-center text-coHead font-bold'>PHOTOCOPY</div>
 
       <div className='flex flex-row justify-center items-center scale-90'>
 
@@ -75,4 +75,4 @@ const ScanningRecorder = () => {
   )
 }
 
-export default ScanningRecorder;
+export default PhotocopyRecorder;
