@@ -77,7 +77,7 @@ const JobCard = () => {
               </div>
 
               <div className='flex flex-row justify-evenly gap-3 scale-90'>
-                <button className='bg-container hover:bg-high hover:text-container text-coHead px-4 py-1 font-bold rounded-md drop-shadow-sm shadow shadow-2xl'>
+                <button className='bg-coHead hover:bg-high hover:text-container text-container px-4 py-1 font-bold rounded-md drop-shadow-sm shadow shadow-2xl'>
                   Save order
                 </button>
               </div>
