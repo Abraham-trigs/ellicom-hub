@@ -10,7 +10,7 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react';
-import Logo from '../logo';
+import Logo from '../Universal-UI/logo';
 
 const navItems = [
   { label: 'Recent Jobs', Icon: Printer },

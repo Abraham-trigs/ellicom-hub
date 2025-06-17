@@ -15,4 +15,4 @@ const ClientLoginButton = () => {
   )
 }
 
-export default ClientLoginButton
+export default ClientLoginButton;

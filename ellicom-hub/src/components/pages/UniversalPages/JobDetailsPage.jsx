@@ -1,10 +1,10 @@
 import React from 'react'
-import CTSideBar from '../UI/CLIENT-UI/CTSideBar'
-import Head from '../UI/Head'
-import LargeFormatRecorder from '../UI/LargeFormatRecorder'
-import PapperPrintingRecorder from '../UI/PapperPrintingRecorder'
-import ScanningRecorder from '../UI/ScanningRecorder'
-import PhotocopyRecorder from '../UI/PhotocopyRecorder'
+import CTSideBar from '../../UI/CLIENT-UI/CTSideBar'
+import Head from '../../UI/Universal-UI/Head'
+import LargeFormatRecorder from '../../UI/Universal-UI/LargeFormatRecorder'
+import PapperPrintingRecorder from '../../UI/Universal-UI/PapperPrintingRecorder'
+import ScanningRecorder from '../../UI/Universal-UI/ScanningRecorder'
+import PhotocopyRecorder from '../../UI/Universal-UI/PhotocopyRecorder'
 
 const JobDetailsPage = () => {
   return (

@@ -1,8 +1,8 @@
 import React from 'react';
-import NewJobButton from '../UI/NewJobButton';
-import CTDashButton from '../../UI/CLIENT-UI/CTDashButton';
-import CTSideBar from '../UI/CTSideBar';
-import AvailableNow from '../UI/AvailableNow';
+import CTSideBar from '../../UI/CLIENT-UI/CTSideBar';
+import AvailableNow from '../../UI/Universal-UI/AvailableNow';
+import JobCardButton from '../../UI/Universal-UI/JobCardButton';
+import DashBoardButton from '../../UI/Universal-UI/DashBoardButton';
 
 const Home = () => {
   return (
@@ -13,7 +13,7 @@ const Home = () => {
         <div className="w-full flex justify-between ">
 
           <div className='scale-75 mb-3'>
-            <NewJobButton />
+            <JobCardButton />
           </div>
 
           <div>
@@ -24,7 +24,7 @@ const Home = () => {
       </div>
 
       <div className=" scale-75 flex flex-col items-center justify-center">
-        <CTDashButton />
+        <DashBoardButton />
       </div>
     </div>
 

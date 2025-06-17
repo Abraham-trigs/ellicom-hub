@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSLStore from '../../store/SLStore';
-import Logo from '../../UI/logo';
+import Logo from '../../UI/Universal-UI/logo';
 import SLForm from '../../UI/Staff-UI/SLForm';
 
 const SLPage = () => {

@@ -1,7 +1,7 @@
 import React from 'react'
-import Logo from '../../UI/logo';
+import Logo from '../../UI/Universal-UI/logo';
 import CTLForm from '../../UI/CLIENT-UI/CTLForm';
-import SocialLoginButtons from '../../UI/SocialLoginButtons';
+import SocialLoginButtons from '../../UI/Universal-UI/SocialLoginButtons';
 
 const CTLPage = () => {
   return (

@@ -8,7 +8,7 @@ import {
   MapPin,
 } from 'lucide-react';
 import Logo from './logo';
-import useMediaQuery from '../hooks/MediaQuery';
+import useMediaQuery from '../../hooks/MediaQuery';
 
 
 // Animation variants

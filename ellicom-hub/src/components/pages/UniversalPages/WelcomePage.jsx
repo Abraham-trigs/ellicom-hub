@@ -1,10 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import Logo from '../UI/logo';
-import NewJobButton from '../UI/JobCardButton';
-import ClientLoginButton from '../UI/CLIENT-UI/CTLoginButton';
-import AvailableNow from '../UI/AvailableNow';
-
+import Logo from '../../UI/Universal-UI/logo';
+import JobCardButton from '../../UI/Universal-UI/JobCardButton';
+import ClientLoginButton from '../../UI/CLIENT-UI/CTLoginButton';
+import AvailableNow from '../../UI/Universal-UI/AvailableNow';
 
 const WelcomePage = () => {
   const navigate = useNavigate();

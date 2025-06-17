@@ -1,7 +1,7 @@
 import React from 'react'
-import NewJobButton from '../../UI/JobCardButton';
+import NewJobButton from '../../UI/Universal-UI/JobCardButton';
 import SSideBar from '../../UI/Staff-UI/SSideBar';
-import Head from '../../UI/Head';
+import Head from '../../UI/Universal-UI/Head';
 import SJobHolder from '../../UI/Staff-UI/SJobHolder';
 
 const SDashboard = () => {

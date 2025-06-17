@@ -10,7 +10,7 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react';
-import Logo from '../Universal-UI/logo';
+import Logo from './logo';
 
 const navItems = [
   { label: 'Recent Jobs', Icon: Printer },
@@ -114,7 +114,7 @@ const SideNav = ({ isOpen, onClose }) => {
   );
 };
 
-const CTSideBar = () => {
+const SideBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = () => setIsOpen((prev) => !prev);
 
@@ -143,4 +143,4 @@ const CTSideBar = () => {
   );
 };
 
-export default CTSideBar;
+export default SideBar;

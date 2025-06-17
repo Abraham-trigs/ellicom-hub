@@ -1,20 +1,20 @@
 import { Routes, Route } from 'react-router-dom';
 // Layout
-import LayoutWithNav from './components/UI/LayoutWithNavBar';
+import LayoutWithNav from './components/UI/Universal-UI/LayoutWithNavBar';
 
 // Auth Protection
 import { RequireAuth, RequireClient, RequireStaff, RequireAdmin } from './Routes/RequireAuth';
 // Universal Pages
-import WelcomePage from './components/pages/WelcomePage';
-import AddJobPage from './components/pages/AddJobPage';
-import JobDetailsPage from './components/pages/JobDetailsPage';
+import WelcomePage from './components/pages/UniversalPages/WelcomePage';
+import AddJobPage from './components/pages/UniversalPages/AddJobPage';
+import JobDetailsPage from './components/pages/UniversalPages/JobDetailsPage';
+import Home from './components/pages/UniversalPages/Home';
 // Client Pages
 import CTLPage from './components/pages/ClientPages/CTLPage';
 import CTJobCard from './components/UI/CLIENT-UI/CTJobCard';
 import CTJobList from './components/pages/ClientPages/CTJobList';
 // Staff Pages
 import SLPage from './components/pages/StaffPages/SLPage';
-import Home from './components/pages/StaffPages/Home';
 import SDashboard from './components/pages/StaffPages/SDashboard';
 
 function App() {
@@ -24,6 +24,7 @@ function App() {
 
         {/* Universal Welcome Page */}
         <Route path="/" element={<WelcomePage />} />
+        <Route path="/Home" element={<Home />} />
 
         {/* Guest/Anonymous Route */}
         <Route path="/guest/add-job" element={<AddJobPage />} />

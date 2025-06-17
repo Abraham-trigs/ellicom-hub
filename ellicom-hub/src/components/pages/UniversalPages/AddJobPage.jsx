@@ -1,11 +1,11 @@
 import React from 'react';
-import Logo from '../UI/logo';
-import NewJobButton from '../UI/JobCardButton';
-import CTSideBar from '../UI/CLIENT-UI/CTSideBar';
-import Head from '../UI/Head';
-import CTLargeFormat from '../UI/LargeFormatRecorder';
-import JobCard from '../UI/CLIENT-UI/JobCard';
-import JobRecorder from '../UI/JobRecorder';
+import Logo from '../../UI/Universal-UI/logo';
+import SideBar from '../../UI/Universal-UI/SideBar';
+import LargeFormatRecorder from '../../UI/Universal-UI/LargeFormatRecorder';
+import JobCard from '../../UI/Universal-UI/JobCard';
+import JobRecorder from '../../UI/Universal-UI/JobRecorder';
+import Head from '../../UI/Universal-UI/Head';
+
 
 const  AddJobPage= () => {
   return (
@@ -15,7 +15,7 @@ const  AddJobPage= () => {
 
           <div className="w-full ">
             <div className=' flex flex-row justify-end'>
-              <CTSideBar />
+              <SideBar />
             </div>
           </div>
         </div>

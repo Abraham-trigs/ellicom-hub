@@ -1,8 +1,8 @@
 import React from 'react';
-import Logo from '../../UI/logo';
-import JobCardButton from '../../UI/JobCardButton';
+import Logo from '../../UI/Universal-UI/logo';
+import JobCardButton from '../../UI/Universal-UI/JobCardButton';
 import CTSideBar from '../../UI/CLIENT-UI/CTSideBar';
-import Head from '../../UI/Head';
+import Head from '../../UI/Universal-UI/Head';
 
 
 const  CTJobList= () => {
