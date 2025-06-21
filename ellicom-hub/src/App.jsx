@@ -16,6 +16,7 @@ import CTJobList from './components/pages/ClientPages/CTJobList';
 // Staff Pages
 import SLPage from './components/pages/StaffPages/SLPage';
 import SDashboard from './components/pages/StaffPages/SDashboard';
+import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         {/* Universal Welcome Page */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/Home" element={<Home />} />
+        <Route path="/Super/DashTry" element={<SuperDashBoard />} />
 
         {/* Guest/Anonymous Route */}
         <Route path="/guest/add-job" element={<AddJobPage />} />
@@ -48,6 +50,11 @@ function App() {
           <Route path="/client/add-job" element={<AddJobPage />} />
           <Route path="/client/joblist" element={<CTJobList />} />
           <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
+        </Route>
+
+        {/* 🔐 Protected SuperAdmin Routes */}
+        <Route element={<RequireAdmin />}>
+          <Route path="/SuperAdmin/Dashboard" element={<SuperDashBoard />} />
         </Route>
 
       </Routes>
