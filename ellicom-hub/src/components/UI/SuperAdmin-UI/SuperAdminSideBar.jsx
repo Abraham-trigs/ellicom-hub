@@ -10,7 +10,7 @@
  * Highlighting of currently active section
  * Toggle button (hamburger menu) for mobile responsiveness
  * 
- * Zustand Store Used: useSidebarStore
+ * Zustand Store Used: useAdminSideBarStore
  * - isOpen       → Boolean, sidebar visibility
  * - toggleSidebar() → Toggles sidebar visibility
  * - closeSidebar()  → Closes the sidebar
@@ -39,8 +39,8 @@ import {
   LayoutDashboard,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import useSidebarStore from '../stores/useSidebarStore';
 import Logo from '../Universal-UI/logo';
+import useAdminSideBarStore from '../../store/SuperAdminStore/AdminSideBarStore';
 
 const navItems = [
   { label: 'Dashboard', Icon: LayoutDashboard },
@@ -55,7 +55,7 @@ const navItems = [
 ];
 
 const SideNav = () => {
-  const { isOpen, closeSidebar, activeTab, setActiveTab } = useSidebarStore();
+  const { isOpen, closeSidebar, activeTab, setActiveTab } = useAdminSideBarStore();
   const navigate = useNavigate();
 
   return (
@@ -159,7 +159,7 @@ const SideNav = () => {
 };
 
 const SuperAdminSidebar = () => {
-  const { isOpen, toggleSidebar } = useSidebarStore();
+  const { isOpen, toggleSidebar } = useAdminSideBarStore();
 
   return (
     <>

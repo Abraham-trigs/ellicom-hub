@@ -10,7 +10,7 @@ const getDashboardPath = (role) => {
       return '/staff/dashboard';
     case 'admin':
     case 'superadmin':
-      return '/admin/dashboard'; // make this route real for admin panel
+      return '/admin/dashboard'; 
     default:
       return '/';
   }

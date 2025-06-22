@@ -19,48 +19,53 @@ import SDashboard from './components/pages/StaffPages/SDashboard';
 import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
 
 function App() {
+  // To confirm Firebase env variables are loading correctly
+  console.log("✅ Firebase Project ID:", import.meta.env.VITE_FIREBASE_PROJECT_ID);
+  console.log("✅ Firebase API Key:", import.meta.env.VITE_FIREBASE_API_KEY);
+
   return (
-    <LayoutWithNav>
-      <Routes>
+    <>
+      <LayoutWithNav>
+        <Routes>
 
-        {/* Universal Welcome Page */}
-        <Route path="/" element={<WelcomePage />} />
-        <Route path="/Home" element={<Home />} />
-        <Route path="/Super/DashTry" element={<SuperDashBoard />} />
-        {/* <Route path="/SuperAdmin/Dashboard" element={<SuperDashBoard />} /> */}
+          {/* Universal Welcome Page */}
+          <Route path="/" element={<WelcomePage />} />
+          <Route path="/Home" element={<Home />} />
+          <Route path="/Super/DashTry" element={<SuperDashBoard />} />
+          {/* <Route path="/SuperAdmin/Dashboard" element={<SuperDashBoard />} /> */}
 
+          {/* Guest/Anonymous Route */}
+          <Route path="/guest/add-job" element={<AddJobPage />} />
 
-        {/* Guest/Anonymous Route */}
-        <Route path="/guest/add-job" element={<AddJobPage />} />
+          {/* Client Auth Routes */}
+          <Route path="/client/login" element={<CTLPage />} />
 
-        {/* Client Auth Routes */}
-        <Route path="/client/login" element={<CTLPage />} />
+          {/* Staff Auth Routes */}
+          <Route path="/staff/login" element={<SLPage />} />
 
-        {/* Staff Auth Routes */}
-        <Route path="/staff/login" element={<SLPage />} />
+          {/* 🔐 Protected Staff Routes */}
+          <Route element={<RequireStaff />}>
+            <Route path="/staff/home" element={<Home />} />
+            <Route path="/staff/dashboard" element={<SDashboard />} />
+          </Route>
 
-        {/* 🔐 Protected Staff Routes */}
-        <Route element={<RequireStaff />}>
-          <Route path="/staff/home" element={<Home />} />
-          <Route path="/staff/dashboard" element={<SDashboard />} />
-        </Route>
+          {/* 🔐 Protected Client Routes */}
+          <Route element={<RequireClient />}>
+            <Route path="/client/job-card" element={<CTJobCard />} />
+            <Route path="/client/dashboard" element={<CTJobList />} />
+            <Route path="/client/add-job" element={<AddJobPage />} />
+            <Route path="/client/joblist" element={<CTJobList />} />
+            <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
+          </Route>
 
-        {/* 🔐 Protected Client Routes */}
-        <Route element={<RequireClient />}>
-          <Route path="/client/job-card" element={<CTJobCard />} />
-          <Route path="/client/dashboard" element={<CTJobList />} />
-          <Route path="/client/add-job" element={<AddJobPage />} />
-          <Route path="/client/joblist" element={<CTJobList />} />
-          <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
-        </Route>
+          {/* 🔐 Protected SuperAdmin Routes */}
+          <Route element={<RequireAdmin />}>
+            <Route path="/SuperAdmin/Dashboard" element={<SuperDashBoard />} />
+          </Route>
 
-        {/* 🔐 Protected SuperAdmin Routes */}
-        <Route element={<RequireAdmin />}>
-          <Route path="/SuperAdmin/Dashboard" element={<SuperDashBoard />} />
-        </Route>
-
-      </Routes>
-    </LayoutWithNav>
+        </Routes>
+      </LayoutWithNav>
+    </>
   );
 }
 
