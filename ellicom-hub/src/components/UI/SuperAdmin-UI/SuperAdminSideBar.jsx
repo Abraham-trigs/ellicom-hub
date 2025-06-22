@@ -1,8 +1,33 @@
+/**
+ * SuperAdminSidebar.jsx
+ * ----------------------
+ * Responsive, animated sidebar component for Super Admin dashboards.
+ * Built with Framer Motion and Zustand (global store) to manage:
+ * 
+ * Sidebar open/close state (globally via Zustand)
+ * Active tab tracking for UI feedback & session persistence
+ * Route-based navigation using React Router
+ * Highlighting of currently active section
+ * Toggle button (hamburger menu) for mobile responsiveness
+ * 
+ * Zustand Store Used: useSidebarStore
+ * - isOpen       → Boolean, sidebar visibility
+ * - toggleSidebar() → Toggles sidebar visibility
+ * - closeSidebar()  → Closes the sidebar
+ * - activeTab    → Tracks which nav item is selected
+ * - setActiveTab(tab) → Sets the active tab
+ *
+ * Useful for:
+ * - Dashboard layouts that need centralized sidebar control
+ * - Mobile-first UI where sidebar must toggle dynamically
+ * - Remembering the last section visited by the Super Admin
+ */
+
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
   Users,
-  BarChart2,
   ClipboardList,
   PackageCheck,
   DollarSign,
@@ -11,9 +36,11 @@ import {
   LogOut,
   Award,
   LineChart,
-  LayoutDashboard
+  LayoutDashboard,
 } from 'lucide-react';
-import Logo from './logo';
+import { useNavigate } from 'react-router-dom';
+import useSidebarStore from '../stores/useSidebarStore';
+import Logo from '../Universal-UI/logo';
 
 const navItems = [
   { label: 'Dashboard', Icon: LayoutDashboard },
@@ -27,7 +54,10 @@ const navItems = [
   { label: 'Settings', Icon: Settings },
 ];
 
-const SideNav = ({ isOpen, onClose }) => {
+const SideNav = () => {
+  const { isOpen, closeSidebar, activeTab, setActiveTab } = useSidebarStore();
+  const navigate = useNavigate();
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -38,10 +68,10 @@ const SideNav = ({ isOpen, onClose }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.4 }}
             exit={{ opacity: 0 }}
-            onClick={onClose}
+            onClick={closeSidebar}
           />
 
-          {/* SuperAdmin SideBar */}
+          {/* Sidebar Panel */}
           <motion.nav
             className="fixed top-0 right-0 bottom-0 w-64 bg-white dark:bg-container shadow-xl z-50 flex flex-col p-6 rounded-l-4xl border-2 border-sea"
             initial={{ x: '100%' }}
@@ -51,7 +81,7 @@ const SideNav = ({ isOpen, onClose }) => {
           >
             {/* Close button */}
             <button
-              onClick={onClose}
+              onClick={closeSidebar}
               aria-label="Close menu"
               className="p-2 rounded hover:bg-inactive transition self-end"
             >
@@ -70,21 +100,32 @@ const SideNav = ({ isOpen, onClose }) => {
                 <button
                   className="bg-sea px-7 py-2 text-ground rounded-lg font-normal text-center 
                   transition ease-in-out duration-200 hover:bg-high hover:scale-95"
+                  onClick={() => {
+                    navigate('/add-job');
+                    closeSidebar();
+                  }}
                 >
                   New Job <span className="font-black">+</span>
                 </button>
               </div>
             </div>
 
-            {/* Navigation items */}
+            {/* Navigation */}
             <ul className="w-full flex flex-col items-center">
               {navItems.map(({ label, Icon }, index) => (
                 <React.Fragment key={label}>
                   <li>
                     <button
-                      className="w-full flex items-center gap-3 py-2 px-3 m-1 text-head 
-                      hover:bg-gold hover:text-container hover:font-semibold rounded transition"
-                      onClick={() => console.log(`${label} clicked`)}
+                      onClick={() => {
+                        navigate(`/${label.toLowerCase().replace(/\s/g, '-')}`);
+                        setActiveTab(label); // ✅ Set active tab
+                        closeSidebar();
+                      }}
+                      className={`w-full flex items-center gap-3 py-2 px-3 m-1 rounded transition ${
+                        activeTab === label
+                          ? 'bg-gold text-container font-semibold'
+                          : 'text-head hover:bg-gold hover:text-container hover:font-semibold'
+                      }`}
                     >
                       <Icon className="w-5 h-5" />
                       {label}
@@ -101,7 +142,10 @@ const SideNav = ({ isOpen, onClose }) => {
             <div className="w-full mt-auto pt-6">
               <button
                 className="w-full flex items-center gap-3 px-3 py-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded transition"
-                onClick={() => console.log('Logout clicked')}
+                onClick={() => {
+                  console.log('Logout clicked');
+                  closeSidebar();
+                }}
               >
                 <LogOut className="w-5 h-5" />
                 Logout
@@ -115,14 +159,13 @@ const SideNav = ({ isOpen, onClose }) => {
 };
 
 const SuperAdminSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggleMenu = () => setIsOpen((prev) => !prev);
+  const { isOpen, toggleSidebar } = useSidebarStore();
 
   return (
     <>
       {/* Hamburger Toggle */}
       <button
-        onClick={toggleMenu}
+        onClick={toggleSidebar}
         aria-label="Toggle menu"
         className="flex flex-col justify-center items-center w-10 h-10 space-y-1.5 focus:outline-none"
       >
@@ -138,11 +181,9 @@ const SuperAdminSidebar = () => {
       </button>
 
       {/* Sidebar */}
-      <SideNav isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <SideNav />
     </>
   );
 };
 
 export default SuperAdminSidebar;
-
-

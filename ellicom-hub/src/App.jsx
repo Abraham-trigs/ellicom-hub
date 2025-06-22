@@ -27,6 +27,8 @@ function App() {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/Home" element={<Home />} />
         <Route path="/Super/DashTry" element={<SuperDashBoard />} />
+        {/* <Route path="/SuperAdmin/Dashboard" element={<SuperDashBoard />} /> */}
+
 
         {/* Guest/Anonymous Route */}
         <Route path="/guest/add-job" element={<AddJobPage />} />
