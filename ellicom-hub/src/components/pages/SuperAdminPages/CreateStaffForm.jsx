@@ -1,36 +1,24 @@
+// components/SuperAdmin/CreateStaffForm.jsx
 import React, { useState } from 'react';
-import { httpsCallable } from 'firebase/functions';
-import { functions } from '../../../firebase/firebaseConfig'; // adjust import to your path
-import { toast } from 'react-toastify';
+import { useStaffStore } from '../../stores/useStaffStore'; // ✅ Zustand Store
 
 const CreateStaffForm = () => {
+  const { createStaff, loading } = useStaffStore(); // Zustand actions
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     role: 'staff',
   });
 
-  const [loading, setLoading] = useState(false);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleCreate = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      const createStaffAccount = httpsCallable(functions, 'createStaffAccount');
-      const response = await createStaffAccount(formData);
-
-      toast.success(`✅ Created: ${response.data.staffID}`);
+    const success = await createStaff(formData);
+    if (success) {
       setFormData({ name: '', email: '', role: 'staff' });
-    } catch (err) {
-      console.error(err);
-      toast.error(`❌ ${err.message || 'Failed to create account'}`);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -39,7 +27,8 @@ const CreateStaffForm = () => {
       <h2 className="text-2xl font-bold text-center text-gold mb-4">
         Create Staff/Admin Account
       </h2>
-      <form onSubmit={handleCreate} className="space-y-4">
+
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700">Full Name</label>
           <input
