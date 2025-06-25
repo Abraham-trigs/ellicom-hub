@@ -1,49 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { auth } from '../../../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../../firebase';
+import useUserStore from '../../store/useUserStore'; // ✅ Zustand store
+import { getJobRouteForRole } from '../../utils/roleRoutes'; // ✅ Util route map
 
 const JobCardButton = () => {
   const navigate = useNavigate();
-  const [user] = useAuthState(auth);
-  const [role, setRole] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      if (user) {
-        try {
-          const userRef = doc(db, 'users', user.uid);
-          const userSnap = await getDoc(userRef);
-
-          if (userSnap.exists()) {
-            setRole(userSnap.data().role);
-          } else {
-            console.warn('No user doc found.');
-          }
-        } catch (err) {
-          console.error('Failed to fetch user role:', err);
-        }
-      }
-      setLoading(false);
-    };
-
-    fetchUserRole();
-  }, [user]);
+  // 🔄 Global role state from Zustand
+  const role = useUserStore((state) => state.role);
+  const loading = useUserStore((state) => state.loading);
 
   const handleClick = () => {
-    if (!role) return;
-
-    if (role === 'client') navigate('/Client/Add-Job');
-    else if (role === 'staff') navigate('/staff/add-job');
-    else if (role === 'admin') navigate('/admin/new-job');
-    else navigate('/unauthorized'); // fallback route
+    const route = getJobRouteForRole(role);
+    navigate(route);
   };
 
+  // 🧼 UX fallback while role is loading
   if (loading) return <p className="text-gray-400 text-sm">Checking access...</p>;
 
+  // 🚫 Hide if no role found (e.g. guest)
   if (!role) return null;
 
   return (

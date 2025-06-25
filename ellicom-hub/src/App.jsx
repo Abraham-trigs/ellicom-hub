@@ -1,9 +1,14 @@
+// App.jsx – Main Application Shell (Zustand + Role-Based Access)
+
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
+// Zustand Stores
+import useAuthenticStore from './components/store/AuthenticStore';
+import useUserStore from './components/store/UserStore'; // ✅ New import
+
 // 🔐 Role-based guard (Zustand powered)
 import RequireRole from './Routes/RequireRoles';
-import useAuthenticStore from './components/store/AuthenticStore';
 
 // Layout
 import LayoutWithNav from './components/UI/Universal-UI/LayoutWithNavBar';
@@ -29,19 +34,21 @@ import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
 
 function App() {
   const { isAppReady, loading, fetchUser } = useAuthenticStore();
+  const { fetchUserAndRole } = useUserStore(); // ✅ Load role via Zustand
 
-  // 🔄 Load user on app mount
+  // 🔄 Load Firebase Auth user on mount
   useEffect(() => {
     fetchUser();
+    fetchUserAndRole(); // ✅ Load role & user details for global access
   }, []);
 
-  // 🧼 Remove preloader when app is ready
+  // 🧼 Preloader cleanup when ready
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (isAppReady && preloader) preloader.remove();
   }, [isAppReady]);
 
-  // 🧯 Fallback if isAppReady fails
+  // 🧯 Fallback preloader removal (if appReady missed)
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (!loading && preloader) preloader.remove();
@@ -110,19 +117,22 @@ function App() {
 export default App;
 
 
-//
 // App.jsx – Main Application Shell (Zustand + Role-Based Access)
 //
-// 📦 State & Auth:
-//   - Powered by Zustand's `useAuthenticStore`
-//   - Fetches Firebase user + role on mount (via fetchUser())
-//   - Centralizes isAppReady, user, role, and loading flags
+// 📦 State Management:
+//   - Uses `useAuthenticStore` to manage Firebase auth state (isAppReady, loading, fetchUser)
+//   - Uses `useUserStore` to globally fetch and store the Firebase user role from Firestore
 //
-// 🧼 Splash Screen Handling:
-//   - Removes #preloader once `isAppReady` is true
-//   - Includes fallback removal when `loading` becomes false
+// 🛡️ Route Protection:
+//   - All protected routes use <RequireRole /> wrapper
+//   - Centralizes role-based access control with reusable logic
 //
-// 🛡️ Route Guards:
-//   - Single reusable <RequireRole allowedRoles={[]} /> for all protected sections
-//   - Replaces old guard components like RequireClient / RequireAdmin
+// 🧼 Preloader Handling:
+//   - Removes loading splash screen when auth is resolved (via isAppReady or fallback)
+//
+// 📁 Page Structure:
+//   - Universal Pages (accessible by all users)
+//   - Client Pages (protected by client role)
+//   - Staff Pages (protected by staff and admin roles)
+//   - SuperAdmin Pages (protected by superadmin role)
 //

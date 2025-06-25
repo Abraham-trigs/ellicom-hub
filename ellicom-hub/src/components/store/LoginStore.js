@@ -1,54 +1,53 @@
-// store/useLoginStore.js
+// 🔐 useLoginStore.login() triggers signInWithEmailAndPassword
+
+// 🧠 It then calls useAuthenticStore.fetchUser()
+
+// 🧬 fetchUser() listens to Firebase auth and resolves role
+
+// 🔄 Both stores (AuthenticStore and UserStore) are synced
+
+// 🚀 UI everywhere can just use useUserStore() for reactive user info
+
 
 import { create } from 'zustand';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import useAuthenticStore from './AuthenticStore';
+import useUserStore from './UserStore'; // 👈 syncing point
 
 const roleRedirectMap = {
-  superadmin: 'dashboard',
+  superadmin: '/superadmin/dashboard',
   admin: '/admin-home',
   staff: '/staff-home',
   client: '/client-home',
 };
 
 const useLoginStore = create((set, get) => ({
-  // 🔐 UI state for login form
   email: '',
   password: '',
-  loginType: '', // Can be client, staff, admin — optional for UI context
+  loginType: '',
   loading: false,
   error: null,
 
-  // ✏️ Input setters
   setEmail: (val) => set({ email: val }),
   setPassword: (val) => set({ password: val }),
   setLoginType: (type) => set({ loginType: type }),
 
-  /**
-   * 🔁 Login function
-   * - Signs in user via Firebase Auth
-   * - Triggers global user + role state update
-   * - Redirects based on user role
-   *
-   * @param {Function} navigate - useNavigate() from react-router-dom
-   */
   login: async (navigate) => {
     const { email, password } = get();
-    const { fetchUser, role } = useAuthenticStore.getState();
+    const { fetchUser } = useAuthenticStore.getState();
 
     set({ loading: true, error: null });
 
     try {
-      // 🔐 Attempt Firebase login
       const userCred = await signInWithEmailAndPassword(auth, email, password);
 
-      // 🔄 Refresh global user info and role
       await fetchUser();
-      const currentRole = useAuthenticStore.getState().role;
+      const { user, role } = useAuthenticStore.getState();
 
-      // 🚦 Redirect based on role
-      const redirectPath = roleRedirectMap[currentRole] || '/unauthorized';
+      useUserStore.setState({ user, role }); // sync again (just in case)
+
+      const redirectPath = roleRedirectMap[role] || '/unauthorized';
       navigate(redirectPath);
 
       return userCred.user;
@@ -66,21 +65,24 @@ export default useLoginStore;
 
 
 //
-// 🏗️ useLoginStore.js – Auth UI + Middleware Logic
+// 🛂 useLoginStore.js – Login Form Handler + Auth Trigger
 //
-// Description:
-//   - Handles local state for login inputs (email, password, loginType)
-//   - Performs Firebase login via signInWithEmailAndPassword
-//   - Syncs user & role to global `useAuthenticStore`
-//   - Redirects user based on resolved role (superadmin, admin, staff, client)
+// 🔍 Purpose:
+//   - Local state for login form fields (email, password)
+//   - Handles login flow via Firebase Auth
+//   - Triggers fetchUser() from useAuthenticStore
+//   - Redirects user based on resolved role
 //
-// Usage:
-//   - Wrap login pages in useLoginStore()
-//   - Call login(navigate) on form submit
+// 🔁 Syncs With:
+//   - ✅ useAuthenticStore: to refresh user + role
+//   - ✅ useUserStore: updates global role/user state for UI
 //
-// Why not merge with useAuthenticStore?
-//   - Separation of concerns: keep form state + Firebase triggers isolated
-//   - Makes testing, reuse, and expansion (biometrics, 2FA) easier
+// 📦 State:
+//   - email, password, loginType (optional for UI labeling)
+//   - loading: login progress state
+//   - error: for invalid credentials or Firebase errors
 //
-// Author: Abraham Bortey Danfa 🛠️
+// 🔧 Actions:
+//   - setEmail(), setPassword(), setLoginType()
+//   - login(navigate): calls Firebase login, then redirects
 //
