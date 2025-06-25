@@ -60,33 +60,31 @@ const useAuthenticStore = create((set, get) => ({
 export default useAuthenticStore;
 
 
+// store/useAuthenticStore.js
+
 //
-// useAuthStore.js – Global Auth + Role Management with Zustand
+// 🧠 AuthenticStore – Central auth + role store (used app-wide)
 //
 // Purpose:
-//   - Tracks the current authenticated user and their assigned role
-//   - Syncs Firebase Auth state into Zustand's global state
-//   - Resolves roles using either custom claims or fallback to Firestore
+//   - Tracks current Firebase user and their role (superadmin, staff, client, etc.)
+//   - Listens to real-time auth state changes via onAuthStateChanged
+//   - Retrieves role either from custom claims or Firestore fallback
 //
-// State:
-//   - user: Firebase user object or null
-//   - role: 'superadmin', 'admin', 'staff', etc.
-//   - loading: used to block UI while resolving role
-//   - isAppReady: flags when role-check and auth-check are done
+// Core State:
+//   - user: Firebase user object
+//   - role: String (e.g. "superadmin", "staff")
+//   - loading: Whether auth check is in progress
+//   - isAppReady: Used to gate route rendering until auth is resolved
 //
-// Actions:
-//   - fetchUser(): attaches onAuthStateChanged listener, resolves role
-//   - logout(): signs out and clears state
+// Core Actions:
+//   - fetchUser(): initializes user + role detection
+//   - logout(): signs out and resets user state
 //
 // Utilities:
-//   - isSuperAdmin(): returns true if user is superadmin
-//   - isStaff(): checks for admin or staff
-//   - isGuest(): true when no user is logged in
-//   - hasRole([...roles]): checks against valid roles list
+//   - isSuperAdmin(), isStaff(), isGuest(), hasRole() – helpful role-based checks
 //
-// Notes:
-//   - Prevents duplicate listeners with `unsubscribeAuth` guard
-//   - Can be extended with `canAccessDashboard`, `canCreateJobs`, etc.
-//   - Works seamlessly with RequireRole.jsx for route protection
+// Why Use Zustand Here?
+//   - Centralized, reactive state for route guards, UI conditions, dashboards, etc.
+//   - Easily accessed from anywhere in the app without prop drilling
 //
 
