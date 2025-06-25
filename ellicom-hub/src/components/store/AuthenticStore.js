@@ -9,11 +9,11 @@
 // 🚀 UI everywhere can just use useUserStore() for reactive user info
 
 
+// store/useAuthenticStore.js
 import { create } from 'zustand';
 import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../lib/firebase';
-import useUserStore from './UserStore'; // syncing point
 
 const useAuthenticStore = create((set, get) => ({
   user: null,
@@ -21,43 +21,41 @@ const useAuthenticStore = create((set, get) => ({
   loading: true,
   isAppReady: false,
 
-  // 🔁 Real-time auth listener + role resolver
-  fetchUser: async () => {
+  fetchUser: async (loginType = '') => {
     onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
         set({ user: firebaseUser });
-        useUserStore.setState({ user: firebaseUser }); // sync
 
         try {
           await firebaseUser.getIdToken(true);
           const tokenResult = await getIdTokenResult(firebaseUser);
           const customRole = tokenResult.claims.role;
 
-          let resolvedRole = null;
-
           if (customRole) {
-            resolvedRole = customRole;
+            set({ role: customRole });
           } else {
-            const userRef = doc(db, 'staff', firebaseUser.uid); // Change as needed
-            const userSnap = await getDoc(userRef);
-            if (userSnap.exists()) {
-              resolvedRole = userSnap.data().role || null;
+            let userRef;
+            if (loginType === 'client') {
+              userRef = doc(db, 'clients', firebaseUser.uid);
             } else {
-              console.warn('⚠️ Role not found in Firestore.');
+              userRef = doc(db, 'staff', firebaseUser.uid);
+            }
+
+            const userSnap = await getDoc(userRef);
+
+            if (userSnap.exists()) {
+              set({ role: userSnap.data().role || null });
+            } else {
+              console.warn('⚠️ Role not found in expected collection.');
+              set({ role: null });
             }
           }
-
-          set({ role: resolvedRole });
-          useUserStore.setState({ role: resolvedRole }); // sync
-
         } catch (err) {
-          console.error('🔥 Error retrieving user role:', err);
+          console.error('🔥 Error resolving user role:', err);
           set({ role: null });
-          useUserStore.setState({ role: null });
         }
       } else {
         set({ user: null, role: null });
-        useUserStore.setState({ user: null, role: null }); // sync
       }
 
       set({ loading: false, isAppReady: true });
@@ -67,10 +65,8 @@ const useAuthenticStore = create((set, get) => ({
   logout: async () => {
     await auth.signOut();
     set({ user: null, role: null, loading: false });
-    useUserStore.setState({ user: null, role: null }); // sync
   },
 
-  // Utility role checks
   isSuperAdmin: () => get().role === 'superadmin',
   isStaff: () => ['staff', 'admin'].includes(get().role),
   isGuest: () => !get().user && !get().role,

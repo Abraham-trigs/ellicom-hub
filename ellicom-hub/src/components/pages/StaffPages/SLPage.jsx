@@ -1,18 +1,8 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import useSLStore from '../../store/SLStore';
 import Logo from '../../UI/Universal-UI/logo';
 import SLForm from '../../UI/Staff-UI/SLForm';
 
 const SLPage = () => {
-  const { name, password, setName, setPassword, login } = useSLStore();
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    login(navigate);
-  };
-
   return (
     <>
       <div className='scale-80'>
@@ -29,21 +19,22 @@ const SLPage = () => {
         </div>
 
         <div>
-          <p className='text-head font-normal text-center mt-(-4) '> 
-            Advertising Ghana Ltd </p>
+          <p className='text-head font-normal text-center mt-(-4)'> 
+            Advertising Ghana Ltd
+          </p>
         </div>
-      </div>
 
         <div>
-          <p className='text-inactive font-normal italic text-center mt-(-4) '> 
-            Staff Login <span className='text-highGold'>Only</span> </p>
+          <p className='text-inactive font-normal italic text-center mt-(-4)'> 
+            Staff Login <span className='text-highGold'>Only</span>
+          </p>
         </div>
+      </div>
 
       <div className='mt-3'>
-          <SLForm />
+        <SLForm />
       </div>
     </>
-    
   );
 };
 

@@ -9,14 +9,14 @@
 // 🚀 UI everywhere can just use useUserStore() for reactive user info
 
 
+// store/useLoginStore.js
 import { create } from 'zustand';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../lib/firebase';
 import useAuthenticStore from './AuthenticStore';
-import useUserStore from './UserStore'; // 👈 syncing point
 
 const roleRedirectMap = {
-  superadmin: '/superadmin/dashboard',
+  superadmin: 'dashboard',
   admin: '/admin-home',
   staff: '/staff-home',
   client: '/client-home',
@@ -34,7 +34,7 @@ const useLoginStore = create((set, get) => ({
   setLoginType: (type) => set({ loginType: type }),
 
   login: async (navigate) => {
-    const { email, password } = get();
+    const { email, password, loginType } = get();
     const { fetchUser } = useAuthenticStore.getState();
 
     set({ loading: true, error: null });
@@ -42,14 +42,13 @@ const useLoginStore = create((set, get) => ({
     try {
       const userCred = await signInWithEmailAndPassword(auth, email, password);
 
-      await fetchUser();
-      const { user, role } = useAuthenticStore.getState();
+      // 🔁 Pass loginType to fetchUser()
+      await fetchUser(loginType);
 
-      useUserStore.setState({ user, role }); // sync again (just in case)
+      const currentRole = useAuthenticStore.getState().role;
+      const redirectPath = roleRedirectMap[currentRole] || '/unauthorized';
 
-      const redirectPath = roleRedirectMap[role] || '/unauthorized';
       navigate(redirectPath);
-
       return userCred.user;
     } catch (err) {
       console.error('Login error:', err.message);
