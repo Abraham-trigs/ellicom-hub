@@ -79,3 +79,23 @@ const CreateStaffForm = () => {
 };
 
 export default CreateStaffForm;
+
+
+//
+// CreateStaffForm.jsx – SuperAdmin-only form for staff/admin account creation
+//
+// Role: UI component responsible for submitting staff or admin data
+//
+// Features:
+//   - Captures name, email, and role input from SuperAdmin
+//   - Calls Zustand action `createStaff()` to trigger backend Cloud Function
+//   - Handles loading state and resets form after success
+//
+// Notes:
+//   - Scoped only to SuperAdmin (component should be protected by RequireRole)
+//   - Cloud Function handles sensitive logic like ID generation, temp password, and email
+//   - This form is lean: all backend interaction lives in the Zustand store
+//
+// Folder: /components/SuperAdmin/CreateStaffForm.jsx
+// Author: Abraham Bortey Danfa
+//

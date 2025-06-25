@@ -102,22 +102,23 @@ const WelcomePage = () => {
 export default WelcomePage;
 
 
-/* 
-// 🧭 WelcomePage.jsx – Public Entry Screen
 //
-// Acts as the root landing page of the Ellicom platform
-// Directs users to 3 access levels via buttons: Guest, Client, and Admin/Staff
-// Clean UI with company logo, motto, and a responsive, centered layout
-// Uses `useNavigate()` from React Router to trigger routing
-// Highlights company brand and service division
+// WelcomePage.jsx – Landing screen with entry paths for all user types
 //
-// 📦 Linked Navigation Paths:
-//    - Guest → /Guest/Add-Job
-//    - Client → /Client/login
-//    - Staff → /Staff/login
+// Role: First interaction screen that routes users based on role or intent
 //
-// 💡 Notes:
-//    - Admin/Staff button is centered using `flex justify-center w-full`
-//    - `JobCardButton` and `ClientLoginButton` are currently unused imports
-//    - `AvailableNow` displays real-time badge or CTA
-*/
+// Features:
+//   - Buttons for:
+//       • Guest Add Job → skips login, opens job form directly
+//       • Client Login → standard Firebase login path
+//       • Admin/Staff Login → protected role-based auth
+//   - Displays Ellicom branding and call to action
+//
+// Notes:
+//   - Acts as root entry in Phase 1 and persists through all phases
+//   - May evolve to include dynamic banners or announcements
+//   - Component structure should remain mobile-first and responsive
+//
+// Folder: /components/WelcomePage.jsx
+// Author: Abraham Bortey Danfa
+//

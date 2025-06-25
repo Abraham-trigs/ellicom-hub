@@ -31,16 +31,21 @@ const RequireRole = ({ allowedRoles = [], redirectTo = '/', children }) => {
 export default RequireRole;
 
 
-// 🧠 RequireRole –
-
-// - ✅ Checks for user + role match
-// - ✅ Accepts any role array (['client'], ['admin', 'superadmin'], etc.)
-// - ✅ Redirects unauthorized users wherever you want (default: '/')
-// - ✅ Uses Zustand store (not React Context)
-// - ✅ Prevents race condition by fetching user if missing
-// - ✅ Supports route memory via state (from: location)
-
-// Perfect for:
-// - Scalable apps with multi-role access control
-// - Centralizing role logic
-// - Reducing boilerplate and mistakes in route setup
+//
+// RequireRole.jsx – Role-based route guard wrapper
+//
+// Role: Restricts access to child components based on current user's role
+//
+// Features:
+//   - Accepts a `role` or array of roles (`["superadmin", "admin"]`)
+//   - Checks authenticated user's role from Zustand or context
+//   - Redirects unauthorized users to login or 403 page
+//
+// Notes:
+//   - Replaces legacy RequireSuperAdmin logic
+//   - Should wrap all routes and pages that need protection (e.g., SuperAdminDashboard, AdminPanel)
+//   - Works best with central `useAuthStore()`
+//   - Can be extended later for permissions like `canCreateJobs`, `canDeleteStaff`, etc.
+//
+// Author: Abraham Bortey Danfa
+//

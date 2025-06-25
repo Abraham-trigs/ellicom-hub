@@ -58,3 +58,35 @@ const useAuthenticStore = create((set, get) => ({
 }));
 
 export default useAuthenticStore;
+
+
+//
+// useAuthStore.js – Global Auth + Role Management with Zustand
+//
+// Purpose:
+//   - Tracks the current authenticated user and their assigned role
+//   - Syncs Firebase Auth state into Zustand's global state
+//   - Resolves roles using either custom claims or fallback to Firestore
+//
+// State:
+//   - user: Firebase user object or null
+//   - role: 'superadmin', 'admin', 'staff', etc.
+//   - loading: used to block UI while resolving role
+//   - isAppReady: flags when role-check and auth-check are done
+//
+// Actions:
+//   - fetchUser(): attaches onAuthStateChanged listener, resolves role
+//   - logout(): signs out and clears state
+//
+// Utilities:
+//   - isSuperAdmin(): returns true if user is superadmin
+//   - isStaff(): checks for admin or staff
+//   - isGuest(): true when no user is logged in
+//   - hasRole([...roles]): checks against valid roles list
+//
+// Notes:
+//   - Prevents duplicate listeners with `unsubscribeAuth` guard
+//   - Can be extended with `canAccessDashboard`, `canCreateJobs`, etc.
+//   - Works seamlessly with RequireRole.jsx for route protection
+//
+
