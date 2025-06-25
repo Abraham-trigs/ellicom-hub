@@ -58,7 +58,14 @@ function App() {
 
         {/* 🧾 Client Auth */}
         <Route path="/client/login" element={<CTLPage />} />
-        <Route element={<RequireRole allowedRoles={['client']} />}>
+        <Route
+          element={
+            <RequireRole
+              allowedRoles={['client']}
+              redirectTo="/client/login"
+            />
+          }
+        >
           <Route path="/client/job-card" element={<CTJobCard />} />
           <Route path="/client/dashboard" element={<CTJobList />} />
           <Route path="/client/add-job" element={<AddJobPage />} />
@@ -68,13 +75,27 @@ function App() {
 
         {/* 🧰 Staff Auth */}
         <Route path="/staff/login" element={<SLPage />} />
-        <Route element={<RequireRole allowedRoles={['staff', 'admin']} />}>
+        <Route
+          element={
+            <RequireRole
+              allowedRoles={['staff', 'admin']}
+              redirectTo="/staff/login"
+            />
+          }
+        >
           <Route path="/staff/home" element={<Home />} />
           <Route path="/staff/dashboard" element={<SDashboard />} />
         </Route>
 
         {/* 🛡 SuperAdmin Auth */}
-        <Route element={<RequireRole allowedRoles={['superadmin']} />}>
+        <Route
+          element={
+            <RequireRole
+              allowedRoles={['superadmin']}
+              redirectTo="/unauthorized"
+            />
+          }
+        >
           <Route path="/superadmin" element={<SuperAdmin />}>
             <Route index element={<SuperDashBoard />} />
             <Route path="dashboard" element={<SuperDashBoard />} />
@@ -90,12 +111,19 @@ function App() {
 export default App;
 
 
-// 🧭 App.jsx – Root Shell with Zustand + Reusable Role-Based Guards
-
-// ✅ Uses Zustand (not Context) via useAuthenticStore
-// ✅ Replaces all individual guards with a single RequireRole component
-// ✅ Protects routes by role in a centralized, DRY way
-// ✅ Handles preloader splash via isAppReady and fallback
-// ✅ Supports nested routing (e.g., /superadmin/dashboard)
-
-// ✨ Clean, scalable, and 🔥 ready for anything enterprise-level.
+//
+// App.jsx – Main Application Shell (Zustand + Role-Based Access)
+//
+// 📦 State & Auth:
+//   - Powered by Zustand's `useAuthenticStore`
+//   - Fetches Firebase user + role on mount (via fetchUser())
+//   - Centralizes isAppReady, user, role, and loading flags
+//
+// 🧼 Splash Screen Handling:
+//   - Removes #preloader once `isAppReady` is true
+//   - Includes fallback removal when `loading` becomes false
+//
+// 🛡️ Route Guards:
+//   - Single reusable <RequireRole allowedRoles={[]} /> for all protected sections
+//   - Replaces old guard components like RequireClient / RequireAdmin
+//
