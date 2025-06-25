@@ -1,3 +1,5 @@
+// UI/Staff-UI/SLForm.jsx
+
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLoginStore from '../../store/LoginStore';
@@ -11,25 +13,25 @@ const SLForm = () => {
     login,
     setLoginType,
     loading,
-    error
+    error,
   } = useLoginStore();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🎯 Force this form to always log in as 'staff' or 'admin'
+    // 🎯 Ensure we're in staff login mode
     setLoginType('staff');
   }, [setLoginType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await login();
-    if (user) navigate('/dashboard'); // 🔁 adjust to your staff/superadmin dashboard route
+    const user = await login(navigate);
+    // Redirecting is handled inside login() already based on role
   };
 
   return (
     <div className="flex items-center justify-center px-4">
-      <form
+      <form 
         onSubmit={handleSubmit}
         className="w-full max-w-md p-6 rounded-2xl shadow-lg space-y-6"
       >
@@ -67,10 +69,29 @@ const SLForm = () => {
           >
             {loading ? 'Loading...' : 'Enter'}
           </button>
-        </div>
+        </div>    
       </form>
     </div>
   );
 };
 
 export default SLForm;
+
+
+//
+// SLForm.jsx – Staff Login Form (connected to Zustand useLoginStore)
+//
+// 🔐 Purpose:
+//   - Renders staff email/password login form
+//   - Uses shared useLoginStore for logic and state
+//
+// 🧠 Zustand Sync:
+//   - email, password → from useLoginStore
+//   - loginType → set to "staff" via useEffect()
+//   - login() handles auth + redirect
+//
+// 💡 Features:
+//   - Auto disables button while logging in
+//   - Displays error messages if Firebase login fails
+//   - Uses useNavigate() for redirection (also triggered inside login())
+//
