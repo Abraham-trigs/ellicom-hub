@@ -1,51 +1,71 @@
 import React, { useEffect } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import useAuthenticStore from '../components/store/AuthenticStore';
 
 /**
- * Reusable route guard that checks if the user's role is authorized.
- * 
- * @param {Array} allowedRoles - An array of allowed roles, e.g. ['staff', 'admin']
- * @param {String} redirectTo - Path to redirect unauthorized users to (default: '/')
- * @param {ReactNode} children - Protected content to render
+ * ✅ RequireRole – A route guard that restricts access based on user role.
+ *
+ * @param {Array|string} allowedRoles - One or more roles allowed to access the route
+ * @param {string} redirectTo - Path to redirect unauthorized users (default: "/")
+ *
+ * Example usage:
+ * <Route
+ *   element={<RequireRole allowedRoles={['admin', 'staff']} redirectTo="/unauthorized" />}
+ * >
+ *   <Route path="/staff/dashboard" element={<StaffDashboard />} />
+ * </Route>
  */
 const RequireRole = ({ allowedRoles = [], redirectTo = '/', children }) => {
-  const { user, role, loading, fetchUser } = useAuthenticStore();
+  const { user, role, loading, isAppReady, fetchUser } = useAuthenticStore();
   const location = useLocation();
 
   useEffect(() => {
-    if (!user) fetchUser(); // ensures auth is fetched on refresh
+    // 🧠 Ensure role is fetched on initial load (especially after refresh)
+    if (!user) fetchUser();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  // ⏳ While loading auth state, show nothing or a loader
+  if (loading || !isAppReady) return null;
 
-  const isAuthorized = user && allowedRoles.includes(role);
+  // 🎯 Normalize allowedRoles to array if it's a single string
+  const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
 
-  return isAuthorized ? (
-    children
-  ) : (
-    <Navigate to={redirectTo} replace state={{ from: location }} />
-  );
+  // 🔐 Check if user is logged in and role matches
+  const isAuthorized = user && rolesArray.includes(role);
+
+  // ✅ Authorized → render children or nested routes
+  if (isAuthorized) {
+    return children ? children : <Outlet />;
+  }
+
+  // ❌ Not authorized → redirect and preserve attempted path
+  return <Navigate to={redirectTo} replace state={{ from: location }} />;
 };
 
 export default RequireRole;
 
 
+
 //
-// RequireRole.jsx – Role-based route guard wrapper
+// RequireRole.jsx – Role-based route guard wrapper for protected routes
 //
-// Role: Restricts access to child components based on current user's role
+// 🔐 Purpose:
+//   - Restrict access to specific routes based on user's role (e.g., 'staff', 'admin')
+//   - Redirects unauthorized users to login or fallback page
 //
-// Features:
-//   - Accepts a `role` or array of roles (`["superadmin", "admin"]`)
-//   - Checks authenticated user's role from Zustand or context
-//   - Redirects unauthorized users to login or 403 page
+// ⚙️ Parameters:
+//   - allowedRoles (string | array): Accepts a role or an array of roles
+//   - redirectTo (string): Path to redirect unauthorized users (default is "/")
 //
-// Notes:
-//   - Replaces legacy RequireSuperAdmin logic
-//   - Should wrap all routes and pages that need protection (e.g., SuperAdminDashboard, AdminPanel)
-//   - Works best with central `useAuthStore()`
-//   - Can be extended later for permissions like `canCreateJobs`, `canDeleteStaff`, etc.
+// 🧠 Behavior:
+//   - Pulls current user and role from Zustand `useAuthenticStore`
+//   - Triggers `fetchUser()` if user is null (like on refresh)
+//   - Uses `Outlet` if no children are passed (ideal for wrapping <Route> groups)
 //
-// Author: Abraham Bortey Danfa
+// 🛠️ Example Usage:
+//   <Route element={<RequireRole allowedRoles={['superadmin']} redirectTo="/unauthorized" />}>
+//     <Route path="/superadmin/dashboard" element={<SuperDash />} />
+//   </Route>
 //
+// 👤 Auth Integration:
+//   - Depends on Zustan
