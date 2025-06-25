@@ -10,10 +10,10 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react';
-import Logo from '../Universal-UI/logo';
 import ProfileAvatar from '../Universal-UI/ProfileAvatar';
-import useUserStore from '../../store/useUserStore';
-import useAuthenticStore from '../../store/useAuthenticStore'; // ✅ NEW: Import logout logic
+import useUserStore from '../../store/UserStore';
+import useAuthenticStore from '../../store/AuthenticStore';
+
 
 const navItems = [
   { label: 'Recent Jobs', Icon: Printer },

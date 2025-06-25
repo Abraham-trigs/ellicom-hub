@@ -9,3 +9,5 @@ export const getJobRouteForRole = (role) => {
 
   return routeMap[role] || '/unauthorized';
 };
+
+export default getJobRouteForRole;

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useUserStore from '../../store/useUserStore'; // ✅ Zustand store
-import { getJobRouteForRole } from '../../utils/roleRoutes'; // ✅ Util route map
+import useUserStore from '../../store/UserStore';
+import getJobRouteForRole from '../../../utils/roleRoutes';
+
 
 const JobCardButton = () => {
   const navigate = useNavigate();
