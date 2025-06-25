@@ -1,11 +1,7 @@
-// 🔐 useLoginStore.login() triggers signInWithEmailAndPassword
-
+// 🔐 useLoginStore.login() triggers signInWithEmailAndPassword 
 // 🧠 It then calls useAuthenticStore.fetchUser()
-
 // 🧬 fetchUser() listens to Firebase auth and resolves role
-
 // 🔄 Both stores (AuthenticStore and UserStore) are synced
-
 // 🚀 UI everywhere can just use useUserStore() for reactive user info
 
 
@@ -70,34 +66,18 @@ const useAuthenticStore = create((set, get) => ({
   isSuperAdmin: () => get().role === 'superadmin',
   isStaff: () => ['staff', 'admin'].includes(get().role),
   isGuest: () => !get().user && !get().role,
-  hasRole: (rolesArray) => rolesArray.includes(get().role),
+
+  // 🔒 Flexible role checker: accepts string or array
+  hasRole: (roleOrRoles) => {
+    const currentRole = get().role;
+    if (!currentRole) return false;
+
+    if (Array.isArray(roleOrRoles)) {
+      return roleOrRoles.includes(currentRole);
+    }
+
+    return currentRole === roleOrRoles;
+  }
 }));
 
 export default useAuthenticStore;
-
-
-
-//
-// 🧠 useAuthenticStore.js – Central Firebase Auth & Role Manager
-//
-// 🔍 Purpose:
-//   - Listens for auth state changes via Firebase
-//   - Determines user role via custom claims or Firestore fallback
-//   - Shares `user`, `role`, and auth state across the app
-//
-// 🔁 Syncs With:
-//   - ✅ useUserStore: keeps UI-reactive global user/role in sync
-//
-// 📦 Core State:
-//   - user: Firebase user object
-//   - role: String (e.g. "staff", "client", "superadmin")
-//   - loading: true while checking
-//   - isAppReady: true once app has determined auth state
-//
-// 🔧 Actions:
-//   - fetchUser(): Called on app init and after login
-//   - logout(): Signs out and resets state
-//
-// ⚙️ Utilities:
-//   - isSuperAdmin(), isStaff(), isGuest(), hasRole([...])
-//
