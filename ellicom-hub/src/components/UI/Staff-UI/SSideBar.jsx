@@ -11,7 +11,8 @@ import {
   LogOut,
 } from 'lucide-react';
 import Logo from '../Universal-UI/logo';
-import useUserStore from '../../store/useUserStore'; // ✅ Zustand role + name
+import ProfileAvatar from '../Universal-UI/ProfileAvatar';
+import useUserStore from '../../store/useUserStore';
 
 const navItems = [
   { label: 'Recent Jobs', Icon: Printer },
@@ -23,8 +24,9 @@ const navItems = [
 ];
 
 const SideNav = ({ isOpen, onClose }) => {
-  const { role, user } = useUserStore(); // ✅ Access name + role
-  const displayName = user?.displayName || 'User'; // fallback
+  const { user } = useUserStore();
+  const displayName = user?.displayName || 'User';
+  const photoURL = user?.photoURL || '';
 
   return (
     <AnimatePresence>
@@ -57,28 +59,24 @@ const SideNav = ({ isOpen, onClose }) => {
             </button>
 
             <div className="flex flex-col flex-grow justify-center items-center -mt-10 text-center">
-              <div className="scale-75">
-                <Logo />
-              </div>
+              {/* 🔥 Updated Avatar Section */}
+              <ProfileAvatar name={displayName} photoURL={photoURL} size="w-20 h-20 mb-3" />
 
-              {/* 👤 Username */}
-              <div className="mb-4 -mt-3 text-xl font-semibold text-head">
+              {/* Display name */}
+              <div className="text-xl font-semibold text-head mb-4 -mt-2">
                 {displayName}
               </div>
 
               {/* New Job Button */}
               <div className="mb-6">
-                <div className="flex flex-col items-center justify-center">
-                  <button
-                    className="bg-sea p-2 px-7 py-1 text-ground rounded-lg font-normal
-                    transition ease-in-out duration-200 hover:bg-high hover:scale-95"
-                  >
-                    New Job <span className="font-black">+</span>
-                  </button>
-                </div>
+                <button
+                  className="bg-sea p-2 px-7 py-1 text-ground rounded-lg font-normal transition ease-in-out duration-200 hover:bg-high hover:scale-95"
+                >
+                  New Job <span className="font-black">+</span>
+                </button>
               </div>
 
-              {/* 🔗 Nav items */}
+              {/* Nav Items */}
               <ul className="w-full flex flex-col justify-center items-center">
                 {navItems.map(({ label, Icon }, index) => (
                   <React.Fragment key={label}>
@@ -100,7 +98,7 @@ const SideNav = ({ isOpen, onClose }) => {
                 ))}
               </ul>
 
-              {/* 🚪 Logout */}
+              {/* Logout */}
               <div className="w-full mt-6">
                 <button
                   className="w-full flex items-center gap-3 px-3 py-2 text-red-600 dark:text-red-400 
@@ -141,7 +139,6 @@ const SSideBar = () => {
         )}
       </button>
 
-      {/* Sidebar drawer */}
       <SideNav isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
