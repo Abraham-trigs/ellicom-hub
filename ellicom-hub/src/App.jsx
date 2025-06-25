@@ -3,52 +3,52 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-// Zustand Stores
+// 🧠 Zustand Stores
 import useAuthenticStore from './components/store/AuthenticStore';
-import useUserStore from './components/store/UserStore'; // ✅ New import
+import useUserStore from './components/store/UserStore'; // ✅ Firestore sync
 
-// 🔐 Role-based guard (Zustand powered)
+// 🔐 Role-based route guard
 import RequireRole from './Routes/RequireRoles';
 
-// Layout
+// 🧱 Layout Shell
 import LayoutWithNav from './components/UI/Universal-UI/LayoutWithNavBar';
 
-// Universal Pages
+// 🌐 Universal Pages
 import WelcomePage from './components/pages/UniversalPages/WelcomePage';
 import AddJobPage from './components/pages/UniversalPages/AddJobPage';
 import JobDetailsPage from './components/pages/UniversalPages/JobDetailsPage';
 import Home from './components/pages/UniversalPages/Home';
 
-// Client Pages
+// 👤 Client Pages
 import CTLPage from './components/pages/ClientPages/CTLPage';
 import CTJobCard from './components/UI/CLIENT-UI/CTJobCard';
 import CTJobList from './components/pages/ClientPages/CTJobList';
 
-// Staff Pages
+// 🧰 Staff Pages
 import SLPage from './components/pages/StaffPages/SLPage';
 import SDashboard from './components/pages/StaffPages/SDashboard';
 
-// SuperAdmin Pages
+// 🛡 SuperAdmin Pages
 import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
 import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
 
 function App() {
-  const { isAppReady, loading, fetchUser } = useAuthenticStore();
-  const { fetchUserAndRole } = useUserStore(); // ✅ Load role via Zustand
+  const { isAppReady, loading, fetchUser, profile } = useAuthenticStore(); // ✅ Now includes `profile`
+  const { fetchUserAndRole } = useUserStore(); // ✅ Firestore extended info
 
-  // 🔄 Load Firebase Auth user on mount
+  // 🔄 Load user + role from Firebase and Firestore on mount
   useEffect(() => {
-    fetchUser();
-    fetchUserAndRole(); // ✅ Load role & user details for global access
+    fetchUser();             // 🔐 Pulls Firebase user + claims + role + Firestore fallback
+    fetchUserAndRole();      // 🧬 Pulls extended user details like phone, photo, dept
   }, []);
 
-  // 🧼 Preloader cleanup when ready
+  // 🧼 Preloader removal when app is ready
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (isAppReady && preloader) preloader.remove();
   }, [isAppReady]);
 
-  // 🧯 Fallback preloader removal (if appReady missed)
+  // 🔁 Backup: Preloader removal in case isAppReady missed
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (!loading && preloader) preloader.remove();
@@ -63,14 +63,11 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
 
-        {/* 🧾 Client Auth */}
+        {/* 👤 Client Auth Routes */}
         <Route path="/client/login" element={<CTLPage />} />
         <Route
           element={
-            <RequireRole
-              allowedRoles={['client']}
-              redirectTo="/client/login"
-            />
+            <RequireRole allowedRoles={['client']} redirectTo="/client/login" />
           }
         >
           <Route path="/client/job-card" element={<CTJobCard />} />
@@ -80,27 +77,21 @@ function App() {
           <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
         </Route>
 
-        {/* 🧰 Staff Auth */}
+        {/* 🧰 Staff Auth Routes */}
         <Route path="/staff/login" element={<SLPage />} />
         <Route
           element={
-            <RequireRole
-              allowedRoles={['staff', 'admin']}
-              redirectTo="/staff/login"
-            />
+            <RequireRole allowedRoles={['staff', 'admin']} redirectTo="/staff/login" />
           }
         >
           <Route path="/staff/home" element={<Home />} />
           <Route path="/staff/dashboard" element={<SDashboard />} />
         </Route>
 
-        {/* 🛡 SuperAdmin Auth */}
+        {/* 🛡 SuperAdmin Auth Routes */}
         <Route
           element={
-            <RequireRole
-              allowedRoles={['superadmin']}
-              redirectTo="/unauthorized"
-            />
+            <RequireRole allowedRoles={['superadmin']} redirectTo="/unauthorized" />
           }
         >
           <Route path="/superadmin" element={<SuperAdmin />}>
@@ -117,22 +108,24 @@ function App() {
 export default App;
 
 
-// App.jsx – Main Application Shell (Zustand + Role-Based Access)
 //
-// 📦 State Management:
-//   - Uses `useAuthenticStore` to manage Firebase auth state (isAppReady, loading, fetchUser)
-//   - Uses `useUserStore` to globally fetch and store the Firebase user role from Firestore
+// App.jsx – Central Role-Guided Shell for Ellicom-Hub
+//
+// 🧠 State Architecture:
+//   - `useAuthenticStore`: Handles Firebase Auth, claims, roles, and now `profile` (photoURL, name, email, etc.)
+//   - `useUserStore`: Enhances role data with Firestore fallback and detail syncing
 //
 // 🛡️ Route Protection:
-//   - All protected routes use <RequireRole /> wrapper
-//   - Centralizes role-based access control with reusable logic
+//   - Uses `<RequireRole />` wrapper for clients, staff/admins, and superadmins
+//   - Ensures deep control over unauthorized page access
 //
-// 🧼 Preloader Handling:
-//   - Removes loading splash screen when auth is resolved (via isAppReady or fallback)
+// 🧼 Splash/Preloader Logic:
+//   - Preloader is hidden once app knows user + role (via isAppReady)
+//   - Fallback included in case `isAppReady` skips (e.g., fast login)
 //
-// 📁 Page Structure:
-//   - Universal Pages (accessible by all users)
-//   - Client Pages (protected by client role)
-//   - Staff Pages (protected by staff and admin roles)
-//   - SuperAdmin Pages (protected by superadmin role)
+// 🌐 Route Map:
+//   - Public: welcome, home, add job (guest)
+//   - Client: dashboard, job list/card/details (must be 'client')
+//   - Staff/Admin: dashboard, home (must be 'staff' or 'admin')
+//   - SuperAdmin: dashboard inside nested outlet (must be 'superadmin')
 //
