@@ -99,7 +99,6 @@ function App() {
           <Route path="/superadmin" element={<SuperAdmin />}>
             <Route index element={<SuperDashBoard />} />
             <Route path="dashboard" element={<SuperDashBoard />} />
-            {/* <Route path="create-staff" element={<CreateStaff />} /> */}
           </Route>
         </Route>
 

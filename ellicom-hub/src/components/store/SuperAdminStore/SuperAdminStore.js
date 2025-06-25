@@ -1,15 +1,4 @@
-/**
- * 🧠 useSuperAdminStore – Central Zustand Store for Super Admin Dashboard
- *
- * Handles:
- * - Sidebar state (open/close)
- * - Active tab tracking
- * - Persistent UI preferences
- * - Dashboard metrics (total staff, jobs, etc.)
- *
- * Middleware:
- * - Zustand 'persist' middleware keeps sidebar and UI state on reloads
- */
+
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';

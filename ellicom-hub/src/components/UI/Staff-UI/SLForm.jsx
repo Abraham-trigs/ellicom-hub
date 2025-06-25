@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useLoginStore from '../../store/useLoginStore';
+import useLoginStore from '../../store/LoginStore';
 
 const SLForm = () => {
   const {
