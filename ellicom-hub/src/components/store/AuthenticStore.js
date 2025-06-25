@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../lib/firebase';
+import { auth, db } from '../../lib/firebase';
 
 const useAuthenticStore = create((set, get) => ({
   user: null,

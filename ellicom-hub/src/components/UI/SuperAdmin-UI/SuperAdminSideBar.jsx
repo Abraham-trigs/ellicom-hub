@@ -18,7 +18,8 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../Universal-UI/logo';
 
 // ✅ UPDATED: Centralized SuperAdmin Store
-import useSuperAdminStore from '../../store/SuperAdminStore/useSuperAdminStore';
+import useAuthenticStore from '../../store/AuthenticStore';
+
 
 const navItems = [
   { label: 'Dashboard', Icon: LayoutDashboard },
@@ -33,7 +34,7 @@ const navItems = [
 ];
 
 const SideNav = () => {
-  const { isOpen, closeSidebar, activeTab, setActiveTab } = useSuperAdminStore();
+  const { isOpen, closeSidebar, activeTab, setActiveTab } = useAuthenticStore();
   const navigate = useNavigate();
 
   return (
@@ -131,7 +132,7 @@ const SideNav = () => {
 };
 
 const SuperAdminSidebar = () => {
-  const { isOpen, toggleSidebar } = useSuperAdminStore();
+  const { isOpen, toggleSidebar } = useAuthenticStore();
 
   return (
     <>
@@ -165,7 +166,7 @@ export default SuperAdminSidebar;
  * -------------------------------------------------------------
  * Animated, role-based navigation sidebar built with:
  * - Framer Motion for animation
- * - Zustand (via useSuperAdminStore) for global state
+ * - Zustand (via useAuthenticStore) for global state
  *
  * Handles:
  * ✅ Sidebar open/close state
@@ -173,7 +174,7 @@ export default SuperAdminSidebar;
  * ✅ Navigation with React Router
  * ✅ Mobile responsiveness via hamburger toggle
  *
- * Zustand Store Used: useSuperAdminStore
+ * Zustand Store Used: useAuthenticStore
  * - isOpen           → Sidebar visibility (Boolean)
  * - toggleSidebar()  → Toggles sidebar visibility
  * - closeSidebar()   → Closes sidebar

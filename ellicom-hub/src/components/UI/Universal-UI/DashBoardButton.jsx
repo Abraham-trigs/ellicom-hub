@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../../context/AuthContext';
+import useAuthenticStore from '../../store/AuthenticStore';
 
 const getDashboardPath = (role) => {
   switch (role) {
@@ -17,7 +17,7 @@ const getDashboardPath = (role) => {
 };
 
 const DashBoardButton = () => {
-  const { user, role } = useAuth();
+  const { user, role } = useAuthenticStore();
   const navigate = useNavigate();
 
   const handleClick = () => {
