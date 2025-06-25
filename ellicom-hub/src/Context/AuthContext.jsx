@@ -10,6 +10,8 @@ export const AuthProvider = ({ children }) => {
   const [role, setRole] = useState(null);        // Role from custom claims or fallback Firestore
   const [loading, setLoading] = useState(true);  // Controls loading state while checking auth
 
+  const [isAppReady, setIsAppReady] = useState(false); // ✅ New: controls splash screen removal
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -46,7 +48,8 @@ export const AuthProvider = ({ children }) => {
         setRole(null);
       }
 
-      setLoading(false); // Always clear loading flag
+      setLoading(false);      // Auth logic completed
+      setIsAppReady(true);    // App is now ready for display (safe to remove splash)
     });
 
     return () => unsubscribe(); // Cleanup listener on unmount
@@ -63,7 +66,16 @@ export const AuthProvider = ({ children }) => {
   const hasRole = (rolesArray) => rolesArray.includes(role);
 
   return (
-    <AuthContext.Provider value={{ user, role, isSuperAdmin, isStaff, isGuest, hasRole, loading }}>
+    <AuthContext.Provider value={{
+      user,
+      role,
+      isSuperAdmin,
+      isStaff,
+      isGuest,
+      hasRole,
+      loading,
+      isAppReady, // ✅ Expose app-ready flag for splash removal
+    }}>
       {children}
     </AuthContext.Provider>
   );
@@ -89,8 +101,6 @@ export const useAuth = () => useContext(AuthContext);
 
 
 
-// This AuthProvider sets up a global authentication and role-based access context for the Ellicom-hub app. It:
-
 // ✅ Listens to Firebase Auth changes (onAuthStateChanged)
 
 // 🔑 Tries to get the user's role from custom claims first (fast & secure)
@@ -98,16 +108,19 @@ export const useAuth = () => useContext(AuthContext);
 // 🧯 Falls back to Firestore if no custom claims are set
 
 // 🧠 Exposes useful flags:
-
-// isSuperAdmin – true if role is 'superadmin'
-
-// isStaff – true if role is 'staff' or 'admin'
-
-// isGuest – true if no user is logged in
+//    - isSuperAdmin – true if role is 'superadmin'
+//    - isStaff – true if role is 'staff' or 'admin'
+//    - isGuest – true if no user is logged in
 
 // 🔧 Provides hasRole(['role1', 'role2']) to check custom roles
 
 // 🚦 Includes a loading flag to manage auth state delays
 
-// This makes it easy to protect routes, show/hide UI, and enforce secure access rules across your entire app.
+// ✨ NEW: Exposes isAppReady – true when Firebase Auth + Role logic has completed
+//         - Used to safely remove splash screen/preloader
+//         - Prevents premature route rendering or UI flash before user status is confirmed
 
+// 🧩 This makes it easy to:
+//    - Protect routes based on user role
+//    - Show/hide UI elements conditionally
+//    - Remove preloader smoothly after app is truly ready

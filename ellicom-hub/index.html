@@ -2,12 +2,64 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/Ellicom_logo.svg" />
+    <link rel="icon" type="image/svg+xml" href="/ellicom_logo.svg" />
+    <link rel="preload" as="image" href="/ellicom-logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ellicom</title>
+
+    <style>
+      #preloader {
+        position: fixed;
+        inset: 0;
+        background: #000321;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: sans-serif;
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        margin-bottom: 1rem;
+      }
+
+      .loader-text {
+        color: #ffffff;
+        font-size: 0.7rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+    </style>
   </head>
+
   <body>
+    <!-- Preloader Splash -->
+    <div id="preloader">
+      <img src="/ellicom-logo.svg" alt="Ellicom Logo" class="logo" />
+      <p class="loader-text">Just a moment...</p>
+    </div>
+
+    <!-- React App Mount -->
     <div id="root"></div>
+
+    <!-- Vite App Bootstrap -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
+
+
+<!--
+  🌐 index.html – HTML Entry Point for Ellicom-hub
+
+  ✅ Sets up favicon and preload for the Ellicom logo (performance boost)
+  ✅ Defines a minimal, centered splash screen (preloader) with logo + short message
+     - No animation or transition = ultra-fast render
+     - Prevents white flash on first app load
+     - Removed instantly in App.jsx once Firebase Auth is ready
+  ✅ Mounts React app at #root
+  ✅ Boots Vite-based application via /src/main.jsx
+-->

@@ -5,7 +5,7 @@ const JobCard = () => {
       <div className="">
         {/* main Job Card with Details  */}
         <div className="-mt-5 flex flex-col justify-center items-center object-contain mb-2">
-          <button className="bg-sea rounded-b-2xl p-2 px-5 font-bold scale-75 text-Ground mb-3 object-contain">
+          <button className="bg-sea rounded-b-2xl p-2 px-5 font-bold scale-75 text-ground mb-3 object-contain">
             Job Card
           </button>
           

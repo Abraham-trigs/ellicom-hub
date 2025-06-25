@@ -47,18 +47,6 @@ const CTLPage = () => {
             Contact Us
           </p>
         </div>
-
-          
-
-
-          
-
-          
-
-
-          
-
-      {/* </div> */}
     </>
   )
 }
