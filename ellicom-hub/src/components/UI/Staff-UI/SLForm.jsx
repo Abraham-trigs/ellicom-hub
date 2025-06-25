@@ -1,6 +1,6 @@
 // UI/Staff-UI/SLForm.jsx
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLoginStore from '../../store/LoginStore';
 
@@ -16,17 +16,17 @@ const SLForm = () => {
     error,
   } = useLoginStore();
 
+  const [selectedRole, setSelectedRole] = useState('staff'); // Default to staff
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🎯 Ensure we're in staff login mode
-    setLoginType('staff');
-  }, [setLoginType]);
+    setLoginType(selectedRole);
+  }, [selectedRole, setLoginType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const user = await login(navigate);
-    // Redirecting is handled inside login() already based on role
+    // login() already redirects based on role
   };
 
   return (
@@ -36,9 +36,21 @@ const SLForm = () => {
         className="w-full max-w-md p-6 rounded-2xl shadow-lg space-y-6"
       >
         <div>
+          <select
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head bg-white focus:outline-none focus:ring-0 focus:border-gold"
+          >
+            <option value="superadmin">Super Admin</option>
+            <option value="admin">Admin</option>
+            <option value="staff">Staff</option>
+          </select>
+        </div>
+
+        <div>
           <input
             type="email"
-            placeholder="Staff Email"
+            placeholder="Work Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -79,19 +91,18 @@ export default SLForm;
 
 
 //
-// SLForm.jsx – Staff Login Form (connected to Zustand useLoginStore)
+// SLForm.jsx – Unified Login Form for Staff, Admin, and SuperAdmin
 //
 // 🔐 Purpose:
-//   - Renders staff email/password login form
-//   - Uses shared useLoginStore for logic and state
+//   - Handles login for all internal roles: 'superadmin', 'admin', 'staff'
 //
-// 🧠 Zustand Sync:
-//   - email, password → from useLoginStore
-//   - loginType → set to "staff" via useEffect()
-//   - login() handles auth + redirect
+// 🧠 Zustand Integration:
+//   - Uses useLoginStore for:
+//     - email, password, login(), loading, error
+//     - setLoginType(selectedRole) → determines which Firestore path to use
 //
 // 💡 Features:
-//   - Auto disables button while logging in
-//   - Displays error messages if Firebase login fails
-//   - Uses useNavigate() for redirection (also triggered inside login())
+//   - Select role dropdown (ensures correct role resolution via Firestore)
+//   - Controlled input for email/password
+//   - Zustand login() redirects automatically after auth
 //
