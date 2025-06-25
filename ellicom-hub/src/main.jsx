@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider , useAuth } from './Context/AuthContext';
 
 // 🧠 Create root and render React app
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -11,9 +10,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <App />
     </BrowserRouter>
   </React.StrictMode>
 );
@@ -25,9 +22,12 @@ if (preloader) {
 }
 
 
-// main.jsx – React App Bootstrapper for Ellicom-hub
 //
-// ✅ Mounts the main App component into #root
-// ✅ Wraps with React Router and global AuthContext provider
-// ✅ Instantly removes the #preloader splash after initial hydration
-//    - No transitions, prioritizes performance and responsiveness
+// 🧭 main.jsx – React App Bootstrapper for Ellicom-hub
+//
+// Mounts the main App component into #root
+// Wraps app with React Router (no need for AuthProvider anymore)
+// Zustand handles all auth/state logic globally (no context wrapping needed)
+// Instantly removes the #preloader splash after hydration
+//    - Fast user experience, avoids flickers
+//

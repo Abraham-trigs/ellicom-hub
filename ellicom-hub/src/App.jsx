@@ -1,13 +1,16 @@
 import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { useAuth } from './Context/AuthContext';
 
+// 🧠 Zustand Auth Store (not Context anymore)
+import useAuthenticStore from './components/store/AuthenticStore';
 
 // Layout
 import LayoutWithNav from './components/UI/Universal-UI/LayoutWithNavBar';
 
-// Auth Protection
-import { RequireAuth, RequireClient, RequireStaff, RequireAdmin } from './Routes/RequireAuth';
+// Auth Protection (updated guards using Zustand)
+import RequireClient from './Routes/RequireClient';
+import RequireStaff from './Routes/RequireStaff';
+import RequireSuperAdmin from './Routes/RequireSuperAdmin';
 
 // Universal Pages
 import WelcomePage from './components/pages/UniversalPages/WelcomePage';
@@ -23,108 +26,91 @@ import CTJobList from './components/pages/ClientPages/CTJobList';
 // Staff Pages
 import SLPage from './components/pages/StaffPages/SLPage';
 import SDashboard from './components/pages/StaffPages/SDashboard';
-import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
 
 // SuperAdmin Pages
+import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
 import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
 
-
-// AuthContext for splash screen readiness
 function App() {
-  const { isAppReady } = useAuth();
+  const { isAppReady, loading, isGuest, fetchUser } = useAuthenticStore();
 
+  // ✅ Initial fetch for auth state
   useEffect(() => {
-    if (isAppReady) {
-      const preloader = document.getElementById('preloader');
-      if (preloader) preloader.remove(); // 👈 boom. gone.
-    }
+    fetchUser(); // ensure auth is fetched on mount
+  }, []);
+
+  // ✅ Remove splash screen when ready
+  useEffect(() => {
+    const preloader = document.getElementById('preloader');
+    if (isAppReady && preloader) preloader.remove();
   }, [isAppReady]);
 
-
-    const { loading, isGuest, isStaff, isSuperAdmin } = useAuth();
-
-    useEffect(() => {
-      const preloader = document.getElementById('preloader');
-
-      // ✅ Only remove preloader when Firebase Auth has loaded
-      if (!loading && preloader) {
-        if (isGuest) {
-          // 🧼 Remove preloader for guests (first-time users)
-          preloader.remove();
-        } else {
-          // ⚡ Instantly skip preloader for logged-in users
-          preloader.remove();
-        }
-      }
-    }, [loading, isGuest, isStaff, isSuperAdmin]);
-
-  // ✅ Firebase config check (can be removed later)
+  // ✅ Extra fallback in case appReady fails (based on loading)
+  useEffect(() => {
+    const preloader = document.getElementById('preloader');
+    if (!loading && preloader) preloader.remove();
+  }, [loading]);
 
   return (
-    <>
-      <LayoutWithNav>
-        <Routes>
+    <LayoutWithNav>
+      <Routes>
 
-          {/* Universal Welcome Page */}
-          <Route path="/" element={<WelcomePage />} />
-          <Route path="/Home" element={<Home />} />
-          <Route path="/Super/DashTry" element={<SuperDashBoard />} />
-          {/* <Route path="/SuperAdmin/Dashboard" element={<SuperDashBoard />} /> */}
+        {/* 🌐 Public Universal Routes */}
+        <Route path="/" element={<WelcomePage />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/guest/add-job" element={<AddJobPage />} />
 
-          {/* Guest/Anonymous Route */}
-          <Route path="/guest/add-job" element={<AddJobPage />} />
+        {/* 🔐 Client Auth */}
+        <Route path="/client/login" element={<CTLPage />} />
+        <Route element={<RequireClient />}>
+          <Route path="/client/job-card" element={<CTJobCard />} />
+          <Route path="/client/dashboard" element={<CTJobList />} />
+          <Route path="/client/add-job" element={<AddJobPage />} />
+          <Route path="/client/joblist" element={<CTJobList />} />
+          <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
+        </Route>
 
-          {/* Client Auth Routes */}
-          <Route path="/client/login" element={<CTLPage />} />
+        {/* 🔐 Staff Auth */}
+        <Route path="/staff/login" element={<SLPage />} />
+        <Route element={<RequireStaff />}>
+          <Route path="/staff/home" element={<Home />} />
+          <Route path="/staff/dashboard" element={<SDashboard />} />
+        </Route>
 
-          {/* Staff Auth Routes */}
-          <Route path="/staff/login" element={<SLPage />} />
-
-          {/* 🔐 Protected Staff Routes */}
-          <Route element={<RequireStaff />}>
-            <Route path="/staff/home" element={<Home />} />
-            <Route path="/staff/dashboard" element={<SDashboard />} />
+        {/* 🛡️ Super Admin Protected */}
+        <Route element={<RequireSuperAdmin />}>
+          <Route path="/superadmin" element={<SuperAdmin />}>
+            <Route index element={<SuperDashBoard />} />
+            <Route path="dashboard" element={<SuperDashBoard />} />
+            {/* Future: <Route path="create-staff" element={<CreateStaff />} /> */}
           </Route>
-
-          {/* 🔐 Protected Client Routes */}
-          <Route element={<RequireClient />}>
-            <Route path="/client/job-card" element={<CTJobCard />} />
-            <Route path="/client/dashboard" element={<CTJobList />} />
-            <Route path="/client/add-job" element={<AddJobPage />} />
-            <Route path="/client/joblist" element={<CTJobList />} />
-            <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
-          </Route>
-
-          {/* 🔐 Protected SuperAdmin Routes */}
-          <Route element={<RequireAdmin />}>
-              <Route path="/SuperAdmin" element={<SuperAdmin />}>
-                <Route index element={<SuperDashBoard />} /> {/* /SuperAdmin */}
-                <Route path="Dashboard" element={<SuperDashBoard />} /> {/* /SuperAdmin/Dashboard */}
-                {/* <Route path="create-staff" element={<CreateStaff />} /> */}
-              </Route>
-            </Route>
-        </Routes>
-      </LayoutWithNav>
-    </>
+        </Route>
+        
+      </Routes>
+    </LayoutWithNav>
   );
 }
 
 export default App;
 
 
-// 🧭 App.jsx – Root Application Shell
+// 🧭 App.jsx – Root Application Shell (Zustand Version)
 //
-// ✅ Defines all core routes and layout structure using React Router
-// ✅ Wraps app with a shared navigation layout (LayoutWithNav)
-// ✅ Implements route protection using role-based guards (RequireAuth, RequireStaff, etc.)
-// ✅ Uses AuthContext's `isAppReady` to control preloader splash
-// ✅ The first useEffect removes the preloader once the app is logically "ready".
-// ✅ The second useEffect removes the preloader specifically based on Firebase Auth state and role.
-//    → Prevents rendering before Firebase Auth + Role resolution completes
+//Centralized route definitions using React Router
+// Global layout (LayoutWithNav) wraps the entire app
+//Auth handled by Zustand-based useAuthStore() instead of Context
+//Preloader removed via isAppReady + fallback useEffect
 //
-// 📦 Pages included:
-//    - Universal: WelcomePage, AddJob, JobDetails, Home
-//    - Client: Login, Dashboard, JobList, AddJob
+// 🔐 Route Guards:
+//    - RequireClient
+//    - RequireStaff
+//    - RequireSuperAdmin (replaces RequireAdmin)
+//
+// 📦 Pages Included:
+//    - Universal: WelcomePage, AddJobPage, JobDetailsPage, Home
+//    - Client: Login, Dashboard, JobCard, AddJob
 //    - Staff: Login, Dashboard
-//    - SuperAdmin: Dashboard
-
+//    - SuperAdmin: Dashboard (nested)
+//
+// 🧠 Zustand-powered auth allows cleaner guards, centralized logic,
+//    and avoids the overhead of React Context.

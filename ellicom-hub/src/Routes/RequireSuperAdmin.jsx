@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAuth } from '../Context/AuthContext';
+import useAuthenticStore from '../store/AuthenticStore';
 
-// Only superadmins can access this route
-const RequireSuperAdmin = ({ children }) => {
-  const { user, role, loading } = useAuth();
+export const RequireAdmin = ({ children }) => {
+  const { user, role, loading, fetchUser } = useAuthenticStore();
+
+  useEffect(() => {
+    if (!user) fetchUser();
+  }, []);
 
   if (loading) return <p>Loading...</p>;
 
-  if (!user) return <Navigate to="/Login" replace />;
-  if (role !== 'superadmin') return <Navigate to="/unauthorized" replace />;
-
-  return children;
+  return user && (role === 'admin' || role === 'superadmin')
+    ? children
+    : <Navigate to="/" replace />;
 };
-
-export default RequireSuperAdmin;
