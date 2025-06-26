@@ -4,7 +4,6 @@
 // 🔄 Both stores (AuthenticStore and UserStore) are synced
 // 🚀 UI everywhere can just use useUserStore() for reactive user info
 
-// store/useAuthenticStore.js
 import { create } from 'zustand';
 import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
@@ -17,7 +16,7 @@ const useAuthenticStore = create((set, get) => ({
   loading: true,
   isAppReady: false,
 
-  // 🔍 Resolves Firebase user + role from custom claims or fallback to Firestore
+  // 🔍 Resolves Firebase user + role from custom claims (preferred) or fallback Firestore
   fetchUser: async (loginType = '') => {
     onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
@@ -34,15 +33,15 @@ const useAuthenticStore = create((set, get) => ({
         set({ profile: userProfile });
 
         try {
-          // 🔐 Force token refresh to pull updated custom claims
-          await firebaseUser.getIdToken(true);
-          const tokenResult = await getIdTokenResult(firebaseUser);
+          // 🔐 Force token refresh to ensure latest custom claims
+          const tokenResult = await getIdTokenResult(firebaseUser, true);
           const customRole = tokenResult.claims.role;
 
           if (customRole) {
+            // 🎯 Use custom claim if present
             set({ role: customRole });
           } else {
-            // 🔁 Fall back to Firestore for role resolution
+            // 🛠️ Firestore fallback (for legacy accounts or claim sync delay)
             let userRef;
             if (loginType === 'client') {
               userRef = doc(db, 'clients', firebaseUser.uid);
@@ -56,24 +55,24 @@ const useAuthenticStore = create((set, get) => ({
               const data = userSnap.data();
               set({ role: data.role || null });
 
-              // 🎯 Merge in Firestore profile info if present
+              // 🔁 Merge in any Firestore profile info (e.g., name override)
               set((state) => ({
                 profile: {
                   ...state.profile,
-                  ...data, // caution: override if keys overlap
+                  ...data,
                 },
               }));
             } else {
-              console.warn('⚠️ Role not found in expected Firestore collection.');
+              console.warn('⚠️ Role not found in Firestore fallback.');
               set({ role: null });
             }
           }
         } catch (err) {
-          console.error('🔥 Error resolving user role via token/Firestore:', err);
+          console.error('🔥 Error resolving user role via claims/Firestore:', err);
           set({ role: null });
         }
       } else {
-        // ❌ No logged-in user
+        // ❌ No authenticated user
         set({ user: null, role: null, profile: null });
       }
 

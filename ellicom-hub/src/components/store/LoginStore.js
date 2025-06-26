@@ -1,10 +1,8 @@
 // 🔐 useLoginStore.login() triggers signInWithEmailAndPassword
 // 🧠 It then calls useAuthenticStore.fetchUser()
-// 🧬 fetchUser() listens to Firebase auth and resolves role
+// 🧬 fetchUser() listens to Firebase auth and resolves role via custom claims
 // 🔄 Both stores (AuthenticStore and UserStore) are synced
 // 🚀 UI everywhere can just use useUserStore() for reactive user info
-
-// store/useLoginStore.js
 
 import { create } from 'zustand';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -38,7 +36,7 @@ const useLoginStore = create((set, get) => ({
   /**
    * 🔐 login() – Main login handler
    * - Calls Firebase Auth
-   * - Syncs role via `useAuthenticStore`
+   * - Syncs role via `useAuthenticStore` using custom claims
    * - Syncs Firestore user profile via `useUserStore`
    * - Redirects user to role-based home
    */
@@ -53,13 +51,13 @@ const useLoginStore = create((set, get) => ({
       // 🔐 Firebase login
       const userCred = await signInWithEmailAndPassword(auth, email, password);
 
-      // 🧠 Sync Firebase auth & custom claims
-      await fetchUser(loginType);
+      // 🧠 Sync Firebase Auth and extract custom claims
+      await fetchUser(); // 🔁 Role will be set inside useAuthenticStore.role from claims
 
-      // 🔄 Sync Firestore user profile to Zustand
-      await fetchUserAndRole();
+      // 🔄 Optionally sync Firestore user profile (not for role)
+      await fetchUserAndRole(); // Just hydrates name, profile, etc.
 
-      // 🧭 Route user based on resolved role
+      // 🧭 Route user based on resolved role from claims
       const currentRole = useAuthenticStore.getState().role;
       const redirectPath = roleRedirectMap[currentRole] || '/unauthorized';
 

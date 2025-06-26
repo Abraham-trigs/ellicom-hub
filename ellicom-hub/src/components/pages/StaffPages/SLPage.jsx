@@ -24,14 +24,14 @@ const SLPage = () => {
           </p>
         </div>
 
-        <div>
+        <div className='mt-15'>
           <p className='text-inactive font-normal italic text-center mt-(-4)'> 
             Staff Login <span className='text-highGold'>Only</span>
           </p>
         </div>
       </div>
 
-      <div className='mt-3'>
+      <div className='-mt-7'>
         <SLForm />
       </div>
     </>

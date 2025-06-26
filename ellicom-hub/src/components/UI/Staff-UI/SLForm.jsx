@@ -1,6 +1,5 @@
-// UI/Staff-UI/SLForm.jsx
-
-import React, { useEffect, useState } from 'react';
+// src/UI/Staff-UI/SLForm.jsx
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLoginStore from '../../store/LoginStore';
 
@@ -11,22 +10,15 @@ const SLForm = () => {
     setEmail,
     setPassword,
     login,
-    setLoginType,
     loading,
     error,
   } = useLoginStore();
 
-  const [selectedRole, setSelectedRole] = useState('staff'); // Default to staff
   const navigate = useNavigate();
-
-  useEffect(() => {
-    setLoginType(selectedRole);
-  }, [selectedRole, setLoginType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await login(navigate);
-    // login() already redirects based on role
+    const user = await login(navigate); // login function handles everything
   };
 
   return (
@@ -36,21 +28,9 @@ const SLForm = () => {
         className="w-full max-w-md p-6 rounded-2xl shadow-lg space-y-6"
       >
         <div>
-          <select
-            value={selectedRole}
-            onChange={(e) => setSelectedRole(e.target.value)}
-            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head bg-white focus:outline-none focus:ring-0 focus:border-gold"
-          >
-            <option value="superadmin">Super Admin</option>
-            <option value="admin">Admin</option>
-            <option value="staff">Staff</option>
-          </select>
-        </div>
-
-        <div>
           <input
             type="email"
-            placeholder="Work Email"
+            placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
