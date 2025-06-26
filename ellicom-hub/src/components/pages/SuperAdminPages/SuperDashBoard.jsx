@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Head from '../../UI/Universal-UI/Head';
 import SuperAdminSidebar from '../../UI/SuperAdmin-UI/SuperAdminSideBar';
 import useAuthenticStore from '../../store/AuthenticStore';
-
+import { setUserRole } from '../../../utils/userRole';
 /**
  * SuperDashBoard.jsx – Super Admin Dashboard Page
  *
  * ✅ Displays quick overview stats (total staff, jobs, admins)
- * ✅ Includes navigation links to key SuperAdmin actions (create staff, view jobs, manage roles)
+ * ✅ SuperAdmin can assign roles via setCustomClaims
  * ✅ Uses shared components like Head and SuperAdminSidebar
  * ✅ Designed with Tailwind for responsive layout and branding
- *
- * Used by: Only users with "superadmin" role
  */
 
 const SuperDashBoard = () => {
   const { profile } = useAuthenticStore();
   const firstName = profile?.displayName?.split(' ')[0] || 'SuperAdmin';
+
+  const [uid, setUid] = useState('');
+  const [role, setRole] = useState('staff');
+  const [message, setMessage] = useState('');
+
+  const handleAssign = async () => {
+    try {
+      const response = await setUserRole(uid, role);
+      setMessage(response);
+      setUid('');
+      setRole('staff');
+    } catch (err) {
+      setMessage(err.message);
+    }
+  };
 
   return (
     <div className='border-gold border-b-1 h-23 mb-5'>
@@ -37,7 +50,6 @@ const SuperDashBoard = () => {
 
       {/* Main Content */}
       <div className="p-4 min-h-screen">
-        {/* Welcome Text */}
         <h1 className="text-2xl font-bold text-gold mb-4">
           Welcome, {firstName}
         </h1>
@@ -63,7 +75,7 @@ const SuperDashBoard = () => {
         </div>
 
         {/* Navigation Tiles */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
           <Link to="/superadmin/create-staff">
             <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform">
               Create Staff
@@ -84,6 +96,33 @@ const SuperDashBoard = () => {
               Manage Roles
             </div>
           </Link>
+        </div>
+
+        {/* 🔐 Assign Role Panel */}
+        <div className="bg-white p-6 rounded-lg shadow-md max-w-xl">
+          <h2 className="text-lg font-semibold mb-2 text-head">Assign Role to User</h2>
+          <input
+            className="border p-2 rounded w-full mb-2"
+            placeholder="Enter User UID"
+            value={uid}
+            onChange={(e) => setUid(e.target.value)}
+          />
+          <select
+            className="border p-2 rounded w-full mb-2"
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+          >
+            <option value="staff">Staff</option>
+            <option value="admin">Admin</option>
+            <option value="client">Client</option>
+          </select>
+          <button
+            className="bg-gold text-white px-4 py-2 rounded hover:opacity-90"
+            onClick={handleAssign}
+          >
+            Assign Role
+          </button>
+          {message && <p className="mt-2 text-sm text-blue-600">{message}</p>}
         </div>
       </div>
     </div>
