@@ -1,3 +1,5 @@
+// src/UI/SuperAdmin-UI/SuperAdminSidebar.jsx
+// 🧭 SuperAdminSidebar – Sidebar UI & Navigation for SuperAdmin pages
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -16,21 +18,14 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../Universal-UI/logo';
-
-// ✅ UPDATED: Centralized SuperAdmin Store
 import useAuthenticStore from '../../store/AuthenticStore';
 
-
 const navItems = [
-  { label: 'Dashboard', Icon: LayoutDashboard },
-  { label: 'Staff Management', Icon: Users },
-  { label: 'Top Performer', Icon: Award },
-  { label: 'Job Queue', Icon: ClipboardList },
-  { label: 'Inventory', Icon: PackageCheck },
-  { label: 'Transactions', Icon: DollarSign },
-  { label: 'Analytics', Icon: LineChart },
-  { label: 'Notifications', Icon: Bell },
-  { label: 'Settings', Icon: Settings },
+  { label: 'Dashboard', Icon: LayoutDashboard, path: '/superadmin/dashboard' },
+  { label: 'Staff Management', Icon: Users, path: '/superadmin/all-staff' },
+  { label: 'Create Staff', Icon: Award, path: '/superadmin/create-staff' },
+  { label: 'Job Queue', Icon: ClipboardList, path: '/superadmin/all-jobs' },
+  { label: 'Manage Roles', Icon: Settings, path: '/superadmin/manage-roles' },
 ];
 
 const SideNav = () => {
@@ -71,6 +66,7 @@ const SideNav = () => {
               <div className="mb-4 -mt-3 text-xl font-semibold text-head">
                 Super Admin
               </div>
+
               <div className="mb-6">
                 <button
                   className="bg-sea px-7 py-2 text-ground rounded-lg font-normal text-center 
@@ -86,12 +82,12 @@ const SideNav = () => {
             </div>
 
             <ul className="w-full flex flex-col items-center">
-              {navItems.map(({ label, Icon }, index) => (
+              {navItems.map(({ label, Icon, path }, index) => (
                 <React.Fragment key={label}>
                   <li>
                     <button
                       onClick={() => {
-                        navigate(`/${label.toLowerCase().replace(/\s/g, '-')}`);
+                        navigate(path);
                         setActiveTab(label);
                         closeSidebar();
                       }}
@@ -159,31 +155,30 @@ const SuperAdminSidebar = () => {
 
 export default SuperAdminSidebar;
 
-
-
 /**
- * 🧭 SuperAdminSidebar.jsx – Responsive Sidebar for Super Admin
- * -------------------------------------------------------------
- * Animated, role-based navigation sidebar built with:
- * - Framer Motion for animation
- * - Zustand (via useAuthenticStore) for global state
+ * 📌 SuperAdminSidebar Notes
  *
- * Handles:
- * ✅ Sidebar open/close state
- * ✅ Active tab tracking
- * ✅ Navigation with React Router
- * ✅ Mobile responsiveness via hamburger toggle
+ * ✅ Handles mobile-friendly, animated Super Admin sidebar UI
+ * ✅ Built with:
+ *    - Zustand for state management (isOpen, toggleSidebar, setActiveTab)
+ *    - Framer Motion for transitions and animations
+ *    - Lucide React for icons
+ *    - React Router's `navigate` for route control
  *
- * Zustand Store Used: useAuthenticStore
- * - isOpen           → Sidebar visibility (Boolean)
- * - toggleSidebar()  → Toggles sidebar visibility
- * - closeSidebar()   → Closes sidebar
- * - activeTab        → String tracking current tab
- * - setActiveTab(tab)→ Updates current tab
+ * 🧠 Features:
+ * - Toggles visibility of a right-slide-in sidebar panel
+ * - Tracks which nav tab is active using `activeTab`
+ * - Real route paths wired per SuperAdmin use case
+ * - Clean logout button (currently stubbed – should link to logout logic)
  *
- * Great for:
- * - Super Admin dashboard layouts with multiple sections
- * - Keeping sidebar state across page reloads
- * - Mobile-first UIs that require dynamic toggling
+ * 🔐 Zustand State Accessed:
+ * - `isOpen`           → boolean to show/hide sidebar
+ * - `toggleSidebar()`  → toggles isOpen
+ * - `closeSidebar()`   → force-closes sidebar
+ * - `activeTab`        → string label of current nav tab
+ * - `setActiveTab()`   → updates current tab label
+ *
+ * 🏁 Final Purpose:
+ * - Acts as a central navigation system for the SuperAdmin layout
+ * - Easy to extend with more routes or sidebar buttons
  */
-

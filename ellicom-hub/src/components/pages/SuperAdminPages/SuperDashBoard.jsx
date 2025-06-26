@@ -1,34 +1,30 @@
+// 🛡️ Super Admin Dashboard – Role Overview + Secure Role Assignment UI
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Head from '../../UI/Universal-UI/Head';
 import SuperAdminSidebar from '../../UI/SuperAdmin-UI/SuperAdminSideBar';
 import useAuthenticStore from '../../store/AuthenticStore';
-import { setUserRole } from '../../../utils/userRole';
-/**
- * SuperDashBoard.jsx – Super Admin Dashboard Page
- *
- * ✅ Displays quick overview stats (total staff, jobs, admins)
- * ✅ SuperAdmin can assign roles via setCustomClaims
- * ✅ Uses shared components like Head and SuperAdminSidebar
- * ✅ Designed with Tailwind for responsive layout and branding
- */
+import { assignCustomRole } from '../../../utils/firebaseRoleUtils'; // ✅ Correct role assign util
 
 const SuperDashBoard = () => {
   const { profile } = useAuthenticStore();
   const firstName = profile?.displayName?.split(' ')[0] || 'SuperAdmin';
 
+  // 🔄 Role Form State
   const [uid, setUid] = useState('');
   const [role, setRole] = useState('staff');
   const [message, setMessage] = useState('');
 
+  // 🚀 Role Assignment Handler
   const handleAssign = async () => {
     try {
-      const response = await setUserRole(uid, role);
-      setMessage(response);
+      const result = await assignCustomRole(uid, role); // ✅ Cloud Function trigger
+      setMessage(result);
       setUid('');
       setRole('staff');
     } catch (err) {
-      setMessage(err.message);
+      setMessage(`❌ ${err.message}`);
     }
   };
 
@@ -130,3 +126,20 @@ const SuperDashBoard = () => {
 };
 
 export default SuperDashBoard;
+
+
+/**
+ * SuperDashBoard.jsx – Super Admin Dashboard Page
+ *
+ * 🔐 Only accessible by users with the "superadmin" role.
+ *
+ * ✅ Displays quick dashboard stats (Total Staff, Jobs, Admins).
+ * ✅ Includes navigation tiles for key SuperAdmin actions (create/view staff, jobs, manage roles).
+ * ✅ Provides a secure Role Assignment Panel – allows SuperAdmin to assign roles (staff/admin/client) to other users.
+ * ✅ Uses Firebase Callable Function via `assignCustomRole()` from firebaseRoleUtils.js.
+ * ✅ Uses Zustand (useAuthenticStore) to get current user profile.
+ * ✅ Components: Head (Logo/Header), SuperAdminSidebar (Sidebar Nav).
+ *
+ * 💡 Note: Role assignment backend ensures only SuperAdmins can set roles.
+ */
+
