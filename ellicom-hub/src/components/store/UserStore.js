@@ -7,6 +7,7 @@
 import { create } from 'zustand';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../../lib/firebase';
+import useAuthenticStore from './AuthenticStore';
 
 const useUserStore = create((set) => ({
   user: null,
@@ -26,23 +27,44 @@ const useUserStore = create((set) => ({
     if (!currentUser) return;
 
     const { uid } = currentUser;
-    let userRef;
+    const currentRole = useAuthenticStore.getState().role;
 
-    // Try both collections (adjust this logic if you split clients/staff/admin)
-    const clientRef = doc(db, 'clients', uid);
-    const staffRef = doc(db, 'staff', uid);
+    let userRef = null;
 
-    const clientSnap = await getDoc(clientRef);
-    const staffSnap = await getDoc(staffRef);
+    // 🔍 Match role to specific Firestore collections
+    switch (currentRole) {
+      case 'client':
+        userRef = doc(db, 'clients', uid);
+        break;
+      case 'staff':
+        userRef = doc(db, 'staff', uid);
+        break;
+      case 'admin':
+        userRef = doc(db, 'admins', uid);
+        break;
+      case 'superadmin':
+        userRef = doc(db, 'superadmins', uid);
+        break;
+      case 'guest':
+        userRef = doc(db, 'guests', uid);
+        break;
+      default:
+        console.warn('⚠️ Unknown role:', currentRole);
+        return;
+    }
 
-    if (clientSnap.exists()) {
-      const data = clientSnap.data();
-      set({ user: { ...currentUser, ...data }, role: data.role });
-    } else if (staffSnap.exists()) {
-      const data = staffSnap.data();
-      set({ user: { ...currentUser, ...data }, role: data.role });
-    } else {
-      console.warn('⚠️ No user data found in Firestore for UID:', uid);
+    try {
+      const snap = await getDoc(userRef);
+      if (snap.exists()) {
+        const data = snap.data();
+        set({ user: { ...currentUser, ...data }, role: data.role || currentRole });
+      } else {
+        console.warn(`⚠️ No document found for ${currentRole} at path: ${userRef.path}`);
+        set({ user: currentUser, role: currentRole });
+      }
+    } catch (err) {
+      console.error('🔥 Firestore fetch error:', err);
+      set({ user: currentUser, role: currentRole });
     }
   },
 }));

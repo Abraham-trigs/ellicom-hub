@@ -25,3 +25,6 @@ dist-ssr
 .env
 serviceAccountKey.json
 
+# Ignore role-claim script
+scripts/setCustomClaim.js
+

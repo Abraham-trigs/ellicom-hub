@@ -1,18 +1,49 @@
-rules_version='2'
-
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      // This rule allows anyone with your database reference to view, edit,
-      // and delete all data in your database. It is useful for getting
-      // started, but it is configured to expire after 30 days because it
-      // leaves your app open to attackers. At that time, all client
-      // requests to your database will be denied.
-      //
-      // Make sure to write security rules for your app before that time, or
-      // else all client requests to your database will be denied until you
-      // update your rules.
-      allow read, write: if request.time < timestamp.date(2025, 7, 17);
+
+    // 🔐 Universal Read/Write Access for SuperAdmins
+    match /{docPath=**} {
+      allow read, write: if isSuperAdmin();
+    }
+
+    // 🧱 Role-Specific Access Control for Others
+    match /superadmins/{userId} {
+      allow read, write: if isOwner(userId) && isRole('superadmin');
+    }
+
+    match /admins/{userId} {
+      allow read, write: if isOwner(userId) && isRole('admin');
+    }
+
+    match /staff/{userId} {
+      allow read, write: if isOwner(userId) && isRole('staff');
+    }
+
+    match /clients/{userId} {
+      allow read, write: if isOwner(userId) && isRole('client');
+    }
+
+    match /guests/{userId} {
+      allow read: if isSignedIn() && isRole('guest');
+      allow write: if false; // 🔒 Guests can't write
     }
   }
+}
+
+// 🔧 Helpers
+function isSignedIn() {
+  return request.auth != null;
+}
+
+function isOwner(userId) {
+  return request.auth != null && request.auth.uid == userId;
+}
+
+function isRole(role) {
+  return request.auth.token.role == role;
+}
+
+function isSuperAdmin() {
+  return request.auth != null && request.auth.token.role == 'superadmin';
 }

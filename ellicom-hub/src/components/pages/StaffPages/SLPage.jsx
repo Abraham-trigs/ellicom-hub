@@ -26,7 +26,7 @@ const SLPage = () => {
 
         <div className='mt-15'>
           <p className='text-inactive font-normal italic text-center mt-(-4)'> 
-            Staff Login <span className='text-highGold'>Only</span>
+           Staff Login
           </p>
         </div>
       </div>
