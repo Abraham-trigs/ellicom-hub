@@ -1,8 +1,8 @@
-// UI/CLIENT-UI/CTLForm.jsx
+// src/UI/CLIENT-UI/CTLForm.jsx – Unified Client Login Form
 
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useLoginStore from '../../store/LoginStore';
+import useAuthenticStore from '../../store/AuthenticStore';
 
 const CTLForm = () => {
   const {
@@ -14,19 +14,18 @@ const CTLForm = () => {
     setLoginType,
     loading,
     error,
-  } = useLoginStore();
+  } = useAuthenticStore();
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // 🎯 Force login type to 'client' when form mounts
+    // Mark this login type as 'client' to tell store which Firestore collection to use
     setLoginType('client');
   }, [setLoginType]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await login();
-    if (user) navigate('/client/dashboard'); 
+    await login(navigate); // Handles full login + redirect
   };
 
   return (
@@ -76,8 +75,3 @@ const CTLForm = () => {
 };
 
 export default CTLForm;
-
-
-// Added setLoginType('client') inside useEffect() to make sure role-based login works correctly.
-
-// Connected everything via Zustand state: email, password, loading, error, login, setLoginType.

@@ -22,6 +22,7 @@ const useUserStore = create((set) => ({
    * 🧠 fetchUserAndRole – Fetch additional user data from Firestore
    * Called after login or app init to sync profile data (like displayName)
    */
+
   fetchUserAndRole: async () => {
     const currentUser = auth.currentUser;
     if (!currentUser) return;
@@ -63,7 +64,7 @@ const useUserStore = create((set) => ({
         set({ user: currentUser, role: currentRole });
       }
     } catch (err) {
-      console.error('🔥 Firestore fetch error:', err);
+      console.error(' Firestore fetch error:', err);
       set({ user: currentUser, role: currentRole });
     }
   },

@@ -1,12 +1,9 @@
-// App.jsx – Main Application Shell (Zustand + Role-Based Access)
+// App.jsx – Main Application Shell (Refactored with Unified Auth Store)
 
 import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-// Zustand Stores
 import useAuthenticStore from './components/store/AuthenticStore';
-import useUserStore from './components/store/UserStore';
-
 // Role Guard
 import RequireRole from './Routes/RequireRoles';
 
@@ -33,13 +30,11 @@ import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
 import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
 
 function App() {
-  const { isAppReady, loading, fetchUser } = useAuthenticStore();
-  const { fetchUserAndRole } = useUserStore();
+  const { isAppReady, loading, initAuth } = useAuthenticStore();
 
   // 🔄 Load auth + Firestore user data on mount
   useEffect(() => {
-    fetchUser();
-    fetchUserAndRole();
+    initAuth();
   }, []);
 
   // 🧼 Remove splash/preloader once app is ready
@@ -48,7 +43,7 @@ function App() {
     if (isAppReady && preloader) preloader.remove();
   }, [isAppReady]);
 
-  // 🧯 Fallback in case isAppReady is skipped
+  // 🧯 Backup cleaner
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (!loading && preloader) preloader.remove();
@@ -100,29 +95,3 @@ function App() {
 }
 
 export default App;
-
-
-//
-// App.jsx – Main Application Shell (Zustand + Role-Based Access)
-//
-// 🧬 Auth Integration:
-//   - Uses `useAuthenticStore` for Firebase auth + custom claims
-//   - Uses `useUserStore` to fetch Firestore-stored user data
-//
-// 🛡 Role-Based Protection:
-//   - Uses new `RequireRole` wrapper with `Outlet` for secure nested routing
-//   - Allows passing string or array to `allowedRoles` prop
-//
-// 🚀 Boot Logic:
-//   - Automatically fetches role + auth user on mount
-//   - Handles preloader cleanup gracefully using isAppReady or loading
-//
-// 🧭 Routes Covered:
-//   - Public: Welcome, Home, Guest Add Job
-//   - Client: Login + Dashboard + JobViews
-//   - Staff/Admin: Login + Home + Dashboard
-//   - SuperAdmin: Nested dashboard pages
-//
-// 🧱 Design:
-//   - Modular, readable and scalable for permission-based expansion
-//

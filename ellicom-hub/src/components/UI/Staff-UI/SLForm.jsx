@@ -1,7 +1,7 @@
 // src/UI/Staff-UI/SLForm.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useLoginStore from '../../store/LoginStore';
+import useAuthenticStore from '../../store/AuthenticStore';
 
 const SLForm = () => {
   const {
@@ -12,7 +12,7 @@ const SLForm = () => {
     login,
     loading,
     error,
-  } = useLoginStore();
+  } = useAuthenticStore();
 
   const navigate = useNavigate();
 

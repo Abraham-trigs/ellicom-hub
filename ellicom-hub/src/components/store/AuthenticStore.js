@@ -1,132 +1,163 @@
-// 🔐 useLoginStore.login() triggers signInWithEmailAndPassword 
-// 🧠 It then calls useAuthenticStore.fetchUser()
-// 🧬 fetchUser() listens to Firebase auth and resolves role
-// 🔄 Both stores (AuthenticStore and UserStore) are synced
-// 🚀 UI everywhere can just use useUserStore() for reactive user info
+// src/store/AuthenticStore.js
+// 🔐 Unified Auth Store – Handles Login, Firebase Auth, Role Detection, Profile Sync
 
 import { create } from 'zustand';
-import { onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { signInWithEmailAndPassword, onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
 import { auth, db } from '../../lib/firebase';
+import { doc, getDoc } from 'firebase/firestore';
+
+const roleRedirectMap = {
+  superadmin: '/superadmin/dashboard',
+  admin: '/admin-home',
+  staff: '/staff-home',
+  client: '/client-home',
+};
 
 const useAuthenticStore = create((set, get) => ({
-  user: null, // Firebase auth user
-  role: null, // User role: 'client', 'staff', 'admin', 'superadmin'
-  profile: null, // 📌 User metadata: email, uid, name, photo, etc.
-  loading: true,
+  // 🔐 Auth & Profile State
+  user: null,
+  role: null,
+  profile: null,
+  loading: false,
   isAppReady: false,
+  error: null,
 
-  // 🔍 Resolves Firebase user + role from custom claims (preferred) or fallback Firestore
-  fetchUser: async (loginType = '') => {
-    onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // 🔁 Set basic Firebase auth user object
-        set({ user: firebaseUser });
+  // 📝 Login Form Fields
+  email: '',
+  password: '',
+  loginType: '',
 
-        // 📌 Extract core user profile metadata
-        const userProfile = {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          displayName: firebaseUser.displayName || 'Anonymous',
-          photoURL: firebaseUser.photoURL || '',
-        };
-        set({ profile: userProfile });
+  // ✍️ Input Mutators
+  setEmail: (val) => set({ email: val }),
+  setPassword: (val) => set({ password: val }),
+  setLoginType: (val) => set({ loginType: val }),
 
-        try {
-          // 🔐 Force token refresh to ensure latest custom claims
-          const tokenResult = await getIdTokenResult(firebaseUser, true);
-          const customRole = tokenResult.claims.role;
+  /**
+   * 🔓 login – Full login flow
+   * - Firebase Auth
+   * - Custom Claims OR Firestore fallback
+   * - Profile hydration
+   * - Redirect
+   */
+  login: async (navigate) => {
+    const { email, password, loginType } = get();
+    set({ loading: true, error: null });
 
-          if (customRole) {
-            // 🎯 Use custom claim if present
-            set({ role: customRole });
-          } else {
-            // 🛠️ Firestore fallback (for legacy accounts or claim sync delay)
-            let userRef;
-            if (loginType === 'client') {
-              userRef = doc(db, 'clients', firebaseUser.uid);
-            } else {
-              userRef = doc(db, 'staff', firebaseUser.uid);
-            }
+    try {
+      const userCred = await signInWithEmailAndPassword(auth, email, password);
+      const firebaseUser = userCred.user;
 
-            const userSnap = await getDoc(userRef);
+      const tokenResult = await getIdTokenResult(firebaseUser, true);
+      let resolvedRole = tokenResult.claims.role || null;
 
-            if (userSnap.exists()) {
-              const data = userSnap.data();
-              set({ role: data.role || null });
+      const profile = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName || 'Anonymous',
+        photoURL: firebaseUser.photoURL || '',
+      };
 
-              // 🔁 Merge in any Firestore profile info (e.g., name override)
-              set((state) => ({
-                profile: {
-                  ...state.profile,
-                  ...data,
-                },
-              }));
-            } else {
-              console.warn('⚠️ Role not found in Firestore fallback.');
-              set({ role: null });
-            }
-          }
-        } catch (err) {
-          console.error('🔥 Error resolving user role via claims/Firestore:', err);
-          set({ role: null });
+      // Fallback to Firestore role if no custom claim
+      if (!resolvedRole) {
+        const userRef = loginType === 'client'
+          ? doc(db, 'clients', firebaseUser.uid)
+          : doc(db, 'staff', firebaseUser.uid);
+
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          resolvedRole = data.role || null;
+          Object.assign(profile, data); // merge Firestore profile fields
+        } else {
+          console.warn('⚠️ Role not found in Firestore.');
         }
-      } else {
-        // ❌ No authenticated user
-        set({ user: null, role: null, profile: null });
       }
 
-      set({ loading: false, isAppReady: true });
+      // Update Store
+      set({
+        user: firebaseUser,
+        profile,
+        role: resolvedRole,
+        isAppReady: true,
+      });
+
+      const redirectPath = roleRedirectMap[resolvedRole] || '/unauthorized';
+      navigate(redirectPath);
+      return firebaseUser;
+    } catch (err) {
+      console.error('Login Error:', err.message);
+      set({ error: err.message });
+      return null;
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  /**
+   * 🧠 initAuth – Called on app boot to sync existing auth state
+   */
+  initAuth: () => {
+    set({ loading: true });
+
+    onAuthStateChanged(auth, async (firebaseUser) => {
+      if (!firebaseUser) {
+        set({ user: null, role: null, profile: null, isAppReady: true, loading: false });
+        return;
+      }
+
+      const tokenResult = await getIdTokenResult(firebaseUser);
+      let resolvedRole = tokenResult.claims.role || null;
+
+      const profile = {
+        uid: firebaseUser.uid,
+        email: firebaseUser.email,
+        displayName: firebaseUser.displayName || 'Anonymous',
+        photoURL: firebaseUser.photoURL || '',
+      };
+
+      if (!resolvedRole) {
+        const userRef = doc(db, 'staff', firebaseUser.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const data = userSnap.data();
+          resolvedRole = data.role || null;
+          Object.assign(profile, data);
+        }
+      }
+
+      set({
+        user: firebaseUser,
+        profile,
+        role: resolvedRole,
+        loading: false,
+        isAppReady: true,
+      });
     });
   },
 
-  // 🔓 Sign out the user and clean up state
+  // 🔓 Logout
   logout: async () => {
     await auth.signOut();
-    set({ user: null, role: null, profile: null, loading: false });
+    set({
+      user: null,
+      role: null,
+      profile: null,
+      loading: false,
+      isAppReady: false,
+    });
   },
 
-  // 🎯 Role-specific utility functions
+  // 🎯 Role Utilities
   isSuperAdmin: () => get().role === 'superadmin',
   isStaff: () => ['staff', 'admin'].includes(get().role),
   isGuest: () => !get().user && !get().role,
-
-  // 🔒 Flexible role checker: supports string or array
   hasRole: (roleOrRoles) => {
-    const currentRole = get().role;
-    if (!currentRole) return false;
-
+    const role = get().role;
+    if (!role) return false;
     return Array.isArray(roleOrRoles)
-      ? roleOrRoles.includes(currentRole)
-      : currentRole === roleOrRoles;
+      ? roleOrRoles.includes(role)
+      : role === roleOrRoles;
   },
 }));
 
 export default useAuthenticStore;
-
-
-//
-// 🧠 useAuthenticStore.js – Central Firebase Auth & Role Manager
-//
-// 🔍 Purpose:
-//   - Listens for auth state changes via Firebase
-//   - Determines user role via custom claims or Firestore fallback
-//   - Syncs and extends user profile metadata (email, name, photo, etc.)
-//
-// 🔁 Syncs With:
-//   - ✅ useUserStore: keeps UI-reactive global user/role/profile in sync
-//
-// 📦 Core State:
-//   - user: Firebase user object
-//   - profile: Object with additional info (email, displayName, etc.)
-//   - role: String (e.g. "staff", "client", "superadmin")
-//   - loading: true while checking
-//   - isAppReady: true once app has determined auth state
-//
-// 🔧 Actions:
-//   - fetchUser(): Called on app init and after login
-//   - logout(): Signs out and resets state
-//
-// ⚙️ Utilities:
-//   - isSuperAdmin(), isStaff(), isGuest(), hasRole([... or string])
-//
