@@ -1,14 +1,32 @@
-import React from 'react';
+// UI/CLIENT-UI/CTLForm.jsx
+
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useCTLStore from '../../store/CTLStore';
+import useLoginStore from '../../store/LoginStore';
 
 const CTLForm = () => {
-  const { name, password, setName, setPassword, login } = useCTLStore();
+  const {
+    email,
+    password,
+    setEmail,
+    setPassword,
+    login,
+    setLoginType,
+    loading,
+    error,
+  } = useLoginStore();
+
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    // 🎯 Force login type to 'client' when form mounts
+    setLoginType('client');
+  }, [setLoginType]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(navigate);
+    const user = await login();
+    if (user) navigate('/client/dashboard'); 
   };
 
   return (
@@ -18,22 +36,18 @@ const CTLForm = () => {
         className="w-full max-w-md p-6 rounded-2xl shadow-lg space-y-6"
       >
         <div>
-          <label htmlFor="name" className="block text-sm text-center font-medium text-head mb-1" />
           <input
-            id="name"
-            type="text"
-            placeholder="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            type="email"
+            placeholder="Client Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
             className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium text-center text-head mb-1" />
           <input
-            id="password"
             type="password"
             placeholder="Password"
             value={password}
@@ -43,12 +57,17 @@ const CTLForm = () => {
           />
         </div>
 
+        {error && (
+          <p className="text-red-600 text-sm text-center italic">{error}</p>
+        )}
+
         <div className="flex flex-col items-center justify-center mt-20">
           <button
             type="submit"
+            disabled={loading}
             className="flex items-center justify-center p-6 bg-sea hover:bg-high text-ground font-bold py-2 rounded-lg transition-all ease-in-out duration-200 -mt-6 focus:outline-none focus:ring-0"
           >
-            Enter
+            {loading ? 'Loading...' : 'Enter'}
           </button>
         </div>    
       </form>
@@ -57,3 +76,8 @@ const CTLForm = () => {
 };
 
 export default CTLForm;
+
+
+// Added setLoginType('client') inside useEffect() to make sure role-based login works correctly.
+
+// Connected everything via Zustand state: email, password, loading, error, login, setLoginType.
