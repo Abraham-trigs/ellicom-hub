@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Head from '../../UI/Universal-UI/Head';
 import SuperAdminSidebar from '../../UI/SuperAdmin-UI/SuperAdminSideBar';
+import useAuthenticStore from '../../store/AuthenticStore';
 
 /**
  * SuperDashBoard.jsx – Super Admin Dashboard Page
@@ -15,8 +16,12 @@ import SuperAdminSidebar from '../../UI/SuperAdmin-UI/SuperAdminSideBar';
  */
 
 const SuperDashBoard = () => {
+  const { profile } = useAuthenticStore();
+  const firstName = profile?.displayName?.split(' ')[0] || 'SuperAdmin';
+
   return (
     <div className='border-gold border-b-1 h-23 mb-5'>
+      {/* Sidebar */}
       <div className="mt-10 flex flex-col justify-end">
         <div className="w-full">
           <div className='flex flex-row justify-end'>
@@ -34,7 +39,7 @@ const SuperDashBoard = () => {
       <div className="p-4 min-h-screen">
         {/* Welcome Text */}
         <h1 className="text-2xl font-bold text-gold mb-4">
-          Welcome, SuperAdmin
+          Welcome, {firstName}
         </h1>
 
         {/* Quick Stats */}
@@ -86,14 +91,3 @@ const SuperDashBoard = () => {
 };
 
 export default SuperDashBoard;
-
-// 🧭 SuperDashBoard.jsx – Super Admin Interface
-//
-// ✅ Uses SuperAdminSidebar with Zustand state for sidebar management
-// ✅ Provides access to staff management and job oversight
-// ✅ Displays metrics like total staff, admins, pending and total jobs
-// ✅ Each tile links to a functional sub-page
-// ✅ Built with Tailwind for scalability and UI consistency
-//
-// 🔐 Only accessible to authenticated users with role: 'superadmin'
-// 📁 Part of: /pages/SuperAdmin/ directory

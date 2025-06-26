@@ -50,30 +50,35 @@ const useAuthenticStore = create((set, get) => ({
       const tokenResult = await getIdTokenResult(firebaseUser, true);
       let resolvedRole = tokenResult.claims.role || null;
 
-      const profile = {
+      // Default profile — may get overridden with Firestore fields
+      let profile = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
-        displayName: firebaseUser.displayName || 'Anonymous',
+        displayName: firebaseUser.displayName || '', // temp fallback
         photoURL: firebaseUser.photoURL || '',
       };
 
-      // Fallback to Firestore role if no custom claim
-      if (!resolvedRole) {
-        const userRef = loginType === 'client'
-          ? doc(db, 'clients', firebaseUser.uid)
-          : doc(db, 'staff', firebaseUser.uid);
+      // Fallback to Firestore role + name if needed
+      const userRef = loginType === 'client'
+        ? doc(db, 'clients', firebaseUser.uid)
+        : doc(db, 'staff', firebaseUser.uid);
+      const userSnap = await getDoc(userRef);
 
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const data = userSnap.data();
-          resolvedRole = data.role || null;
-          Object.assign(profile, data); // merge Firestore profile fields
-        } else {
-          console.warn('⚠️ Role not found in Firestore.');
-        }
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        resolvedRole = resolvedRole || data.role || null;
+
+        // 🧠 Prefer Firestore name fields (e.g., name or fullName)
+        profile = {
+          ...profile,
+          ...data,
+          displayName: data.name || data.fullName || firebaseUser.displayName || 'SuperAdmin',
+        };
+      } else {
+        console.warn('⚠️ No Firestore profile found.');
       }
 
-      // Update Store
+      // ✅ Update Zustand state
       set({
         user: firebaseUser,
         profile,
@@ -84,6 +89,7 @@ const useAuthenticStore = create((set, get) => ({
       const redirectPath = roleRedirectMap[resolvedRole] || '/unauthorized';
       navigate(redirectPath);
       return firebaseUser;
+
     } catch (err) {
       console.error('Login Error:', err.message);
       set({ error: err.message });
@@ -108,23 +114,30 @@ const useAuthenticStore = create((set, get) => ({
       const tokenResult = await getIdTokenResult(firebaseUser);
       let resolvedRole = tokenResult.claims.role || null;
 
-      const profile = {
+      // Base profile
+      let profile = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
-        displayName: firebaseUser.displayName || 'Anonymous',
+        displayName: firebaseUser.displayName || '', // temp fallback
         photoURL: firebaseUser.photoURL || '',
       };
 
-      if (!resolvedRole) {
-        const userRef = doc(db, 'staff', firebaseUser.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          const data = userSnap.data();
-          resolvedRole = data.role || null;
-          Object.assign(profile, data);
-        }
+      // Load from Firestore if no custom claim
+      const userRef = doc(db, 'staff', firebaseUser.uid); // defaulting to staff
+      const userSnap = await getDoc(userRef);
+
+      if (userSnap.exists()) {
+        const data = userSnap.data();
+        resolvedRole = resolvedRole || data.role || null;
+
+        profile = {
+          ...profile,
+          ...data,
+          displayName: data.name || data.fullName || firebaseUser.displayName || 'SuperAdmin',
+        };
       }
 
+      // Final state sync
       set({
         user: firebaseUser,
         profile,
