@@ -4,8 +4,8 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { auth, db } from '../../lib/firebase';
-import { assignCustomRole } from '../../utils/firebaseRoleUtils';
+import { auth, db } from '../../../lib/firebase';
+import { assignCustomRole } from '../../../utils/firebaseRoleUtils';
 
 const CreateStaffForm = () => {
   const [form, setForm] = useState({

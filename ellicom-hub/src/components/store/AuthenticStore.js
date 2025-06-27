@@ -1,9 +1,14 @@
+// src/store/AuthenticStore.js
 import { create } from 'zustand';
-import { signInWithEmailAndPassword, onAuthStateChanged, getIdTokenResult } from 'firebase/auth';
+import {
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  getIdTokenResult,
+} from 'firebase/auth';
 import { auth, db } from '../../lib/firebase';
 import { doc, getDoc } from 'firebase/firestore';
 
-// 🧭 Role → Route Redirect Map
+// 🧭 Role-to-Route Redirect Map
 const roleRedirectMap = {
   superadmin: '/superadmin/dashboard',
   admin: '/admin-home',
@@ -13,9 +18,9 @@ const roleRedirectMap = {
 
 const useAuthenticStore = create((set, get) => ({
   // 🔐 Core Auth State
-  user: null,
-  role: null,
-  profile: null,
+  user: JSON.parse(localStorage.getItem('authUser')) || null,
+  role: localStorage.getItem('authRole') || null,
+  profile: JSON.parse(localStorage.getItem('authProfile')) || null,
   loading: false,
   isAppReady: false,
   error: null,
@@ -31,7 +36,7 @@ const useAuthenticStore = create((set, get) => ({
   setLoginType: (val) => set({ loginType: val }),
 
   /**
-   * 🔓 login – Handles full login + Firestore profile fallback
+   * 🔓 login – Handles login, claims, and profile resolution
    */
   login: async (navigate) => {
     const { email, password, loginType } = get();
@@ -41,11 +46,9 @@ const useAuthenticStore = create((set, get) => ({
       const userCred = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCred.user;
 
-      // 🔍 Try to pull custom claims (if any)
       const tokenResult = await getIdTokenResult(firebaseUser, true);
       let resolvedRole = tokenResult.claims.role || null;
 
-      // 📦 Basic fallback profile from Firebase Auth
       let profile = {
         uid: firebaseUser.uid,
         email: firebaseUser.email,
@@ -53,16 +56,15 @@ const useAuthenticStore = create((set, get) => ({
         photoURL: firebaseUser.photoURL || '',
       };
 
-      // 🧠 Load extra profile from Firestore based on loginType
-      const userRef = loginType === 'client'
-        ? doc(db, 'clients', firebaseUser.uid)
-        : doc(db, 'staff', firebaseUser.uid);
+      const userRef =
+        loginType === 'client'
+          ? doc(db, 'clients', firebaseUser.uid)
+          : doc(db, 'staff', firebaseUser.uid);
 
       const userSnap = await getDoc(userRef);
       if (userSnap.exists()) {
         const data = userSnap.data();
 
-        // 🏷️ Merge role + displayName from Firestore
         resolvedRole = resolvedRole || data.role || null;
         profile = {
           ...profile,
@@ -73,7 +75,11 @@ const useAuthenticStore = create((set, get) => ({
         console.warn('⚠️ No Firestore profile found.');
       }
 
-      // ✅ Sync with Zustand store
+      // ✅ Sync Zustand and localStorage
+      localStorage.setItem('authUser', JSON.stringify(firebaseUser));
+      localStorage.setItem('authRole', resolvedRole);
+      localStorage.setItem('authProfile', JSON.stringify(profile));
+
       set({
         user: firebaseUser,
         profile,
@@ -81,7 +87,6 @@ const useAuthenticStore = create((set, get) => ({
         isAppReady: true,
       });
 
-      // 🚀 Redirect based on role
       const redirectPath = roleRedirectMap[resolvedRole] || '/unauthorized';
       navigate(redirectPath);
       return firebaseUser;
@@ -95,13 +100,14 @@ const useAuthenticStore = create((set, get) => ({
   },
 
   /**
-   * 🧠 initAuth – On app boot, restore user + Firestore data
+   * 🧠 initAuth – Restore user on boot + localStorage fallback
    */
   initAuth: () => {
     set({ loading: true });
 
     onAuthStateChanged(auth, async (firebaseUser) => {
       if (!firebaseUser) {
+        localStorage.clear();
         set({ user: null, role: null, profile: null, isAppReady: true, loading: false });
         return;
       }
@@ -109,7 +115,7 @@ const useAuthenticStore = create((set, get) => ({
       const tokenResult = await getIdTokenResult(firebaseUser);
       let resolvedRole = tokenResult.claims.role || null;
 
-      let userRef = doc(db, 'staff', firebaseUser.uid); // default to staff
+      let userRef = doc(db, 'staff', firebaseUser.uid);
       if (resolvedRole === 'client') {
         userRef = doc(db, 'clients', firebaseUser.uid);
       }
@@ -126,7 +132,6 @@ const useAuthenticStore = create((set, get) => ({
         if (userSnap.exists()) {
           const data = userSnap.data();
           resolvedRole = resolvedRole || data.role || null;
-
           profile = {
             ...profile,
             ...data,
@@ -136,6 +141,10 @@ const useAuthenticStore = create((set, get) => ({
       } catch (err) {
         console.warn('Firestore read failed:', err.message);
       }
+
+      localStorage.setItem('authUser', JSON.stringify(firebaseUser));
+      localStorage.setItem('authRole', resolvedRole);
+      localStorage.setItem('authProfile', JSON.stringify(profile));
 
       set({
         user: firebaseUser,
@@ -148,10 +157,11 @@ const useAuthenticStore = create((set, get) => ({
   },
 
   /**
-   * 🔓 logout – Clears session + state
+   * 🔓 logout – Signs out and resets store + localStorage
    */
   logout: async () => {
     await auth.signOut();
+    localStorage.clear();
     set({
       user: null,
       role: null,
@@ -161,7 +171,7 @@ const useAuthenticStore = create((set, get) => ({
     });
   },
 
-  // 🎯 Role Helpers
+  // 🎯 Role Check Utilities
   isSuperAdmin: () => get().role === 'superadmin',
   isStaff: () => ['staff', 'admin'].includes(get().role),
   isGuest: () => !get().user && !get().role,
@@ -176,20 +186,15 @@ const useAuthenticStore = create((set, get) => ({
 
 export default useAuthenticStore;
 
+// ============================================================
+// ✅ AuthenticStore.js – Final Version with Recommended Moves
+// ============================================================
 
-
-// NOTES 
-// 🧠 AuthenticStore.js — Current Responsibilities
-// 🔐 Auth State: Manages user, role, profile, loading, isAppReady, and error.
-
-// 📥 Login Logic: Authenticates with Firebase, fetches custom claims or Firestore role, hydrates profile, and redirects based on role.
-
-// 🧠 App Boot Init: On refresh, rehydrates user session and role by listening to onAuthStateChanged, then pulls Firestore data for fallback.
-
-// 🚪 Logout: Signs out the user and resets all auth-related state.
-
-// 🎛️ Form State: Tracks login form values (email, password, loginType) with setters.
-
-// 🧰 Role Utils: Provides helpers like isSuperAdmin(), isStaff(), hasRole() to gate UI/routes based on role.
-
-// 📦 Zustand Store: Centralizes all auth and role logic in one global state.
+// 🔐 Centralized auth/role/profile state using Zustand
+// 🧠 Supports login, persistent auth (via localStorage), and rehydration
+// 🚀 Automatically redirects users based on their role
+// 🔁 Keeps Firebase user state in sync with Firestore profile data
+// 📦 Profile merged from Firebase Auth and Firestore for flexibility
+// 💾 LocalStorage used to retain login across page refreshes
+// 🔧 Includes reusable helpers: isSuperAdmin, isStaff, hasRole
+// 📣 Easily extendable to support refresh tokens, session expiration, etc.

@@ -28,6 +28,7 @@ import SDashboard from './components/pages/StaffPages/SDashboard';
 // SuperAdmin Pages
 import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
 import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
+import CreateStaffPage from './components/pages/SuperAdminPages/CreateStaffPage';
 
 function App() {
   const { isAppReady, loading, initAuth } = useAuthenticStore();
@@ -57,6 +58,8 @@ function App() {
         <Route path="/" element={<WelcomePage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
+        <Route path="/unauthorized" element={<div className="text-red-600 p-4">🚫 Access Denied</div>} />
+
 
         {/* 👤 Client Auth */}
         <Route path="/client/login" element={<CTLPage />} />
@@ -86,6 +89,8 @@ function App() {
           <Route path="/superadmin" element={<SuperAdmin />}>
             <Route index element={<SuperDashBoard />} />
             <Route path="dashboard" element={<SuperDashBoard />} />
+            <Route path="/superadmin/create-staff" element={<CreateStaffPage />} />
+
           </Route>
         </Route>
 

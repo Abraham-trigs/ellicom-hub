@@ -1,3 +1,4 @@
+// src/pages/SuperAdmin/SuperDashBoard.jsx
 // 🛡️ Super Admin Dashboard – Role Overview + Secure Role Assignment UI
 
 import React, { useState } from 'react';
@@ -19,7 +20,7 @@ const SuperDashBoard = () => {
   // 🚀 Role Assignment Handler
   const handleAssign = async () => {
     try {
-      const result = await assignCustomRole(uid, role); // ✅ Cloud Function trigger
+      const result = await assignCustomRole(uid, role);
       setMessage(result);
       setUid('');
       setRole('staff');
@@ -73,7 +74,7 @@ const SuperDashBoard = () => {
         {/* Navigation Tiles */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
           <Link to="/superadmin/create-staff">
-            <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform">
+            <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform cursor-pointer">
               Create Staff
             </div>
           </Link>
@@ -127,19 +128,12 @@ const SuperDashBoard = () => {
 
 export default SuperDashBoard;
 
+/*
+📝 SuperDashBoard.jsx Summary
 
-/**
- * SuperDashBoard.jsx – Super Admin Dashboard Page
- *
- * 🔐 Only accessible by users with the "superadmin" role.
- *
- * ✅ Displays quick dashboard stats (Total Staff, Jobs, Admins).
- * ✅ Includes navigation tiles for key SuperAdmin actions (create/view staff, jobs, manage roles).
- * ✅ Provides a secure Role Assignment Panel – allows SuperAdmin to assign roles (staff/admin/client) to other users.
- * ✅ Uses Firebase Callable Function via `assignCustomRole()` from firebaseRoleUtils.js.
- * ✅ Uses Zustand (useAuthenticStore) to get current user profile.
- * ✅ Components: Head (Logo/Header), SuperAdminSidebar (Sidebar Nav).
- *
- * 💡 Note: Role assignment backend ensures only SuperAdmins can set roles.
- */
-
+✅ Super Admin landing page showing stats and management actions.
+✅ Navigation tiles route to create/view staff, jobs, or roles.
+✅ Assign Role Panel updates user roles via Firebase callable functions.
+✅ Uses Zustand for reactive role-based UI (profile from useAuthenticStore).
+✅ "Create Staff" button navigates to the full CreateStaffForm at /superadmin/create-staff.
+*/
