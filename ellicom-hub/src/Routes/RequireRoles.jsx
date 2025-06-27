@@ -24,7 +24,7 @@ const RequireRole = ({ allowedRoles = [], redirectTo = '/', children }) => {
     role,
     loading,
     isAppReady,
-    initAuth, // ✅ Correct function to bootstrap auth state
+    initAuth, 
   } = useAuthenticStore();
 
   const location = useLocation();
@@ -37,11 +37,12 @@ const RequireRole = ({ allowedRoles = [], redirectTo = '/', children }) => {
   // ⏳ Show nothing while waiting for auth to resolve
   if (loading || !isAppReady) return null;
 
-  // 🧠 Normalize single role string to array
-  const rolesArray = Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles];
+  // 🔄 Normalize role strings to prevent casing mismatches
+  const normalizedRole = role?.toLowerCase();
+  const rolesArray = (Array.isArray(allowedRoles) ? allowedRoles : [allowedRoles]).map(r => r.toLowerCase());
 
   // 🔐 Check authorization
-  const isAuthorized = user && rolesArray.includes(role);
+  const isAuthorized = user && rolesArray.includes(normalizedRole);
 
   return isAuthorized ? (
     children ? children : <Outlet />
@@ -51,3 +52,20 @@ const RequireRole = ({ allowedRoles = [], redirectTo = '/', children }) => {
 };
 
 export default RequireRole;
+
+/*
+📄 File: RequireRole.jsx
+
+🧠 Purpose:
+- Protects route access based on Firebase user roles (e.g., staff, admin, superadmin)
+
+⚠️ Fixes:
+- Added lowercase normalization to role checks to prevent mismatches like 'SuperAdmin' vs 'superadmin'
+
+🔐 Handles:
+- App boot logic via initAuth()
+- Null UI during loading
+- Dynamic nested routing with <Outlet />
+
+✅ Matches Firebase Auth + Firestore role structure conventions
+*/
