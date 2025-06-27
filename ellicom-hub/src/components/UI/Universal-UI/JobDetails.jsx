@@ -1,6 +1,4 @@
 import React from 'react';
-import Logo from '../UI/logo';
-import NewJobButton from '../UI/NewJobButton';
 import CTSideBar from '../UI/CTSideBar';
 import Head from '../UI/Head';
 
