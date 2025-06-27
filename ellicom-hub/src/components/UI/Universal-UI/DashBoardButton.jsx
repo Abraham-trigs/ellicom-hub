@@ -2,15 +2,20 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuthenticStore from '../../store/AuthenticStore';
 
+/**
+ * 📍 getDashboardPath – Resolves dashboard route based on user role
+ * Includes dedicated path for superadmin
+ */
 const getDashboardPath = (role) => {
-  switch (role) {
+  switch (role?.toLowerCase()) {
     case 'client':
       return '/client/dashboard';
     case 'staff':
       return '/staff/dashboard';
     case 'admin':
+      return '/admin/dashboard';
     case 'superadmin':
-      return '/admin/dashboard'; 
+      return '/superadmin/dashboard'; // ✅ Fixed
     default:
       return '/';
   }
@@ -39,3 +44,17 @@ const DashBoardButton = () => {
 };
 
 export default DashBoardButton;
+
+/*
+📄 Component: DashBoardButton.jsx
+
+🧠 Purpose:
+- Shows a button that navigates users to their role-based dashboard.
+- Handles both authenticated and guest users.
+
+🔧 Fixes:
+- Added explicit path for `superadmin` → `/superadmin/dashboard`
+- Added `.toLowerCase()` safeguard to prevent casing issues in `role`
+
+✅ Now fully supports: superadmin, admin, staff, client, and fallback to guest route.
+*/
