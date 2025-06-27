@@ -1,52 +1,51 @@
 /**
  * Firebase Cloud Functions – Role Management + Logging
  * 🔐 SuperAdmin-only role assignment using custom claims
- * 
- * Supported Triggers:
- * - onCall: secure callable from frontend
- * - onRequest: basic HTTP test endpoint
  */
 
 import { onRequest, onCall } from 'firebase-functions/v2/https';
 import logger from 'firebase-functions/logger';
 import admin from 'firebase-admin';
 
-// 🛠 Initialize Firebase Admin SDK (only once per cold start)
+// 🛠 Initialize Firebase Admin SDK once
 if (!admin.apps.length) {
   admin.initializeApp();
 }
 
-// 📣 Hello World – Simple test function
+// 📣 Hello World – Simple test function (can be removed later)
 export const helloWorld = onRequest((request, response) => {
   logger.info('Hello logs!', { structuredData: true });
   response.send('Hello from Firebase!');
 });
 
 /**
- * 🔐 setCustomClaims
- * Callable only by authenticated SuperAdmins
- * Sets a custom role claim (e.g. superadmin, admin, staff, client) on a target UID
+ * 🔐 setCustomClaims – Callable only by authenticated SuperAdmins
  * 
- * Request shape: { uid: string, role: string }
+ * Request: { uid: string, role: string }
+ * 
+ * Secure via:
+ * ✅ Firebase Authentication (auth context check)
+ * ✅ Role validation via Firestore
  */
 export const setCustomClaims = onCall(async (request) => {
   const context = request.auth;
   const { uid, role } = request.data;
 
-  // 🧱 1. Auth check
+  // 🔒 1. User must be logged in
   if (!context) {
     throw new Error('User must be authenticated to perform this action.');
   }
 
   const callerUID = context.uid;
-  const callerSnap = await admin.firestore().doc(`staff/${callerUID}`).get();
 
-  // 🔐 2. SuperAdmin permission check
+  // 🧠 2. Check role in Firestore: must be 'superadmin'
+  const callerSnap = await admin.firestore().doc(`superadmins/${callerUID}`).get();
+
   if (!callerSnap.exists || callerSnap.data()?.role !== 'superadmin') {
     throw new Error('Only SuperAdmins can assign roles.');
   }
 
-  // ⚠️ 3. Input validation
+  // ⚠️ 3. Validate input
   if (!uid || !role) {
     throw new Error('Both "uid" and "role" are required.');
   }
@@ -59,3 +58,12 @@ export const setCustomClaims = onCall(async (request) => {
     message: `✅ Role '${role}' successfully set for user ${uid}.`,
   };
 });
+
+/*
+📝 index.js Notes
+
+✅ Uses Firebase Callable Functions via `onCall` to avoid CORS issues.
+✅ Requires user to be logged in.
+✅ Enforces SuperAdmin-only permission using Firestore role check.
+✅ Sets custom user claims (used for route protection and UI gating).
+*/
