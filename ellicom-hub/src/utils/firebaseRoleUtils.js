@@ -18,13 +18,21 @@ export const assignCustomRole = async (uid, role) => {
   return result.data.message; // ✅ Response from cloud function
 };
 
-
 /*
-📝 firebaseRoleUtils.js Summary
+📄 File: firebaseRoleUtils.js
 
-✅ Provides a utility function to securely assign custom roles via Firebase Callable Cloud Function.
-✅ Ensures only SuperAdmins (validated server-side) can set roles.
-✅ Used in SuperAdmin workflows, e.g., when creating or editing staff.
+🧠 Purpose:
+- Provides frontend utility for securely assigning custom Firebase roles
+  through a callable Cloud Function (`setCustomClaims`).
 
-Imported via: import { assignCustomRole } from '../utils/firebaseRoleUtils'
+🛡️ Access Control:
+- Server-side function ensures only SuperAdmins can assign roles.
+
+📦 Usage:
+- import { assignCustomRole } from '../utils/firebaseRoleUtils';
+- Used typically in SuperAdmin panels when creating/editing users.
+
+❗ Reminder:
+- Make sure the Firestore path casing matches: 'superadmins', 'staff', etc.
+- This sets the Auth claim — Firestore must still hold matching role documents.
 */
