@@ -19,47 +19,37 @@ function generatePassword(length = 10) {
 
 // 🆔 Generates a unique Staff ID like "Abraham082"
 function generateStaffID(name) {
-  const randomDigits = Math.floor(100 + Math.random() * 900); // 3-digit random number
-  const prefix = name.split(" ")[0]; // First word of name
+  const randomDigits = Math.floor(100 + Math.random() * 900);
+  const prefix = name.split(" ")[0];
   return `${prefix}${randomDigits}`;
 }
 
-// 📬 Configures nodemailer with environment-safe credentials
+// 📬 Nodemailer config (uses Gmail and env vars)
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER, // Set in .env
-    pass: process.env.EMAIL_PASS, // App password from Gmail
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
   },
 });
 
-/**
- * 🔐 createStaffAccount
- * Creates a staff/admin account via callable function, only by a SuperAdmin
- * - Creates Firebase Auth user
- * - Saves user data to Firestore
- * - Emails credentials to new staff
- */
 export const createStaffAccount = onCall(async (request) => {
-  const { name, email, role } = request.data;
+  const { name, email, role, password: rawPassword, staffID: rawStaffID } = request.data;
   const callerUid = request.auth?.uid;
 
-  // 🔒 Ensure only authenticated users proceed
+  // 🔐 Validate caller
   if (!callerUid) {
     throw new HttpsError("unauthenticated", "Authentication required.");
   }
 
-  // 🔐 Verify caller is a SuperAdmin
   const callerDoc = await db.collection("superadmins").doc(callerUid).get();
   if (!callerDoc.exists || callerDoc.data()?.role !== "superadmin") {
-    throw new HttpsError(
-      "permission-denied",
-      "Only SuperAdmins can create staff/admin accounts."
-    );
+    throw new HttpsError("permission-denied", "Only SuperAdmins can create staff/admin accounts.");
   }
 
-  const password = generatePassword();
-  const staffID = generateStaffID(name);
+  // 🧠 Use provided password/staffID or generate fresh ones
+  const password = rawPassword || generatePassword();
+  const staffID = rawStaffID || generateStaffID(name);
 
   try {
     // 👤 Create Firebase user
@@ -69,7 +59,10 @@ export const createStaffAccount = onCall(async (request) => {
       displayName: name,
     });
 
-    // 🗃️ Store in Firestore under staff collection
+    // 🧾 Optional: Set custom claims here if you want role-based access via claims
+    await admin.auth().setCustomUserClaims(userRecord.uid, { role, staffID });
+
+    // 🗃️ Save user data in Firestore
     await db.collection("staff").doc(userRecord.uid).set({
       id: staffID,
       name,
@@ -79,23 +72,24 @@ export const createStaffAccount = onCall(async (request) => {
       canChangePassword: true,
     });
 
-    // 📩 Email credentials to staff
+    // 📧 Email the new staff member
     await transporter.sendMail({
       from: `"Ellicom Hub" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Your EllicomHub Staff Account",
       html: `
         <p>Hello ${name},</p>
-        <p>Your staff account has been created. Use these credentials to log in:</p>
+        <p>Your ${role.toUpperCase()} account has been created. Use the following credentials:</p>
         <ul>
           <li><strong>Staff ID:</strong> ${staffID}</li>
           <li><strong>Temporary Password:</strong> ${password}</li>
         </ul>
-        <p><strong>Note:</strong> Please change your password after your first login.</p>
+        <p><strong>Important:</strong> Please change your password upon first login.</p>
         <p>— Ellicom Hub Team</p>
       `,
     });
 
+    logger.info(`✅ Created ${role} (${staffID}) for ${email}`);
     return { success: true, staffID };
   } catch (error) {
     logger.error("🔥 Error creating staff account:", error);
