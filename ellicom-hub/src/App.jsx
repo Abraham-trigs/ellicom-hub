@@ -59,6 +59,7 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
         <Route path="/unauthorized" element={<div className="text-red-600 p-4">🚫 Access Denied</div>} />
+        
 
 
         {/* 👤 Client Auth */}
