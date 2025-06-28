@@ -1,5 +1,3 @@
-// src/UI/SuperAdmin-UI/CreateStaffForm.jsx
-
 import React, { useState } from 'react';
 import { functions } from '../../../lib/firebase';
 import { httpsCallable } from 'firebase/functions';
@@ -17,6 +15,7 @@ const CreateStaffForm = () => {
 
   const navigate = useNavigate(); // ✅ router hook
 
+  // 🎭 Handle role button click
   const handleRoleClick = (role) => {
     setForm({ ...form, role });
     setShowForm(true);
@@ -25,16 +24,19 @@ const CreateStaffForm = () => {
     setGenerated({ password: '', staffID: '' });
   };
 
+  // ✏️ Track input changes
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // 📋 Copy to clipboard
   const handleCopy = (text) => {
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
+  // 👁️ Preview credentials
   const handlePreview = async (e) => {
     e.preventDefault();
     const pass = Array(10).fill(0).map(() =>
@@ -47,6 +49,7 @@ const CreateStaffForm = () => {
     setShowModal(true);
   };
 
+  // 🚀 Trigger function to create account
   const handleCreate = async () => {
     setLoading(true);
     try {
@@ -55,13 +58,14 @@ const CreateStaffForm = () => {
         name: form.name,
         email: form.email,
         role: form.role,
+        password: generated.password,
+        staffID: generated.staffID,
       });
 
       setFeedback('✅ Account created and email sent. Redirecting...');
       setShowModal(false);
       setForm({ name: '', email: '', role: '' });
 
-      // ⏳ Delay before redirect
       setTimeout(() => {
         navigate('/superadmin/dashboard');
       }, 2500);
@@ -132,6 +136,8 @@ const CreateStaffForm = () => {
             <p className="text-sm text-gray-600 mb-2">
               These credentials will be emailed to the staff. You may copy them now.
             </p>
+
+            {/* Staff ID Display */}
             <div className="mb-3">
               <label className="block text-xs font-bold mb-1">Staff ID</label>
               <div className="relative">
@@ -148,6 +154,8 @@ const CreateStaffForm = () => {
                 />
               </div>
             </div>
+
+            {/* Password Display */}
             <div className="mb-3">
               <label className="block text-xs font-bold mb-1">Password</label>
               <div className="relative">
