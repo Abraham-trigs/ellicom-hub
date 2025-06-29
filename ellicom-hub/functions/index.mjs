@@ -1,69 +1,90 @@
 /**
- * Firebase Cloud Functions – Role Management + Logging
+ * 🌐 Firebase Cloud Functions – Role Management + Logging
  * 🔐 SuperAdmin-only role assignment using custom claims
+ * 📁 File: index.mjs
  */
 
-import { onRequest, onCall } from 'firebase-functions/v2/https';
+import { onRequest, onCall, HttpsError } from 'firebase-functions/v2/https';
 import logger from 'firebase-functions/logger';
 import admin from 'firebase-admin';
+import { createStaffAccount } from './createStaffAccount.mjs';
 
-// 🛠 Initialize Firebase Admin SDK once
+// 🛠️ Initialize Firebase Admin SDK (once)
 if (!admin.apps.length) {
   admin.initializeApp();
 }
+const db = admin.firestore();
 
-// 📣 Hello World – Simple test function (can be removed later)
-export const helloWorld = onRequest((request, response) => {
-  logger.info('Hello logs!', { structuredData: true });
-  response.send('Hello from Firebase!');
+// 📣 helloWorld – Simple test route for sanity check
+export const helloWorld = onRequest((req, res) => {
+  logger.info('🔥 HelloWorld Function triggered!');
+  res.send('👋 Hello from Firebase Functions!');
 });
 
 /**
- * 🔐 setCustomClaims – Callable only by authenticated SuperAdmins
+ * 🔐 setCustomClaims – Assigns role to a user
+ * Only callable by authenticated SuperAdmins.
  * 
- * Request: { uid: string, role: string }
- * 
- * Secure via:
- * ✅ Firebase Authentication (auth context check)
- * ✅ Role validation via Firestore
+ * @param {object} request.data - Contains uid and role
+ * @param {object} request.auth - Firebase Auth context
  */
 export const setCustomClaims = onCall(async (request) => {
-  const context = request.auth;
   const { uid, role } = request.data;
+  const context = request.auth;
 
-  // 🔒 1. User must be logged in
-  if (!context) {
-    throw new Error('User must be authenticated to perform this action.');
+  // 🔒 1. Must be authenticated
+  if (!context?.uid) {
+    throw new HttpsError('unauthenticated', 'Authentication required.');
   }
 
   const callerUID = context.uid;
 
-  // 🧠 2. Check role in Firestore: must be 'superadmin'
-  const callerSnap = await admin.firestore().doc(`superadmins/${callerUID}`).get();
+  // 🔐 2. Caller must be a SuperAdmin in the superadmins collection
+  const callerDoc = await db.collection("superadmins").doc(callerUID).get();
+  const isSuperAdmin = callerDoc.exists && callerDoc.data()?.role === 'superadmin';
 
-  if (!callerSnap.exists || callerSnap.data()?.role !== 'superadmin') {
-    throw new Error('Only SuperAdmins can assign roles.');
+  if (!isSuperAdmin) {
+    throw new HttpsError('permission-denied', 'Only SuperAdmins can assign roles.');
   }
 
-  // ⚠️ 3. Validate input
+  // ⚠️ 3. Validate uid and role inputs
   if (!uid || !role) {
-    throw new Error('Both "uid" and "role" are required.');
+    throw new HttpsError('invalid-argument', 'Both "uid" and "role" are required.');
   }
 
-  // ✅ 4. Set role claim
-  await admin.auth().setCustomUserClaims(uid, { role });
+  const normalizedRole = role.toLowerCase(); // 🧼 Normalize casing
 
-  logger.info(`✅ Role "${role}" set by ${callerUID} for ${uid}`);
+  // ✅ 4. Apply custom claim
+  await admin.auth().setCustomUserClaims(uid, { role: normalizedRole });
+
+  // 🔄 5. Revoke refresh tokens so claim takes effect immediately
+  await admin.auth().revokeRefreshTokens(uid);
+
+  logger.info(`✅ ${callerUID} assigned role "${normalizedRole}" to UID: ${uid}`);
+
   return {
-    message: `✅ Role '${role}' successfully set for user ${uid}.`,
+    message: `✅ Custom claim set: ${uid} → ${normalizedRole}`,
   };
 });
 
-/*
-📝 index.js Notes
+// 🔁 Export staff creation function as well
+export { createStaffAccount };
 
-✅ Uses Firebase Callable Functions via `onCall` to avoid CORS issues.
-✅ Requires user to be logged in.
-✅ Enforces SuperAdmin-only permission using Firestore role check.
-✅ Sets custom user claims (used for route protection and UI gating).
-*/
+
+
+// 🧾 What the Code Does (Summary)
+// Initializes Firebase Admin SDK and Firestore connection.
+
+// Defines a simple helloWorld endpoint for test requests.
+
+// Defines a secure callable setCustomClaims function:
+
+// Requires authentication
+
+// Checks if caller is listed in superadmins collection with role "superadmin"
+
+// Assigns role to any user via custom claims in Firebase Auth
+
+// Revokes token to ensure updated claims apply immediately
+
+// Exports createStaffAccount from the external module

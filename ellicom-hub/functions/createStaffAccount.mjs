@@ -1,4 +1,3 @@
-// 🌍 Load environment variables from .env
 import 'dotenv/config';
 
 import { onCall } from 'firebase-functions/v2/https';
@@ -55,50 +54,63 @@ export const createStaffAccount = onCall(async (request) => {
   const { name, email, role, password: rawPassword, staffID: rawStaffID } = request.data;
   const callerUid = request.auth?.uid;
 
-  // 🔐 Must be logged in
   if (!callerUid) {
     throw new HttpsError("unauthenticated", "Authentication required.");
   }
 
-  // 🔐 Must be a superadmin
   const callerDoc = await db.collection("superadmins").doc(callerUid).get();
   if (!callerDoc.exists || callerDoc.data()?.role !== "superadmin") {
     throw new HttpsError("permission-denied", "Only SuperAdmins can create accounts.");
   }
 
-  // ⚙️ Use provided values or generate new ones
   const password = rawPassword || generatePassword();
   const staffID = rawStaffID || generateStaffID(name);
-  const referralCode = generateReferralCode(name); // ✅ Generate referral code
+  const referralCode = generateReferralCode(name);
 
-  // 📁 Determine Firestore collection
-  let collection = 'staff'; // default fallback
+  let collection = 'staff';
   if (role === 'admin') collection = 'admins';
   else if (role === 'client') collection = 'clients';
 
+  let userRecord;
+
   try {
-    // 👤 Create Firebase user
-    const userRecord = await admin.auth().createUser({
+    // 👤 Create Firebase Auth user
+    userRecord = await admin.auth().createUser({
       email,
       password,
       displayName: name,
     });
+  } catch (err) {
+    logger.error("❌ Firebase Auth creation failed:", err);
+    throw new HttpsError("internal", "Failed to create Firebase Auth user.");
+  }
 
+  try {
     // 🏷️ Assign custom claims
     await admin.auth().setCustomUserClaims(userRecord.uid, { role, staffID });
+  } catch (err) {
+    logger.error("❌ Setting custom claims failed:", err);
+    throw new HttpsError("internal", "Failed to assign custom user claims.");
+  }
 
-    // 🧾 Save profile in appropriate Firestore collection
+  try {
+    // 🧾 Save user profile in Firestore
     await db.collection(collection).doc(userRecord.uid).set({
       id: staffID,
       name,
       email,
       role,
-      referralCode, // ✅ Add to Firestore
+      referralCode,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       canChangePassword: true,
     });
+  } catch (err) {
+    logger.error("❌ Firestore write failed:", err);
+    throw new HttpsError("internal", "Failed to save user profile in Firestore.");
+  }
 
-    // 📧 Send credentials via email
+  try {
+    // 📧 Send account credentials to email
     await transporter.sendMail({
       from: `"Ellicom Hub" <${process.env.EMAIL_USER}>`,
       to: email,
@@ -115,43 +127,30 @@ export const createStaffAccount = onCall(async (request) => {
         <p>— Ellicom Hub Team</p>
       `,
     });
-
-    logger.info(`✅ ${role} account (${staffID}) created for ${email}`);
-    return { success: true, staffID, referralCode }; // ✅ Return in response
-  } catch (error) {
-    logger.error("❌ Error during account creation:", error);
-    throw new HttpsError("internal", error.message);
+  } catch (err) {
+    logger.error("❌ Email sending failed:", err);
+    throw new HttpsError("internal", "Account created, but failed to send email.");
   }
+
+  logger.info(`✅ ${role} account (${staffID}) created for ${email}`);
+  return { success: true, uid: userRecord.uid, staffID, referralCode };
 });
 
 
 
-/*
-📄 File: createStaffAccount.js
+// 🧾 What the Code Does (Summary)
+// Initializes Firebase Admin SDK and sets up email transporter.
 
-🧠 Purpose:
+// Defines utility functions to generate secure password, staff ID, and referral code.
 
-SuperAdmin creates Admin/Staff/Client accounts with full identity setup.
+// Checks that the request is from an authenticated SuperAdmin.
 
-Auto-generates Staff ID and Referral Code from name.
+// Creates a Firebase Auth user with the provided or generated credentials.
 
-Sends login credentials and referral code via email.
+// Sets custom user claims for role and staff ID.
 
-🔑 Key Features:
+// Saves the user profile to the appropriate Firestore collection.
 
-generateStaffID() → Generates a readable unique ID (e.g., Abraham123)
+// Sends the new credentials to the user’s email.
 
-generateReferralCode() → All name initials + 4-digit code (e.g., ABDT1234)
-
-referralCode saved in Firestore + included in welcome email
-
-Supports staff, admin, and client role creation
-
-Secure with SuperAdmin-only callable protection
-
-🛡️ Notes:
-
-Client onboarding will reuse same referral logic
-
-Referral code may be used later for internal reward tracking
-*/
+// Handles errors in isolated try/catch blocks for clearer debugging and failure tracking.

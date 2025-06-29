@@ -2,7 +2,7 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "type": "module",
-  "main": "index.js",
+  "main": "index.mjs",
   "scripts": {
     "lint": "eslint .",
     "serve": "firebase emulators:start --only functions",
