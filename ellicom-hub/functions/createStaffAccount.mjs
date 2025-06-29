@@ -26,6 +26,18 @@ function generateStaffID(name) {
   return `${prefix}${randomDigits}`;
 }
 
+// 🎟️ Generate referral code from all initials like "ABDT1234"
+function generateReferralCode(name) {
+  if (!name) return 'USER0000';
+  const initials = name
+    .trim()
+    .split(/\s+/)
+    .map(word => word[0]?.toUpperCase())
+    .join('');
+  const randomDigits = Math.floor(1000 + Math.random() * 9000);
+  return `${initials}${randomDigits}`;
+}
+
 // 📬 Email setup with Gmail
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -57,6 +69,7 @@ export const createStaffAccount = onCall(async (request) => {
   // ⚙️ Use provided values or generate new ones
   const password = rawPassword || generatePassword();
   const staffID = rawStaffID || generateStaffID(name);
+  const referralCode = generateReferralCode(name); // ✅ Generate referral code
 
   // 📁 Determine Firestore collection
   let collection = 'staff'; // default fallback
@@ -80,6 +93,7 @@ export const createStaffAccount = onCall(async (request) => {
       name,
       email,
       role,
+      referralCode, // ✅ Add to Firestore
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
       canChangePassword: true,
     });
@@ -95,6 +109,7 @@ export const createStaffAccount = onCall(async (request) => {
         <ul>
           <li><strong>Staff ID:</strong> ${staffID}</li>
           <li><strong>Temporary Password:</strong> ${password}</li>
+          <li><strong>Referral Code:</strong> ${referralCode}</li>
         </ul>
         <p>Please change your password on first login.</p>
         <p>— Ellicom Hub Team</p>
@@ -102,9 +117,41 @@ export const createStaffAccount = onCall(async (request) => {
     });
 
     logger.info(`✅ ${role} account (${staffID}) created for ${email}`);
-    return { success: true, staffID };
+    return { success: true, staffID, referralCode }; // ✅ Return in response
   } catch (error) {
     logger.error("❌ Error during account creation:", error);
     throw new HttpsError("internal", error.message);
   }
 });
+
+
+
+/*
+📄 File: createStaffAccount.js
+
+🧠 Purpose:
+
+SuperAdmin creates Admin/Staff/Client accounts with full identity setup.
+
+Auto-generates Staff ID and Referral Code from name.
+
+Sends login credentials and referral code via email.
+
+🔑 Key Features:
+
+generateStaffID() → Generates a readable unique ID (e.g., Abraham123)
+
+generateReferralCode() → All name initials + 4-digit code (e.g., ABDT1234)
+
+referralCode saved in Firestore + included in welcome email
+
+Supports staff, admin, and client role creation
+
+Secure with SuperAdmin-only callable protection
+
+🛡️ Notes:
+
+Client onboarding will reuse same referral logic
+
+Referral code may be used later for internal reward tracking
+*/
