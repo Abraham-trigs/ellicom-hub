@@ -49,7 +49,7 @@ function App() {
       <Routes>
         {/* 🌐 Public Routes */}
         <Route path="/" element={<WelcomePage />} />
-        <Route path="/Login" element={<WelcomePage />} />
+        <Route path="/Login" element={<SLPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
         <Route path="/unauthorized" element={<div className="text-red-600 p-4">🚫 Access Denied</div>} />
@@ -66,7 +66,6 @@ function App() {
         <Route path="/staff/dashboard" element={<SDashboard />} />
 
         {/* 🛡 SuperAdmin Pages */}
-        <Route path="/superadmin" element={<SuperDashBoard />} />
         <Route path="/superadmin/dashboard" element={<SuperDashBoard />} />
         <Route path="/superadmin/create-staff" element={<CreateStaffPage />} />
       </Routes>
