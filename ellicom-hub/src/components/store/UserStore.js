@@ -1,101 +1,110 @@
-// 🔐 useLoginStore.login() triggers signInWithEmailAndPassword
-// 🧠 It then calls useAuthenticStore.fetchUser()
-// 🧬 fetchUser() listens to Firebase auth and resolves role
-// 🔄 Both stores (AuthenticStore and UserStore) are synced
-// 🚀 UI everywhere can just use useUserStore() for reactive user info
-
 import { create } from 'zustand';
-import { doc, getDoc } from 'firebase/firestore';
-import { auth, db } from '../../lib/firebase';
-import useAuthenticStore from './AuthenticStore';
+import { persist } from 'zustand/middleware';
 
-const useUserStore = create((set) => ({
-  user: null,
-  role: null,
+const roleRedirectMap = {
+  superadmin: '/superadmin/dashboard',
+  admin: '/admin-home',
+  staff: '/staff-home',
+  client: '/client-home',
+  guest: '/guest-home',
+};
 
-  setUser: (user) => set({ user }),
-  setRole: (role) => set({ role }),
+const useUserStore = create(
+  persist(
+    (set, get) => ({
+      // 🧠 Core state for all users
+      user: null,       // Entire user object (incl. role, metadata)
+      role: null,
+      loading: false,
+      isAppReady: false,
+      error: null,
 
-  resetUser: () => set({ user: null, role: null }),
+      // 🔑 Login form state
+      email: '',
+      password: '',
 
-  /**
-   * 🧠 fetchUserAndRole – Fetch additional user data from Firestore
-   * Called after login or app init to sync profile data (like displayName)
-   */
+      // 🧰 Input handlers
+      setEmail: (val) => set({ email: val }),
+      setPassword: (val) => set({ password: val }),
 
-  fetchUserAndRole: async () => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) return;
+      // 📦 Manual user sync (e.g. from account creation)
+      setUser: (user) => {
+        const role = user?.role || 'guest';
+        set({ user, role, isAppReady: true });
+      },
 
-    const { uid } = currentUser;
-    const currentRole = useAuthenticStore.getState().role;
+      /**
+       * 🔓 Login with backend-authenticated user fetch
+       */
+      login: async (navigate) => {
+        const { email, password } = get();
+        set({ loading: true, error: null });
 
-    let userRef = null;
+        try {
+          const response = await fetch('http://localhost:5001/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password }),
+          });
 
-    // 🔍 Match role to specific Firestore collections
-    switch (currentRole) {
-      case 'client':
-        userRef = doc(db, 'clients', uid);
-        break;
-      case 'staff':
-        userRef = doc(db, 'staff', uid);
-        break;
-      case 'admin':
-        userRef = doc(db, 'admins', uid);
-        break;
-      case 'superadmin':
-        userRef = doc(db, 'superadmins', uid);
-        break;
-      case 'guest':
-        userRef = doc(db, 'guests', uid);
-        break;
-      default:
-        console.warn('⚠️ Unknown role:', currentRole);
-        return;
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || 'Login failed');
+
+          const user = result.user;
+          const role = user.role || 'guest';
+
+          // Store full user object
+          set({ user, role, isAppReady: true });
+
+          // Navigate
+          const redirectPath = roleRedirectMap[role] || '/unauthorized';
+          navigate(redirectPath);
+          return true;
+        } catch (err) {
+          set({ error: err.message });
+          return false;
+        } finally {
+          set({ loading: false });
+        }
+      },
+
+      /**
+       * 🧠 Boot/restore session from localStorage
+       */
+      initUser: () => {
+        const stored = get();
+        if (stored.user) {
+          set({ isAppReady: true });
+        }
+      },
+
+      /**
+       * 🔒 Logout + clear
+       */
+      logout: () => {
+        set({ user: null, role: null, isAppReady: false });
+        localStorage.clear();
+      },
+
+      // 🎯 Role helpers
+      hasRole: (roleOrRoles) => {
+        const role = get().role;
+        if (!role) return false;
+        return Array.isArray(roleOrRoles)
+          ? roleOrRoles.includes(role)
+          : role === roleOrRoles;
+      },
+
+      isGuest: () => {
+        const { user, role } = get();
+        return !user || role === 'guest';
+      },
+    }),
+    {
+      name: 'user-store',
+      partialize: (state) => ({ user: state.user, role: state.role }),
     }
-
-    try {
-      const snap = await getDoc(userRef);
-      if (snap.exists()) {
-        const data = snap.data();
-        set({ user: { ...currentUser, ...data }, role: data.role || currentRole });
-      } else {
-        console.warn(`⚠️ No document found for ${currentRole} at path: ${userRef.path}`);
-        set({ user: currentUser, role: currentRole });
-      }
-    } catch (err) {
-      console.error(' Firestore fetch error:', err);
-      set({ user: currentUser, role: currentRole });
-    }
-  },
-}));
+  )
+);
 
 export default useUserStore;
-
-
-//
-// 📦 useUserStore.js – Lightweight Reactive Store for UI
-//
-// 🔍 Purpose:
-//   - Holds `user` and `role` for global UI access (without constant re-fetching)
-//   - Used in navbars, dashboards, layouts, and conditional UI rendering
-//
-// 🧠 Fed by:
-//   - ✅ useAuthenticStore (on app init & auth state changes)
-//   - ✅ useLoginStore (after login success)
-//   - ✅ fetchUserAndRole(): Pulls extra Firestore profile data after login
-//
-// 📦 State:
-//   - user: Firebase user (extended with Firestore data like displayName, etc.)
-//   - role: One of 'staff', 'client', 'admin', 'superadmin', etc.
-//
-// 🔧 Actions:
-//   - setUser(user): Set the user object
-//   - setRole(role): Set the role string
-//   - resetUser(): Clears both user and role (on logout)
-//   - fetchUserAndRole(): Loads user profile data from Firestore and sets it
-//
-
-
-
-

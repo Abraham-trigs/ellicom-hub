@@ -1,8 +1,8 @@
-// src/UI/CLIENT-UI/CTLForm.jsx – Unified Client Login Form
+// src/UI/CLIENT-UI/CTLForm.jsx
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthenticStore from '../../store/AuthenticStore';
+import useUserStore from '../../store/UserStore'; // <-- Replace with your unified store
 
 const CTLForm = () => {
   const {
@@ -11,50 +11,44 @@ const CTLForm = () => {
     setEmail,
     setPassword,
     login,
-    setLoginType,
     loading,
     error,
-  } = useAuthenticStore();
+  } = useUserStore(); // <-- use the new unified store
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Mark this login type as 'client' to tell store which Firestore collection to use
-    setLoginType('client');
-  }, [setLoginType]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await login(navigate); // Handles full login + redirect
+
+    const result = await login(navigate);
+    if (!result) {
+      console.warn('❌ Login failed or invalid user object');
+    }
   };
 
   return (
     <div className="flex items-center justify-center px-4">
-      <form 
+      <form
         onSubmit={handleSubmit}
         className="w-full max-w-md p-6 rounded-2xl shadow-lg space-y-6"
       >
-        <div>
-          <input
-            type="email"
-            placeholder="Client Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
-          />
-        </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
+        />
 
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
-          />
-        </div>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
+        />
 
         {error && (
           <p className="text-red-600 text-sm text-center italic">{error}</p>
@@ -68,7 +62,7 @@ const CTLForm = () => {
           >
             {loading ? 'Loading...' : 'Enter'}
           </button>
-        </div>    
+        </div>
       </form>
     </div>
   );

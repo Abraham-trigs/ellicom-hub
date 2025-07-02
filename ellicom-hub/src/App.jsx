@@ -35,7 +35,7 @@ function App() {
 
   // 🔄 Load auth + Firestore user data on mount
   useEffect(() => {
-    initAuth();
+    initAuth(); 
   }, []);
 
   // 🧼 Remove splash/preloader once app is ready

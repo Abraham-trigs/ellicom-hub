@@ -76,7 +76,7 @@ const WelcomePage = () => {
       {/* Admin / Staff Login Button - Centered Horizontally */}
       <div onClick={StaffLogin} className="flex justify-center w-full">
         <button
-          className="hover:bg-coHead  hover:text-ground font-medium text-coHead px-8 py-3 border-high rounded-md"
+          className="hover:bg-darkSea  hover:text-coHead font-medium text-gold px-8 py-3 border-high rounded-md"
         >
           Admin / Staff
         </button>

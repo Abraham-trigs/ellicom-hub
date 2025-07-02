@@ -1,105 +1,57 @@
-import React, { useState } from 'react';
-import { functions } from '../../../lib/firebase';
-import { httpsCallable } from 'firebase/functions';
+import React from 'react';
 import { FiCopy } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
+import useCreateStaffAdminStore from '../../store/SuperAdminStore/CreateStaffAdminStore';
 
 const CreateStaffForm = () => {
-  const [form, setForm] = useState({ name: '', email: '', role: '' });
-  const [generated, setGenerated] = useState({ password: '', staffID: '' });
-  const [loading, setLoading] = useState(false);
-  const [showForm, setShowForm] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [feedback, setFeedback] = useState('');
-  const [copied, setCopied] = useState(false);
-
   const navigate = useNavigate();
 
-  // 🎭 Select role and show the form
-  const handleRoleClick = (role) => {
-    setForm({ name: '', email: '', role });
-    setGenerated({ password: '', staffID: '' });
-    setShowForm(true);
-    setShowModal(false);
-    setFeedback('');
-  };
+  const {
+    form,
+    generated,
+    loading,
+    feedback,
+    copied,
+    showForm,
+    showModal,
+    setRole,
+    setFormField,
+    previewCredentials,
+    handleCopy,
+    createAccount,
+    closeModal,
+  } = useCreateStaffAdminStore();
 
-  // ✏️ Track user input changes
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setFormField(e.target.name, e.target.value);
   };
 
-  // 📋 Copy helper
-  const handleCopy = (text) => {
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
-  // 👁️ Preview the generated credentials before creation
   const handlePreview = (e) => {
     e.preventDefault();
-    const password = Array(10)
-      .fill(0)
-      .map(() =>
-        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random() * 62))
-      )
-      .join('');
-    const prefix = form.name.split(' ')[0] || 'User';
-    const staffID = `${prefix}${Math.floor(100 + Math.random() * 900)}`;
-
-    setGenerated({ password, staffID });
-    setShowModal(true);
+    previewCredentials();
   };
 
-  // 🚀 Actually create the account via Firebase Cloud Function
-  const handleCreate = async () => {
-    setLoading(true);
-    try {
-      const createAccount = httpsCallable(functions, 'createStaffAccount');
-      await createAccount({
-        name: form.name,
-        email: form.email,
-        role: form.role,
-        password: generated.password,
-        staffID: generated.staffID,
-      });
-
-      setFeedback('✅ Account created and email sent. Redirecting...');
-      setShowModal(false);
-      setForm({ name: '', email: '', role: '' });
-
-      // Redirect after a delay
-      setTimeout(() => {
-        navigate('/superadmin/dashboard');
-      }, 2500);
-    } catch (err) {
-      setFeedback(`❌ ${err.message}`);
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  const handleCreate = () => {
+    createAccount(navigate);
   };
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded shadow relative">
-      {/* 🔘 Role Selector */}
       <div className="flex justify-between mb-4 gap-4">
         <button
           className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-1/2"
-          onClick={() => handleRoleClick('staff')}
+          onClick={() => setRole('staff')}
         >
           Create Staff
         </button>
         <button
           className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded w-1/2"
-          onClick={() => handleRoleClick('admin')}
+          onClick={() => setRole('admin')}
         >
           Create Admin
         </button>
       </div>
 
-      {/* 🧾 Form Fields */}
       {showForm && (
         <form onSubmit={handlePreview}>
           <h2 className="text-lg font-bold mb-3">New {form.role} Form</h2>
@@ -132,10 +84,10 @@ const CreateStaffForm = () => {
         </form>
       )}
 
-      {/* ✅ Feedback Message */}
-      {feedback && <p className="mt-4 text-sm text-center">{feedback}</p>}
+      {feedback && (
+        <p className="mt-4 text-sm text-center text-red-600">{feedback}</p>
+      )}
 
-      {/* 🔐 Preview Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-ground bg-opacity-40 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-sm relative">
@@ -144,7 +96,6 @@ const CreateStaffForm = () => {
               These credentials will be emailed to the staff. You may copy them now.
             </p>
 
-            {/* 🆔 Staff ID */}
             <div className="mb-3">
               <label className="block text-xs font-bold mb-1">Staff ID</label>
               <div className="relative">
@@ -162,7 +113,6 @@ const CreateStaffForm = () => {
               </div>
             </div>
 
-            {/* 🔐 Password */}
             <div className="mb-3">
               <label className="block text-xs font-bold mb-1">Password</label>
               <div className="relative">
@@ -180,10 +130,9 @@ const CreateStaffForm = () => {
               </div>
             </div>
 
-            {/* ✅ Action Buttons */}
             <div className="flex justify-end gap-2 mt-4">
               <button
-                onClick={() => setShowModal(false)}
+                onClick={closeModal}
                 className="bg-gray-300 hover:bg-gray-400 text-black px-4 py-2 rounded"
               >
                 Cancel

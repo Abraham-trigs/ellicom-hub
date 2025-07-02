@@ -1,7 +1,8 @@
 // src/UI/Staff-UI/SLForm.jsx
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthenticStore from '../../store/AuthenticStore';
+import useUserStore from '../../store/useUserStore';
 
 const SLForm = () => {
   const {
@@ -12,42 +13,41 @@ const SLForm = () => {
     login,
     loading,
     error,
-  } = useAuthenticStore();
+  } = useUserStore();
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = await login(navigate); // login function handles everything
+    const success = await login(navigate);
+    if (!success) {
+      console.warn('❌ Login failed or invalid credentials');
+    }
   };
 
   return (
     <div className="flex items-center justify-center px-4">
-      <form 
+      <form
         onSubmit={handleSubmit}
         className="w-full max-w-md p-6 rounded-2xl shadow-lg space-y-6"
       >
-        <div>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
-          />
-        </div>
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
+        />
 
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
-          />
-        </div>
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
+        />
 
         {error && (
           <p className="text-red-600 text-sm text-center italic">{error}</p>
@@ -61,28 +61,10 @@ const SLForm = () => {
           >
             {loading ? 'Loading...' : 'Enter'}
           </button>
-        </div>    
+        </div>
       </form>
     </div>
   );
 };
 
 export default SLForm;
-
-
-//
-// SLForm.jsx – Unified Login Form for Staff, Admin, and SuperAdmin
-//
-// 🔐 Purpose:
-//   - Handles login for all internal roles: 'superadmin', 'admin', 'staff'
-//
-// 🧠 Zustand Integration:
-//   - Uses useLoginStore for:
-//     - email, password, login(), loading, error
-//     - setLoginType(selectedRole) → determines which Firestore path to use
-//
-// 💡 Features:
-//   - Select role dropdown (ensures correct role resolution via Firestore)
-//   - Controlled input for email/password
-//   - Zustand login() redirects automatically after auth
-//
