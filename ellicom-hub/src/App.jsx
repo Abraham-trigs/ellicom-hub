@@ -1,7 +1,7 @@
-// src/App.jsx – Main Application Shell (Refactored with Unified Auth Store)
+// src/App.jsx – Login Routes Removed
 
 import React, { useEffect } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import useUserStore from './components/store/UserStore';
 // Layout
@@ -28,7 +28,7 @@ import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
 import CreateStaffPage from './components/pages/SuperAdminPages/CreateStaffPage';
 
 function App() {
-  const { isAppReady, loading, initUser, role } = useUserStore();
+  const { isAppReady, loading, initUser } = useUserStore();
 
   useEffect(() => {
     initUser();
@@ -49,54 +49,26 @@ function App() {
       <Routes>
         {/* 🌐 Public Routes */}
         <Route path="/" element={<WelcomePage />} />
+        <Route path="/Login" element={<WelcomePage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
         <Route path="/unauthorized" element={<div className="text-red-600 p-4">🚫 Access Denied</div>} />
 
-        {/* 👤 Client Auth */}
-        <Route path="/client/login" element={<CTLPage />} />
-        <Route
-          path="/client/*"
-          element={role === 'client' ? (
-            <Routes>
-              <Route path="dashboard" element={<CTJobList />} />
-              <Route path="job-card" element={<CTJobCard />} />
-              <Route path="add-job" element={<AddJobPage />} />
-              <Route path="joblist" element={<CTJobList />} />
-              <Route path="job/:id/details" element={<JobDetailsPage />} />
-            </Routes>
-          ) : (
-            <Navigate to="/client/login" />
-          )}
-        />
+        {/* 👤 Client Pages */}
+        <Route path="/client/dashboard" element={<CTJobList />} />
+        <Route path="/client/job-card" element={<CTJobCard />} />
+        <Route path="/client/add-job" element={<AddJobPage />} />
+        <Route path="/client/joblist" element={<CTJobList />} />
+        <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
 
-        {/* 🧰 Staff Auth */}
-        <Route path="/staff/login" element={<SLPage />} />
-        <Route
-          path="/staff/*"
-          element={['staff', 'admin'].includes(role) ? (
-            <Routes>
-              <Route path="home" element={<Home />} />
-              <Route path="dashboard" element={<SDashboard />} />
-            </Routes>
-          ) : (
-            <Navigate to="/staff/login" />
-          )}
-        />
+        {/* 🧰 Staff Pages */}
+        <Route path="/staff/home" element={<Home />} />
+        <Route path="/staff/dashboard" element={<SDashboard />} />
 
-        {/* 🛡 SuperAdmin Auth */}
-        <Route
-          path="/superadmin/*"
-          element={role === 'superadmin' ? (
-            <Routes>
-              <Route index element={<SuperDashBoard />} />
-              <Route path="dashboard" element={<SuperDashBoard />} />
-              <Route path="create-staff" element={<CreateStaffPage />} />
-            </Routes>
-          ) : (
-            <Navigate to="/unauthorized" />
-          )}
-        />
+        {/* 🛡 SuperAdmin Pages */}
+        <Route path="/superadmin" element={<SuperDashBoard />} />
+        <Route path="/superadmin/dashboard" element={<SuperDashBoard />} />
+        <Route path="/superadmin/create-staff" element={<CreateStaffPage />} />
       </Routes>
     </LayoutWithNav>
   );

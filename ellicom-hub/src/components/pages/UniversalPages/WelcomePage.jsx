@@ -3,21 +3,10 @@ import React from 'react';
 
 // UI Components
 import Logo from '../../UI/Universal-UI/logo';
-import ClientLoginButton from '../../UI/CLIENT-UI/CTLoginButton';
+import LoginButton from '../../UI/Universal-UI/LoginButton';
 import AvailableNow from '../../UI/Universal-UI/AvailableNow';
 
 const WelcomePage = () => {
-  const navigate = useNavigate();
-
-  // Navigation to Client Login Page
-  const ClientLogin = () => {
-    navigate('/Client/login');
-  };
-
-  // Navigation to Staff/Admin Login Page
-  const StaffLogin = () => {
-    navigate('/Staff/login');
-  };
 
   // Navigation to Guest Add Job Page
   const GuestAddJob = () => {
@@ -64,23 +53,12 @@ const WelcomePage = () => {
             New Job+
           </button>
 
-          <button
-            className="hover:bg-darkSea bgz bg-gold hover:text-coHead font-medium text-ground  px-8 py-3  border-high rounded-md mb-5"
-            onClick={ClientLogin}
-          >
-            Client
-          </button>
+            <LoginButton />
+
         </div>
       </div>
 
       {/* Admin / Staff Login Button - Centered Horizontally */}
-      <div onClick={StaffLogin} className="flex justify-center w-full">
-        <button
-          className="hover:bg-darkSea  hover:text-coHead font-medium text-gold px-8 py-3 border-high rounded-md"
-        >
-          Admin / Staff
-        </button>
-      </div>
 
       {/* Availability Badge */}
       <div className="mt-4 flex flex-col items-center justify-center">
