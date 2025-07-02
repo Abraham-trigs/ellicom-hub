@@ -1,33 +1,15 @@
 // src/pages/SuperAdmin/SuperDashBoard.jsx
-// 🛡️ Super Admin Dashboard – Role Overview + Secure Role Assignment UI
+// 🛡️ Super Admin Dashboard – Refactored with Unified Zustand Store
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Head from '../../UI/Universal-UI/Head';
 import SuperAdminSidebar from '../../UI/SuperAdmin-UI/SuperAdminSideBar';
-import useAuthenticStore from '../../store/AuthenticStore';
-import { assignCustomRole } from '../../../utils/firebaseRoleUtils'; // ✅ Correct role assign util
+import useUserStore from '../../store/UserStore';
 
 const SuperDashBoard = () => {
-  const { profile } = useAuthenticStore();
-  const firstName = profile?.displayName?.split(' ')[0] || 'SuperAdmin';
-
-  // 🔄 Role Form State
-  const [uid, setUid] = useState('');
-  const [role, setRole] = useState('staff');
-  const [message, setMessage] = useState('');
-
-  // 🚀 Role Assignment Handler
-  const handleAssign = async () => {
-    try {
-      const result = await assignCustomRole(uid, role);
-      setMessage(result);
-      setUid('');
-      setRole('staff');
-    } catch (err) {
-      setMessage(`❌ ${err.message}`);
-    }
-  };
+  const { user } = useUserStore();
+  const firstName = user?.displayName?.split(' ')[0] || 'SuperAdmin';
 
   return (
     <div className='border-gold border-b-1 h-23 mb-5'>
@@ -88,38 +70,11 @@ const SuperDashBoard = () => {
               View All Jobs
             </div>
           </Link>
-          <Link to="/superadmin/manage-roles">
+          <Link to="/guest/add-job">
             <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform">
-              Manage Roles
+              Guest Job Request
             </div>
           </Link>
-        </div>
-
-        {/* 🔐 Assign Role Panel */}
-        <div className="bg-white p-6 rounded-lg shadow-md max-w-xl">
-          <h2 className="text-lg font-semibold mb-2 text-head">Assign Role to User</h2>
-          <input
-            className="border p-2 rounded w-full mb-2"
-            placeholder="Enter User UID"
-            value={uid}
-            onChange={(e) => setUid(e.target.value)}
-          />
-          <select
-            className="border p-2 rounded w-full mb-2"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-          >
-            <option value="staff">Staff</option>
-            <option value="admin">Admin</option>
-            <option value="client">Client</option>
-          </select>
-          <button
-            className="bg-gold text-white px-4 py-2 rounded hover:opacity-90"
-            onClick={handleAssign}
-          >
-            Assign Role
-          </button>
-          {message && <p className="mt-2 text-sm text-blue-600">{message}</p>}
         </div>
       </div>
     </div>
@@ -129,11 +84,11 @@ const SuperDashBoard = () => {
 export default SuperDashBoard;
 
 /*
-📝 SuperDashBoard.jsx Summary
+📝 SuperDashBoard.jsx Summary (Updated)
 
-✅ Super Admin landing page showing stats and management actions.
-✅ Navigation tiles route to create/view staff, jobs, or roles.
-✅ Assign Role Panel updates user roles via Firebase callable functions.
-✅ Uses Zustand for reactive role-based UI (profile from useAuthenticStore).
-✅ "Create Staff" button navigates to the full CreateStaffForm at /superadmin/create-staff.
+✅ Uses unified Zustand store (useUserStore) instead of useAuthenticStore.
+✅ Sidebar and head components remain unchanged.
+✅ Role-based greeting powered by Zustand user state.
+✅ Removed deprecated "Assign Role" Firebase logic.
+✅ Replaced it with a placeholder action: "Guest Job Request".
 */

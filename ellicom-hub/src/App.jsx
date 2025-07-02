@@ -1,12 +1,9 @@
-// App.jsx – Main Application Shell (Refactored with Unified Auth Store)
+// src/App.jsx – Main Application Shell (Refactored with Unified Auth Store)
 
 import React, { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-import useAuthenticStore from './components/store/AuthenticStore';
-// Role Guard
-import RequireRole from './Routes/RequireRoles';
-
+import useUserStore from './components/store/UserStore';
 // Layout
 import LayoutWithNav from './components/UI/Universal-UI/LayoutWithNavBar';
 
@@ -31,20 +28,17 @@ import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
 import CreateStaffPage from './components/pages/SuperAdminPages/CreateStaffPage';
 
 function App() {
-  const { isAppReady, loading, initAuth } = useAuthenticStore();
+  const { isAppReady, loading, initUser, role } = useUserStore();
 
-  // 🔄 Load auth + Firestore user data on mount
   useEffect(() => {
-    initAuth(); 
+    initUser();
   }, []);
 
-  // 🧼 Remove splash/preloader once app is ready
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (isAppReady && preloader) preloader.remove();
   }, [isAppReady]);
 
-  // 🧯 Backup cleaner
   useEffect(() => {
     const preloader = document.getElementById('preloader');
     if (!loading && preloader) preloader.remove();
@@ -53,48 +47,56 @@ function App() {
   return (
     <LayoutWithNav>
       <Routes>
-
         {/* 🌐 Public Routes */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
         <Route path="/unauthorized" element={<div className="text-red-600 p-4">🚫 Access Denied</div>} />
-        
-
 
         {/* 👤 Client Auth */}
         <Route path="/client/login" element={<CTLPage />} />
         <Route
-          element={<RequireRole allowedRoles="client" redirectTo="/client/login" />}
-        >
-          <Route path="/client/job-card" element={<CTJobCard />} />
-          <Route path="/client/dashboard" element={<CTJobList />} />
-          <Route path="/client/add-job" element={<AddJobPage />} />
-          <Route path="/client/joblist" element={<CTJobList />} />
-          <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
-        </Route>
+          path="/client/*"
+          element={role === 'client' ? (
+            <Routes>
+              <Route path="dashboard" element={<CTJobList />} />
+              <Route path="job-card" element={<CTJobCard />} />
+              <Route path="add-job" element={<AddJobPage />} />
+              <Route path="joblist" element={<CTJobList />} />
+              <Route path="job/:id/details" element={<JobDetailsPage />} />
+            </Routes>
+          ) : (
+            <Navigate to="/client/login" />
+          )}
+        />
 
         {/* 🧰 Staff Auth */}
         <Route path="/staff/login" element={<SLPage />} />
         <Route
-          element={<RequireRole allowedRoles={['staff', 'admin']} redirectTo="/staff/login" />}
-        >
-          <Route path="/staff/home" element={<Home />} />
-          <Route path="/staff/dashboard" element={<SDashboard />} />
-        </Route>
+          path="/staff/*"
+          element={['staff', 'admin'].includes(role) ? (
+            <Routes>
+              <Route path="home" element={<Home />} />
+              <Route path="dashboard" element={<SDashboard />} />
+            </Routes>
+          ) : (
+            <Navigate to="/staff/login" />
+          )}
+        />
 
         {/* 🛡 SuperAdmin Auth */}
         <Route
-          element={<RequireRole allowedRoles="superadmin" redirectTo="/unauthorized" />}
-        >
-          <Route path="/superadmin" element={<SuperAdmin />}>
-            <Route index element={<SuperDashBoard />} />
-            <Route path="dashboard" element={<SuperDashBoard />} />
-            <Route path="/superadmin/create-staff" element={<CreateStaffPage />} />
-
-          </Route>
-        </Route>
-
+          path="/superadmin/*"
+          element={role === 'superadmin' ? (
+            <Routes>
+              <Route index element={<SuperDashBoard />} />
+              <Route path="dashboard" element={<SuperDashBoard />} />
+              <Route path="create-staff" element={<CreateStaffPage />} />
+            </Routes>
+          ) : (
+            <Navigate to="/unauthorized" />
+          )}
+        />
       </Routes>
     </LayoutWithNav>
   );

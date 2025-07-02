@@ -1,3 +1,5 @@
+// src/UI/SuperAdmin-UI/SSideBar.jsx
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -12,8 +14,6 @@ import {
 } from 'lucide-react';
 import ProfileAvatar from '../Universal-UI/ProfileAvatar';
 import useUserStore from '../../store/UserStore';
-import useAuthenticStore from '../../store/AuthenticStore';
-
 
 const navItems = [
   { label: 'Recent Jobs', Icon: Printer },
@@ -25,9 +25,8 @@ const navItems = [
 ];
 
 const SideNav = ({ isOpen, onClose }) => {
-  const { user } = useUserStore();
-  const { logout } = useAuthenticStore(); // ✅ NEW: Access logout
-  const displayName = user?.displayName || 'User';
+  const { user, logout } = useUserStore();
+  const displayName = user?.name || 'User';
   const photoURL = user?.photoURL || '';
 
   return (
@@ -61,7 +60,7 @@ const SideNav = ({ isOpen, onClose }) => {
             </button>
 
             <div className="flex flex-col flex-grow justify-center items-center -mt-10 text-center">
-              {/* 🔥 Avatar Section */}
+              {/* Avatar Section */}
               <ProfileAvatar name={displayName} photoURL={photoURL} size="w-20 h-20 mb-3" />
 
               {/* Display name */}
@@ -100,12 +99,12 @@ const SideNav = ({ isOpen, onClose }) => {
                 ))}
               </ul>
 
-              {/* 🚪 Logout */}
+              {/* Logout */}
               <div className="w-full mt-6">
                 <button
                   className="w-full flex items-center gap-3 px-3 py-2 text-red-600 dark:text-red-400 
                     hover:bg-red-100 dark:hover:bg-red-900 rounded transition"
-                  onClick={logout} // ✅ Connected to actual logout
+                  onClick={logout}
                 >
                   <LogOut className="w-5 h-5" />
                   Logout

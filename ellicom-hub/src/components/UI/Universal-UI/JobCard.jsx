@@ -1,11 +1,11 @@
 import React from 'react';
-import useAuthenticStore from '../../store/AuthenticStore'; // 👈 fetches user role
+import useUserStore from '../../store/UserStore';
 
 const JobCard = () => {
-  const { role } = useAuthenticStore();
+  const { role } = useUserStore();
 
   // ⛔ Only allow these roles to see and use JobCard
-  const allowedRoles = ['staff', 'admin', 'superadmin'];
+  const allowedRoles = ['staff', 'admin', 'superadmin', 'guest'];
 
   if (!allowedRoles.includes(role)) return null; // 🚫 Hide if not permitted
 
@@ -83,7 +83,7 @@ export default JobCard;
 
 🔐 Security:
 - Restricted visibility to roles: 'staff', 'admin', 'superadmin'.
-- Uses Zustand-authenticated role from useAuthenticStore.
+- Uses Zustand-authenticated role from useUserStore.
 
 🚫 Hidden for guests or clients by default.
 ✅ Ready for role-based workflow and dashboard integration.

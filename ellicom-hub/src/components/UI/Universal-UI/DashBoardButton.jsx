@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuthenticStore from '../../store/AuthenticStore';
+import useUserStore from '../../store/UserStore';
 
 /**
  * 📍 getDashboardPath – Resolves dashboard route based on user role
@@ -15,14 +15,14 @@ const getDashboardPath = (role) => {
     case 'admin':
       return '/admin/dashboard';
     case 'superadmin':
-      return '/superadmin/dashboard'; // ✅ Fixed
+      return '/superadmin/dashboard';
     default:
       return '/';
   }
 };
 
-const DashBoardButton = () => {
-  const { user, role } = useAuthenticStore();
+const DashBoardButton = ({ label = 'My Dashboard', className = '' }) => {
+  const { user, role } = useUserStore();
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -34,10 +34,9 @@ const DashBoardButton = () => {
     <div className="items-center justify-center">
       <button
         onClick={handleClick}
-        className="bg-high p-2 px-7 py-1 rounded-lg text-2xl text-center mb-0 text-ground
-        transition ease-in-out duration-100 hover:bg-high hover:scale-95"
+        className={`bg-high p-2 px-7 py-1 rounded-lg text-2xl text-center mb-0 text-ground transition ease-in-out duration-100 hover:bg-high hover:scale-95 ${className}`}
       >
-        My Dashboard
+        {label}
       </button>
     </div>
   );
@@ -52,9 +51,6 @@ export default DashBoardButton;
 - Shows a button that navigates users to their role-based dashboard.
 - Handles both authenticated and guest users.
 
-🔧 Fixes:
-- Added explicit path for `superadmin` → `/superadmin/dashboard`
-- Added `.toLowerCase()` safeguard to prevent casing issues in `role`
-
 ✅ Now fully supports: superadmin, admin, staff, client, and fallback to guest route.
+✨ Refactored to allow custom label and styling via props for reuse.
 */
