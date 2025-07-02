@@ -1,8 +1,8 @@
 import React from 'react';
 import Logo from '../../UI/Universal-UI/logo';
-import SLForm from '../../UI/Staff-UI/SLForm';
+import LoginForm from '../../UI/Universal-UI/LoginForm';
 
-const SLPage = () => {
+const LoginPage = () => {
   return (
     <>
       <div className='scale-80'>
@@ -26,16 +26,16 @@ const SLPage = () => {
 
         <div className='mt-15'>
           <p className='text-inactive font-normal italic text-center mt-(-4)'> 
-           Staff Login
+            Anything They Do, We Do it Better
           </p>
         </div>
       </div>
 
       <div className='-mt-7'>
-        <SLForm />
+        <LoginForm />
       </div>
     </>
   );
 };
 
-export default SLPage;
+export default LoginPage;

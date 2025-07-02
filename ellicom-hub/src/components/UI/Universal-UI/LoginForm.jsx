@@ -4,7 +4,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '../../store/UserStore';
 
-const SLForm = () => {
+const LoginForm = () => {
   const {
     email,
     password,
@@ -67,4 +67,4 @@ const SLForm = () => {
   );
 };
 
-export default SLForm;
+export default LoginForm;

@@ -12,19 +12,17 @@ import WelcomePage from './components/pages/UniversalPages/WelcomePage';
 import AddJobPage from './components/pages/UniversalPages/AddJobPage';
 import JobDetailsPage from './components/pages/UniversalPages/JobDetailsPage';
 import Home from './components/pages/UniversalPages/Home';
+import LoginPage from './components/pages/UniversalPages/LoginPage';
 
 // Client Pages
-import CTLPage from './components/pages/ClientPages/CTLPage';
 import CTJobCard from './components/UI/CLIENT-UI/CTJobCard';
 import CTJobList from './components/pages/ClientPages/CTJobList';
 
 // Staff Pages
-import SLPage from './components/pages/StaffPages/SLPage';
 import SDashboard from './components/pages/StaffPages/SDashboard';
 
 // SuperAdmin Pages
 import SuperDashBoard from './components/pages/SuperAdminPages/SuperDashBoard';
-import SuperAdmin from './components/pages/SuperAdminPages/SuperAdmin';
 import CreateStaffPage from './components/pages/SuperAdminPages/CreateStaffPage';
 
 function App() {
@@ -49,7 +47,7 @@ function App() {
       <Routes>
         {/* 🌐 Public Routes */}
         <Route path="/" element={<WelcomePage />} />
-        <Route path="/Login" element={<SLPage />} />
+        <Route path="/Login" element={<LoginPage />} />
         <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
         <Route path="/unauthorized" element={<div className="text-red-600 p-4">🚫 Access Denied</div>} />
