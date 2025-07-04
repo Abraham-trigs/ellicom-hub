@@ -41,7 +41,7 @@ const WelcomePage = () => {
       </div>
 
       {/* Guest + Client Buttons */}
-      <div className="">
+      <div className="flex flex-col items-center">
         <div className="flex flex-row justify-evenly gap-0">
           {/* <button
             className="hover:bg-darkSea bg-sea hover:text-coHead font-medium text-ground  px-3 py-3  border-neonSea rounded-md mb-5"
