@@ -1,15 +1,26 @@
-// src/pages/SuperAdmin/SuperDashBoard.jsx
-// 🛡️ Super Admin Dashboard – Refactored with Unified Zustand Store
-
-import React from 'react';
+// ✅ SuperDashBoard.jsx – Fully Zustand-Connected
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Head from '../../UI/Universal-UI/Head';
 import SuperAdminSidebar from '../../UI/SuperAdmin-UI/SuperAdminSideBar';
 import useUserStore from '../../store/UserStore';
 
 const SuperDashBoard = () => {
-  const { user } = useUserStore();
+  const {
+    user,
+    fetchAllUsers,
+    getAdminCount,
+    getStaffCount,
+    getClientCount,
+    getGuestCount,
+    getTotalUsers,
+  } = useUserStore();
+
   const firstName = user?.displayName?.split(' ')[0] || 'SuperAdmin';
+
+  useEffect(() => {
+    fetchAllUsers();
+  }, [fetchAllUsers]);
 
   return (
     <div className='border-gold border-b-1 h-23 mb-5'>
@@ -35,45 +46,29 @@ const SuperDashBoard = () => {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 mb-6">
-          <div className="bg-white p-4 rounded-lg shadow-md text-center">
-            <p className="text-sm text-container">Total Staff</p>
-            <p className="text-xl font-semibold text-high">14</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md text-center">
-            <p className="text-sm text-container">Pending Jobs</p>
-            <p className="text-xl font-semibold text-high">5</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md text-center">
-            <p className="text-sm text-container">Total Jobs</p>
-            <p className="text-xl font-semibold text-high">120</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg shadow-md text-center">
-            <p className="text-sm text-container">Admins</p>
-            <p className="text-xl font-semibold text-high">3</p>
-          </div>
+          {/* <StatCard label="Pending Jobs" value={getAdminCount()} />
+          <StatCard label="Total Jobs" value={getStaffCount()} /> */}
+
+          <StatCard label="Total Users" value={getTotalUsers()} />
+          <StatCard label="Admins" value={getAdminCount()} />
+          <StatCard label="Staffs" value={getStaffCount()} />
+          <StatCard label="Clients" value={getClientCount()} />
+          <StatCard label="Guests" value={getGuestCount()} />
         </div>
 
         {/* Navigation Tiles */}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
           <Link to="/superadmin/create-staff">
-            <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform cursor-pointer">
-              Create Account
-            </div>
+            <Tile label="Create Account" />
           </Link>
           <Link to="/superadmin/accounts">
-            <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform">
-              Accounts 
-            </div>
+            <Tile label="Accounts" />
           </Link>
           <Link to="/superadmin/all-jobs">
-            <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform">
-              View All Jobs
-            </div>
+            <Tile label="View All Jobs" />
           </Link>
           <Link to="/guest/add-job">
-            <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform">
-              Guest Job Request
-            </div>
+            <Tile label="Guest Job Request" />
           </Link>
         </div>
       </div>
@@ -81,14 +76,17 @@ const SuperDashBoard = () => {
   );
 };
 
+const StatCard = ({ label, value }) => (
+  <div className="bg-white p-4 rounded-lg shadow-md text-center">
+    <p className="text-sm text-container">{label}</p>
+    <p className="text-xl font-semibold text-high">{value}</p>
+  </div>
+);
+
+const Tile = ({ label }) => (
+  <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform cursor-pointer">
+    {label}
+  </div>
+);
+
 export default SuperDashBoard;
-
-/*
-📝 SuperDashBoard.jsx Summary (Updated)
-
-✅ Uses unified Zustand store (useUserStore) instead of useAuthenticStore.
-✅ Sidebar and head components remain unchanged.
-✅ Role-based greeting powered by Zustand user state.
-✅ Removed deprecated "Assign Role" Firebase logic.
-✅ Replaced it with a placeholder action: "Guest Job Request".
-*/

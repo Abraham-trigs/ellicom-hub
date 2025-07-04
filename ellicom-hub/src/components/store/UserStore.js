@@ -1,3 +1,4 @@
+// ✅ Zustand Store - useUserStore.js
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -12,34 +13,56 @@ const roleRedirectMap = {
 const useUserStore = create(
   persist(
     (set, get) => ({
-      // 🌍 Current logged-in user state
       user: null,
       role: null,
       isAppReady: false,
       loading: false,
       error: null,
 
-      // 🗃️ All users in system (admin, staff, client, guest)
-      allUsers: [],
-      userLoading: false,
-
-      // 🔐 Login form inputs
       email: '',
       password: '',
+      rememberMe: false,
 
-      // 🧰 Input updaters
       setEmail: (email) => set({ email }),
       setPassword: (password) => set({ password }),
+      setRememberMe: (rememberMe) => set({ rememberMe }),
 
-      // 🔐 Manual user setter (used post-creation)
       setUser: (user) => {
         const role = user?.role || 'guest';
         set({ user, role, isAppReady: true });
       },
 
-      // 🚪 Login + redirect
+      allUsers: [],
+      userLoading: false,
+
+      fetchAllUsers: async () => {
+        set({ userLoading: true });
+        try {
+          const res = await fetch('http://localhost:5001/users');
+          const data = await res.json();
+          set({ allUsers: data });
+        } catch (err) {
+          console.error('❌ fetchAllUsers error:', err);
+        } finally {
+          set({ userLoading: false });
+        }
+      },
+
+      deleteUser: async (userId) => {
+        const { fetchAllUsers } = get();
+        try {
+          const response = await fetch(`http://localhost:5001/users/${userId}`, {
+            method: 'DELETE',
+          });
+          if (!response.ok) throw new Error('Failed to delete user');
+          await fetchAllUsers();
+        } catch (err) {
+          console.error('❌ Delete failed:', err.message);
+        }
+      },
+
       login: async (navigate) => {
-        const { email, password } = get();
+        const { email, password, rememberMe } = get();
         set({ loading: true, error: null });
 
         try {
@@ -57,6 +80,12 @@ const useUserStore = create(
 
           set({ user, role, isAppReady: true });
 
+          if (rememberMe) {
+            localStorage.setItem('remember_user', JSON.stringify({ user, role }));
+          } else {
+            localStorage.removeItem('remember_user');
+          }
+
           const redirect = roleRedirectMap[role] || '/unauthorized';
           navigate(redirect);
           return true;
@@ -68,50 +97,28 @@ const useUserStore = create(
         }
       },
 
-      // 🔄 Fetch all registered accounts
-      fetchAllUsers: async () => {
-        set({ userLoading: true });
-        try {
-          const res = await fetch('http://localhost:5001/users');
-          const data = await res.json();
-          set({ allUsers: data });
-        } catch (err) {
-          console.error('❌ fetchAllUsers error:', err);
-        } finally {
-          set({ userLoading: false });
-        }
-      },
-
-      // Inside useUserStore
-      deleteUser: async (userId) => {
-        const { fetchAllUsers } = get();
-        try {
-          const response = await fetch(`http://localhost:5001/users/${userId}`, {
-            method: 'DELETE',
-          });
-
-          if (!response.ok) throw new Error('Failed to delete user');
-
-          // Refetch to update UI
-          await fetchAllUsers();
-        } catch (err) {
-          console.error('❌ Delete failed:', err.message);
-        }
-      },
-
-      // 🧠 Session restore
       initUser: () => {
-        const { user } = get();
-        if (user) set({ isAppReady: true });
+        const remembered = localStorage.getItem('remember_user');
+        if (remembered) {
+          const parsed = JSON.parse(remembered);
+          set({
+            user: parsed.user,
+            role: parsed.role,
+            isAppReady: true,
+            rememberMe: true,
+          });
+        } else {
+          const { user } = get();
+          if (user) set({ isAppReady: true });
+        }
       },
 
-      // 🚫 Full logout
       logout: () => {
-        set({ user: null, role: null, isAppReady: false });
+        set({ user: null, role: null, isAppReady: false, rememberMe: false });
+        localStorage.removeItem('remember_user');
         localStorage.clear();
       },
 
-      // 🔍 Role checkers
       hasRole: (roles) => {
         const { role } = get();
         return Array.isArray(roles) ? roles.includes(role) : role === roles;
@@ -121,12 +128,19 @@ const useUserStore = create(
         const { role, user } = get();
         return !user || role === 'guest';
       },
+
+      getAdminCount: () => get().allUsers.filter((u) => u.role === 'admin').length,
+      getStaffCount: () => get().allUsers.filter((u) => u.role === 'staff').length,
+      getClientCount: () => get().allUsers.filter((u) => u.role === 'client').length,
+      getGuestCount: () => get().allUsers.filter((u) => u.role === 'guest').length,
+      getTotalUsers: () => get().allUsers.length,
     }),
     {
       name: 'user-store',
       partialize: (state) => ({
         user: state.user,
         role: state.role,
+        rememberMe: state.rememberMe,
       }),
     }
   )

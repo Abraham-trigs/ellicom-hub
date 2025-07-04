@@ -8,8 +8,10 @@ const LoginForm = () => {
   const {
     email,
     password,
+    rememberMe,
     setEmail,
     setPassword,
+    setRememberMe,
     login,
     loading,
     error,
@@ -48,6 +50,19 @@ const LoginForm = () => {
           required
           className="w-full px-4 py-2 rounded-lg border-b-2 text-center border-inactive text-head focus:outline-none focus:ring-0 focus:border-gold"
         />
+
+        <div className="flex items-center justify-center space-x-2">
+          <input
+            id="remember"
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="form-checkbox h-4 w-4 text-gold focus:ring-0"
+          />
+          <label htmlFor="remember" className="text-sm text-coHead">
+            Remember Me
+          </label>
+        </div>
 
         {error && (
           <p className="text-red-600 text-sm text-center italic">{error}</p>
