@@ -48,11 +48,11 @@ function App() {
         {/* 🌐 Public Routes */}
         <Route path="/" element={<WelcomePage />} />
         <Route path="/Login" element={<LoginPage />} />
-        <Route path="/home" element={<Home />} />
         <Route path="/guest/add-job" element={<AddJobPage />} />
         <Route path="/unauthorized" element={<div className="text-red-600 p-4">🚫 Access Denied</div>} />
 
         {/* 👤 Client Pages */}
+        <Route path="/client/home" element={<Home />} />
         <Route path="/client/dashboard" element={<CTJobList />} />
         <Route path="/client/job-card" element={<CTJobCard />} />
         <Route path="/client/add-job" element={<AddJobPage />} />
@@ -61,9 +61,11 @@ function App() {
 
         {/* 🧰 Staff Pages */}
         <Route path="/staff/home" element={<Home />} />
+        <Route path="/staff/home" element={<Home />} />
         <Route path="/staff/dashboard" element={<SDashboard />} />
 
         {/* 🛡 SuperAdmin Pages */}
+        <Route path="/home" element={<Home />} />
         <Route path="/superadmin/dashboard" element={<SuperDashBoard />} />
         <Route path="/superadmin/create-staff" element={<CreateStaffPage />} />
       </Routes>

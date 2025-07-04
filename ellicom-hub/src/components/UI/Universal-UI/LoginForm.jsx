@@ -59,7 +59,7 @@ const LoginForm = () => {
             disabled={loading}
             className="flex items-center justify-center p-6 bg-sea hover:bg-high text-ground font-bold py-2 rounded-lg transition-all ease-in-out duration-200 -mt-6 focus:outline-none focus:ring-0"
           >
-            {loading ? 'Loading...' : 'Enter'}
+            {loading ? 'Signing in' : 'Enter'}
           </button>
         </div>
       </form>
