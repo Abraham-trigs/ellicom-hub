@@ -5,13 +5,10 @@ import React from 'react';
 import Logo from '../../UI/Universal-UI/logo';
 import LoginButton from '../../UI/Universal-UI/LoginButton';
 import AvailableNow from '../../UI/Universal-UI/AvailableNow';
+import JobCardButton from '../../UI/Universal-UI/JobCardButton';
 
 const WelcomePage = () => {
 
-  // Navigation to Guest Add Job Page
-  const GuestAddJob = () => {
-    navigate('/Guest/Add-Job');
-  };
 
   return (
     <>
@@ -46,14 +43,15 @@ const WelcomePage = () => {
       {/* Guest + Client Buttons */}
       <div className="">
         <div className="flex flex-row justify-evenly gap-0">
-          <button
+          {/* <button
             className="hover:bg-darkSea bg-sea hover:text-coHead font-medium text-ground  px-3 py-3  border-neonSea rounded-md mb-5"
-            onClick={GuestAddJob}
+            
           >
             New Job+
-          </button>
+          </button> */}
+          <JobCardButton />
 
-            <LoginButton />
+          <LoginButton />
 
         </div>
       </div>

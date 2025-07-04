@@ -56,22 +56,25 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={['client']} />}>
           <Route path="/client/home" element={<Home />} />
           <Route path="/client/dashboard" element={<CTJobList />} />
-          <Route path="/client/job-card" element={<CTJobCard />} />
-          <Route path="/client/add-job" element={<AddJobPage />} />
-          <Route path="/client/joblist" element={<CTJobList />} />
           <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
+          <Route path="/client/add-job" element={<AddJobPage />} />
+
         </Route>
 
         {/* 🧰 Staff Routes */}
         <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
           <Route path="/staff/home" element={<Home />} />
           <Route path="/staff/dashboard" element={<SDashboard />} />
+          <Route path="/staff/add-job" element={<Home />} />
+
         </Route>
       
         {/* 🧰 Admin Routes */}
         <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
           <Route path="/admin/home" element={<Home />} />
           <Route path="/admin/dashboard" element={<SDashboard />} />
+          <Route path="/admin/add-job" element={<AddJobPage />} />
+
         </Route>
 
 
@@ -80,6 +83,7 @@ function App() {
           <Route path="/superadmin/dashboard" element={<SuperDashBoard />} />
           <Route path="/superadmin/create-staff" element={<CreateStaffPage />} />
           <Route path="/superadmin/accounts" element={<AccountListPage />} />
+          <Route path="/superadmin/add-job" element={<AddJobPage />} />
         </Route>
 
         {/* 🏚 Fallback */}

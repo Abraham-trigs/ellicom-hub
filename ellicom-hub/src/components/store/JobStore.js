@@ -1,41 +1,39 @@
 import { create } from 'zustand';
+import useUserStore from './UserStore';
 
 const useJobStore = create((set, get) => ({
-  // 🔁 Job state
   jobs: [],
   loading: false,
   error: null,
 
-  // 🔁 Fetch all jobs from backend
+  // 🧠 Get jobs for the current user
+  userJobs: () => {
+    const { user, role } = useUserStore.getState();
+    const { jobs } = get();
+
+    if (!user) return [];
+
+    switch (role) {
+      case 'superadmin':
+        return jobs;
+      case 'admin':
+      case 'staff':
+        return jobs.filter((job) => job.assignedTo === user.id);
+      case 'client':
+        return jobs.filter((job) => job.createdBy === user.id);
+      case 'guest':
+        return jobs.filter((job) => job.createdBy === user?.id);
+      default:
+        return [];
+    }
+  },
+
   fetchJobs: async () => {
-    set({ loading: true, error: null });
+    set({ loading: true });
     try {
       const res = await fetch('http://localhost:5001/jobs');
       const data = await res.json();
       set({ jobs: data });
-    } catch (err) {
-      console.error('❌ Job fetch failed:', err);
-      set({ error: 'Failed to fetch jobs' });
-    } finally {
-      set({ loading: false });
-    }
-  },
-
-  // ➕ Create a new job
-  createJob: async (jobData) => {
-    set({ loading: true });
-    try {
-      const res = await fetch('http://localhost:5001/jobs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(jobData),
-      });
-
-      const newJob = await res.json();
-      if (!res.ok) throw new Error(newJob.error || 'Failed to create job');
-
-      set((state) => ({ jobs: [...state.jobs, newJob] }));
-      return newJob;
     } catch (err) {
       set({ error: err.message });
     } finally {
@@ -43,9 +41,28 @@ const useJobStore = create((set, get) => ({
     }
   },
 
-  // ✏️ Update a job
+  createJob: async (jobData) => {
+    const { user } = useUserStore.getState();
+    try {
+      const response = await fetch('http://localhost:5001/jobs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...jobData,
+          createdBy: user?.id,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Job creation failed');
+
+      const newJob = await response.json();
+      set((state) => ({ jobs: [...state.jobs, newJob] }));
+    } catch (err) {
+      console.error('❌ createJob error:', err.message);
+    }
+  },
+
   updateJob: async (jobId, updates) => {
-    set({ loading: true });
     try {
       const res = await fetch(`http://localhost:5001/jobs/${jobId}`, {
         method: 'PATCH',
@@ -53,50 +70,32 @@ const useJobStore = create((set, get) => ({
         body: JSON.stringify(updates),
       });
 
-      const updatedJob = await res.json();
-      if (!res.ok) throw new Error(updatedJob.error || 'Failed to update job');
+      if (!res.ok) throw new Error('Failed to update job');
 
+      const updated = await res.json();
       set((state) => ({
-        jobs: state.jobs.map((j) => (j.id === jobId ? updatedJob : j)),
+        jobs: state.jobs.map((j) => (j.id === jobId ? updated : j)),
       }));
     } catch (err) {
-      set({ error: err.message });
-    } finally {
-      set({ loading: false });
+      console.error('❌ updateJob error:', err.message);
     }
   },
 
-  // ❌ Delete a job
   deleteJob: async (jobId) => {
     try {
       const res = await fetch(`http://localhost:5001/jobs/${jobId}`, {
         method: 'DELETE',
       });
+
       if (!res.ok) throw new Error('Failed to delete job');
 
       set((state) => ({
         jobs: state.jobs.filter((j) => j.id !== jobId),
       }));
     } catch (err) {
-      console.error('Delete error:', err.message);
+      console.error('❌ deleteJob error:', err.message);
     }
   },
-
-  // 🧠 Role-aware selectors
-  getJobsByUser: (userId) =>
-    get().jobs.filter((job) => job.userId === userId),
-
-  getJobsAssignedToStaff: (staffId) =>
-    get().jobs.filter((job) => job.assignedTo === staffId),
-
-  getPendingJobs: () =>
-    get().jobs.filter((job) => job.status === 'pending'),
-
-  getCompletedJobs: () =>
-    get().jobs.filter((job) => job.status === 'completed'),
-
-  getJobById: (id) =>
-    get().jobs.find((job) => job.id === id),
 }));
 
 export default useJobStore;
