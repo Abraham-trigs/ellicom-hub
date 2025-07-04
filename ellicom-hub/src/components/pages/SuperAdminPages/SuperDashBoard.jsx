@@ -57,12 +57,12 @@ const SuperDashBoard = () => {
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
           <Link to="/superadmin/create-staff">
             <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform cursor-pointer">
-              Create Staff
+              Create Account
             </div>
           </Link>
-          <Link to="/superadmin/all-staff">
+          <Link to="/superadmin/accounts">
             <div className="bg-gold text-container p-4 rounded-lg shadow-md text-center hover:scale-95 transition-transform">
-              View All Staff
+              Accounts 
             </div>
           </Link>
           <Link to="/superadmin/all-jobs">

@@ -59,14 +59,7 @@ const Home = () => {
       <div className='w-50 h-50 bg-white rounded-full scale-150 -mt-53'></div>
     </div>
 
-
     </div>
-
-
-
-
-
-
     </>
   );
 };

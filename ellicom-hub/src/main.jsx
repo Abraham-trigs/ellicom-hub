@@ -4,6 +4,14 @@ import App from './App';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 
+if (process.env.NODE_ENV === 'development') {
+  (async () => {
+    const { worker } = await import('./mocks/browser');
+    worker.start();
+  })();
+}
+
+
 // 🧠 Create root and render React app
 const root = ReactDOM.createRoot(document.getElementById('root'));
 

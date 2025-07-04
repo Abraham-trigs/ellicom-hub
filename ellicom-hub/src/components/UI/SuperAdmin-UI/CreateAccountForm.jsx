@@ -1,9 +1,9 @@
 import React from 'react';
 import { FiCopy } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import useCreateStaffAdminStore from '../../store/SuperAdminStore/CreateStaffAdminStore';
+import useCreateAccountStore from '../../store/SuperAdminStore/CreateAccountStore';
 
-const CreateStaffForm = () => {
+const CreateAccountForm = () => {
   const navigate = useNavigate();
 
   const {
@@ -20,7 +20,7 @@ const CreateStaffForm = () => {
     handleCopy,
     createAccount,
     closeModal,
-  } = useCreateStaffAdminStore();
+  } = useCreateAccountStore();
 
   const handleChange = (e) => {
     setFormField(e.target.name, e.target.value);
@@ -39,16 +39,22 @@ const CreateStaffForm = () => {
     <div className="max-w-md mx-auto p-4 bg-white rounded shadow relative">
       <div className="flex justify-between mb-4 gap-4">
         <button
-          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-1/2"
+          className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded w-1/3"
           onClick={() => setRole('staff')}
         >
           Create Staff
         </button>
         <button
-          className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded w-1/2"
+          className="bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded w-1/3"
           onClick={() => setRole('admin')}
         >
           Create Admin
+        </button>
+        <button
+          className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded w-1/3"
+          onClick={() => setRole('client')}
+        >
+          Create Client
         </button>
       </div>
 
@@ -93,11 +99,11 @@ const CreateStaffForm = () => {
           <div className="bg-white rounded-lg p-6 shadow-lg w-full max-w-sm relative">
             <h3 className="text-lg font-bold mb-2">Confirm Account Details</h3>
             <p className="text-sm text-gray-600 mb-2">
-              These credentials will be emailed to the staff. You may copy them now.
+              These credentials will be emailed to the {form.role}. You may copy them now.
             </p>
 
             <div className="mb-3">
-              <label className="block text-xs font-bold mb-1">Staff ID</label>
+              <label className="block text-xs font-bold mb-1">ID</label>
               <div className="relative">
                 <input
                   type="text"
@@ -152,4 +158,4 @@ const CreateStaffForm = () => {
   );
 };
 
-export default CreateStaffForm;
+export default CreateAccountForm;

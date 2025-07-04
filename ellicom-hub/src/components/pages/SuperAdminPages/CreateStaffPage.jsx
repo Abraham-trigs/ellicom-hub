@@ -4,7 +4,7 @@
 import React from 'react';
 import SuperAdminSidebar from '../../UI/SuperAdmin-UI/SuperAdminSideBar';
 import Head from '../../UI/Universal-UI/Head';
-import CreateStaffForm from '../../UI/SuperAdmin-UI/CreateStaffForm';
+import CreateAccountForm from '../../UI/SuperAdmin-UI/CreateAccountForm';
 
 const CreateStaffPage = () => {
   return (
@@ -28,7 +28,7 @@ const CreateStaffPage = () => {
         <h1 className="text-2xl font-bold text-gold mb-6">Create New Staff or Admin</h1>
 
         {/* 🧾 Render Create Staff Form */}
-        <CreateStaffForm />
+        <CreateAccountForm />
       </div>
     </div>
   );

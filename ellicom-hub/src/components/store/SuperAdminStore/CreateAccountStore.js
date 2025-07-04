@@ -1,9 +1,8 @@
-// src/store/CreateStaffAdminStore.js
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-const useCreateStaffAdminStore = create(
+const useCreateAccountStore = create(
   persist(
     (set, get) => ({
       form: { name: '', email: '', role: '' },
@@ -111,4 +110,4 @@ const useCreateStaffAdminStore = create(
   )
 );
 
-export default useCreateStaffAdminStore;
+export default useCreateAccountStore;
