@@ -16,7 +16,20 @@ const PhotocopyRecorder = () => {
     <div className="mb-2 w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-sea rounded-2xl">
       <div>
         {/* Job Type Display */}
-        <div className="text-center text-coHead font-bold">{jobType}</div>
+        <div className="text-center text-coHead font-bold">
+
+          {/* jobType */}
+          {jobType} 
+
+          {/* sideType (Front / Front & Back ) */}
+          <span className='text-gold'> 
+            <span className='text-coHead'> (</span>
+
+            {/* main sideType Display */}
+            {displayedSide}
+            <span className='text-coHead'>)</span> 
+            </span>
+            </div>
 
         <div className="flex flex-row justify-center items-center scale-90">
           {/* Left Block: Price & Paper Size */}
@@ -35,36 +48,30 @@ const PhotocopyRecorder = () => {
 
           {/* Right Block: Qty & Total */}
           <div>
-            <div className="w-auto h-9 justify-center items-end mr-2 mt-2 bg-sea w-contain rounded-tr-md">
-              <div className="flex flex-row justify-between gap-5 scale-75 object-contain">
-                <div className="text-ground font-bold text-2xl w-20 h-12 text-center -ml-">
-                  {colorType || '—'}
-                </div>
+<div className="w-60 h-9 flex justify-between items-center px-4 mr-2 mt-2 bg-sea rounded-tr-md">
+  {/* Left: Color Type */}
+  <div className="text-ground font-bold w-auto">
+    {colorType || '—'}
+  </div>
 
-                {/* ✅ Display sideType clearly */}
-                <div className="text-ground text-2xl w-1.5 px-2 h-12 text-center whitespace-nowrap">
-                  {displayedSide}
-                </div>
+  {/* Right: Quantity */}
+  <div className="flex flex-row  text-ground  w-auto text-right">
+    QTY: <div className="text-container font-bold">{quantity}</div>
+  </div>
+</div>
 
-                {/* FILE UPLOAD */}
-                <div className="text-container font-bold text-2xl w-15 h-12 text-center">
-                  {/* File info here if needed */}
-                </div>
-              </div>
-            </div>
+<div className="w-60 h-9 flex justify-between items-center px-4 mr-2 bg-container rounded-br-md">
+  {/* Left: Label */}
+  <div className="text-sea font-bold text-xl">
+    Ghc:
+  </div>
 
-            <div className="w-auto h-9 justify-center items-end mr-2 bg-container w-contain rounded-br-md">
-              <div className="flex flex-row justify-between gap-10 scale-75 object-contain">
-                <div className="flex flex-row text-sea font-medium text-2xl w-auto h-12 text-center -ml-8">
-                  QTY: <span className="text-high font-bold text-2xl">{quantity}</span>
-                </div>
-
-                {/* Price */}
-                <div className="text-high text-right font-bold text-2xl h-12 w-1/2 w-contain -mr-3">
-                  {/* {amount} */}
-                </div>
-              </div>
-            </div>
+  {/* Right: Amount */}
+  <div className="text-high font-bold text-2xl">
+    7,000.00
+  </div>
+</div>
+            
           </div>
         </div>
       </div>
