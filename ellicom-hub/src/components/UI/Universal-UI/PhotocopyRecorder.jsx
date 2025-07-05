@@ -17,6 +17,8 @@ const PhotocopyRecorder = () => {
               <div className="text-center scale-130 mb-1 text-high font-bold">
                 2.00
               </div>
+              
+              {/* PAPER SIZE HERE  */}
               <div className="font-extrabold text-4xl text-center text-sea scale-90">
                 {paperSize}
               </div>
@@ -42,10 +44,11 @@ const PhotocopyRecorder = () => {
             <div className="w-auto h-9 justify-center items-end mr-2 bg-container w-contain rounded-br-md">
               <div className="flex flex-row justify-between gap-10 scale-75 object-contain">
                 <div className="text-sea font-medium text-2xl w-auto h-12 text-center -ml-8">
-                  QTY: <span className="text-high">{quantity}</span>
+                  QTY: 
                 </div>
                 <div className="text-high text-right font-bold text-2xl h-12 w-1/2 w-contain -mr-3">
-                  {(2 * quantity).toFixed(2)}
+                {quantity}
+
                 </div>
               </div>
             </div>

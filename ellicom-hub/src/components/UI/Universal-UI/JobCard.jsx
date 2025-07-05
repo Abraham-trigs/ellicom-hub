@@ -2,6 +2,7 @@ import React from 'react';
 import useUserStore from '../../store/UserStore';
 import useJobCardStore from '../../store/JobCardStore';
 import JobTypeModal from './JobCardModals/JobTypeModal';
+import PaperSizeModal from './JobCardModals/PaperSizeModal';
 
 const JobCard = () => {
   const { role, user } = useUserStore();
@@ -16,6 +17,10 @@ const JobCard = () => {
     color,
     side,
     fileAttached,
+    isPaperSizeModalOpen,
+    openPaperSizeModal,
+    closePaperSizeModal,
+    setPaperSize,
   } = useJobCardStore();
 
   const isJobSelected = Boolean(jobType);
@@ -36,12 +41,12 @@ const JobCard = () => {
             <div className="flex flex-row justify-between items-center gap-x-1 w-39 h-30 rounded-xl -ml-2 bg-high drop-shadow-sm shadow shadow-2xl scale-95">
               
               {/* Paper size */}
-              <div className="flex flex-row justify-center items-center m-1 w-18 h-26 rounded-md bg-ground border-1 drop-shadow-sm shadow shadow-md">
+              <div
+                onClick={isJobSelected ? openPaperSizeModal : undefined}
+                className="flex flex-row justify-center items-center m-1 w-18 h-26 rounded-md bg-ground border-1 drop-shadow-sm shadow shadow-md cursor-pointer"
+              >
                 <div className="flex flex-col justify-evenly items-center">
-                  <div className="text-center scale-130 mb-1 border-b-2 border-b-coHead text-coHead">Size</div>
-                  <div className="font-extrabold text-4xl text-center text-gold">
-                    {isJobSelected ? paperSize : '-'}
-                  </div>
+                  <div className="text-center font-semibold scale-130 mb-1 border-b-2 border-b-coHead text-coHead">Size</div>
                 </div>
               </div>
 
@@ -97,11 +102,17 @@ const JobCard = () => {
         </div>
       </div>
 
-      {/* Job Type Modal */}
+      {/* Modals */}
       <JobTypeModal
         open={isJobTypeModalOpen}
         onClose={closeModal}
         onSelect={setJobType}
+      />
+
+      <PaperSizeModal
+        open={isPaperSizeModalOpen}
+        onClose={closePaperSizeModal}
+        onSelect={setPaperSize}
       />
     </div>
   );

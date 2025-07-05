@@ -9,6 +9,7 @@ const useJobCardStore = create(set => ({
   fileAttached: false,
 
   isJobTypeModalOpen: false,
+  isPaperSizeModalOpen: false,
 
   // Setters
   setJobType: (type) => set({ jobType: type }),
@@ -24,6 +25,9 @@ const useJobCardStore = create(set => ({
   openModal: () => set({ isJobTypeModalOpen: true }),
   closeModal: () => set({ isJobTypeModalOpen: false }),
 
+  openPaperSizeModal: () => set({ isPaperSizeModalOpen: true }),
+  closePaperSizeModal: () => set({ isPaperSizeModalOpen: false }),
+
   // Reset to default
   resetJobCard: () => set({
     jobType: '',
@@ -33,6 +37,7 @@ const useJobCardStore = create(set => ({
     side: 'F / B',
     fileAttached: false,
     isJobTypeModalOpen: false,
+    isPaperSizeModalOpen: false,
   })
 }));
 
