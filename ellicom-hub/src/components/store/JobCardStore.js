@@ -12,6 +12,12 @@ const useJobCardStore = create(set => ({
   isPaperSizeModalOpen: false,
   isQuantityModalOpen: false,
 
+  // color type 
+  colorType: null,
+  setColorType: (type) => set({ colorType: type }),
+
+
+
   // Setters
   setJobType: (type) => set({ jobType: type }),
   setPaperSize: (size) => set({ paperSize: size }),

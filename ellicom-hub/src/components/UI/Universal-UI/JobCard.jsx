@@ -15,7 +15,6 @@ const JobCard = () => {
     setJobType,
     paperSize,
     quantity,
-    color,
     side,
     fileAttached,
     isPaperSizeModalOpen,
@@ -26,6 +25,8 @@ const JobCard = () => {
     openQuantityModal,
     closeQuantityModal,
     setQuantity,
+    colorType,
+    setColorType,
   } = useJobCardStore();
 
   const isJobSelected = Boolean(jobType);
@@ -65,7 +66,6 @@ const JobCard = () => {
                 </div>
                 <div onClick={isJobSelected ? openQuantityModal : undefined} className="flex flex-row justify-between items-center w-18 h-10 rounded-md bg-coHead">
                   <div
-                   
                     className="flex flex-row -ml-1 items-center w-10 h-12 rounded-md scale-75 font-bold bg-ground cursor-pointer"
                   >
                     <div className="mr-0.5 ml-1 text-coHead">
@@ -76,19 +76,34 @@ const JobCard = () => {
               </div>
             </div>
 
-            {/* Right: Color, Side, File */}
+
+            {/* additional informations  */}
+            {/* Color, Side, File */}
             <div className="flex flex-col justify-center items-center ml-1 w-30 h-25 rounded-2xl bg-high drop-shadow-sm shadow shadow-2xl">
               <div className="flex flex-row gap-x-2 justify-center items-center scale-90 mb-2 mt-3">
-                <div className="w-14 h-8 rounded-md bg-container text-center text-coHead flex justify-center items-center font-semibold">
-                  {isJobSelected ? 'Color' : '-'}
+
+                {/* color selections */}
+                <div
+                  onClick={() => setColorType('Color')}
+                  className={`w-14 h-8 rounded-md text-center flex justify-center items-center font-semibold cursor-pointer ${
+                    colorType === 'Color' ? 'bg-green-500 text-container' : 'bg-coHead text-ground'
+                  }`}
+                >
+                  Color
                 </div>
-                <div className="w-14 h-8 rounded-md bg-coHead text-center flex justify-center items-center font-semibold">
-                  {isJobSelected ? color : '-'}
+
+                <div
+                  onClick={() => setColorType('Black')}
+                  className={`w-14 h-8 rounded-md text-center flex justify-center items-center font-semibold cursor-pointer ${
+                    colorType === 'Black' ? 'bg-green-500 text-container' : 'bg-coHead text-ground'
+                  }`}
+                >
+                  Black
                 </div>
               </div>
               <div className="flex flex-row gap-x-2 justify-center items-center scale-90">
                 <div className="w-14 h-8 rounded-md bg-coHead font-bold text-center flex justify-center items-center">
-                  {isJobSelected ? side : '-'}
+                  F/B
                 </div>
                 <div className="w-14 h-8 rounded-md bg-green-500 text-container text-center flex justify-center items-center font-bold">
                   {isJobSelected && fileAttached ? 'File +' : '-'}

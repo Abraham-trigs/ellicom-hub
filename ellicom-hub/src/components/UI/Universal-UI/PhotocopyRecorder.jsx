@@ -2,7 +2,7 @@ import React from 'react';
 import useJobCardStore from '../../store/JobCardStore';
 
 const PhotocopyRecorder = () => {
-  const { jobType, paperSize, quantity } = useJobCardStore();
+  const { jobType, paperSize, quantity, colorType } = useJobCardStore();
 
   return (
     <div className="mb-2 w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-sea rounded-2xl">
@@ -30,7 +30,7 @@ const PhotocopyRecorder = () => {
             <div className="w-auto h-9 justify-center items-end mr-2 mt-2 bg-sea w-contain rounded-tr-md">
               <div className="flex flex-row justify-between gap-5 scale-75 object-contain">
                 <div className="text-ground font-bold text-2xl w-15 h-12 text-center">
-                  Black
+                  {colorType}
                 </div>
                 <div className="text-ground text-2xl w-15 h-12 text-center">
                   F/B
