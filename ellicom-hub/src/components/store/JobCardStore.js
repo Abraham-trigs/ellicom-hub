@@ -1,34 +1,45 @@
+// src/store/JobCardStore.js
+
 import { create } from 'zustand';
 
-const useJobCardStore = create(set => ({
+const useJobCardStore = create((set) => ({
+  // 📌 Core Job Data
   jobType: '',
   paperSize: 'A4',
   quantity: '',
   color: 'Black',
-  side: 'F / B',
+  colorType: null,
+  sideType: 'Front', // ✅ Default now explicitly 'Front'
   fileAttached: false,
 
+  // 📌 Modal States
   isJobTypeModalOpen: false,
   isPaperSizeModalOpen: false,
   isQuantityModalOpen: false,
 
-  // color type 
-  colorType: null,
-  setColorType: (type) => set({ colorType: type }),
-
-
-
-  // Setters
+  // 📌 Setters
   setJobType: (type) => set({ jobType: type }),
   setPaperSize: (size) => set({ paperSize: size }),
   setQuantity: (qty) => set({ quantity: qty }),
   setColor: (color) => set({ color }),
-  setSide: (side) => set({ side }),
   attachFile: () => set({ fileAttached: true }),
   detachFile: () => set({ fileAttached: false }),
 
-  // Modal Controls
-  toggleModal: () => set(state => ({ isJobTypeModalOpen: !state.isJobTypeModalOpen })),
+  // 📌 Color selection
+  setColorType: (type) => set({ colorType: type }),
+
+  // 📌 Side selection (✅ updated logic)
+  setSideType: (value) => set({ sideType: value }),
+  toggleSideType: () =>
+    set((state) => ({
+      sideType: state.sideType === 'Front & Back' ? 'Front' : 'Front & Back',
+    })),
+
+  // 📌 Modal Controls
+  toggleModal: () =>
+    set((state) => ({
+      isJobTypeModalOpen: !state.isJobTypeModalOpen,
+    })),
   openModal: () => set({ isJobTypeModalOpen: true }),
   closeModal: () => set({ isJobTypeModalOpen: false }),
 
@@ -38,18 +49,20 @@ const useJobCardStore = create(set => ({
   openQuantityModal: () => set({ isQuantityModalOpen: true }),
   closeQuantityModal: () => set({ isQuantityModalOpen: false }),
 
-  // Reset to default
-  resetJobCard: () => set({
-    jobType: '',
-    paperSize: 'A4',
-    quantity: '',
-    color: 'Black',
-    side: 'F / B',
-    fileAttached: false,
-    isJobTypeModalOpen: false,
-    isPaperSizeModalOpen: false,
-    isQuantityModalOpen: false,
-  })
+  // 📌 Reset entire form
+  resetJobCard: () =>
+    set({
+      jobType: '',
+      paperSize: 'A4',
+      quantity: '',
+      color: 'Black',
+      colorType: null,
+      sideType: 'Front', // ✅ also reset to 'Front'
+      fileAttached: false,
+      isJobTypeModalOpen: false,
+      isPaperSizeModalOpen: false,
+      isQuantityModalOpen: false,
+    }),
 }));
 
 export default useJobCardStore;

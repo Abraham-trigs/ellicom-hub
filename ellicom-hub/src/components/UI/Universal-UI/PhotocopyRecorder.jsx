@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useJobCardStore from '../../store/JobCardStore';
 
 const PhotocopyRecorder = () => {
-  const { jobType, paperSize, quantity, colorType } = useJobCardStore();
+  const { jobType, paperSize, quantity, colorType, sideType } = useJobCardStore();
+
+  // ✅ Ensure sideType always renders something meaningful
+  const displayedSide = sideType === 'Front & Back' ? 'Front & Back' : 'Front';
+
+  // 🔍 Debug check to ensure reactivity works
+  useEffect(() => {
+    console.log('🔁 sideType updated in PhotocopyRecorder:', sideType);
+  }, [sideType]);
 
   return (
     <div className="mb-2 w-contain ml-1 mr-1 w-70 h-contain bg-darkSea border-2 border-sea rounded-2xl">
@@ -17,8 +25,8 @@ const PhotocopyRecorder = () => {
               <div className="text-center scale-130 mb-1 text-high font-bold">
                 2.00
               </div>
-              
-              {/* PAPER SIZE HERE  */}
+
+              {/* PAPER SIZE HERE */}
               <div className="font-extrabold text-4xl text-center text-sea scale-90">
                 {paperSize}
               </div>
@@ -29,12 +37,16 @@ const PhotocopyRecorder = () => {
           <div>
             <div className="w-auto h-9 justify-center items-end mr-2 mt-2 bg-sea w-contain rounded-tr-md">
               <div className="flex flex-row justify-between gap-5 scale-75 object-contain">
-                <div className="text-ground font-bold text-2xl w-15 h-12 text-center">
-                  {colorType}
+                <div className="text-ground font-bold text-2xl w-20 h-12 text-center -ml-">
+                  {colorType || '—'}
                 </div>
-                <div className="text-ground text-2xl w-15 h-12 text-center">
-                  F/B
+
+                {/* ✅ Display sideType clearly */}
+                <div className="text-ground text-2xl w-1.5 px-2 h-12 text-center whitespace-nowrap">
+                  {displayedSide}
                 </div>
+
+                {/* FILE UPLOAD */}
                 <div className="text-container font-bold text-2xl w-15 h-12 text-center">
                   {/* File info here if needed */}
                 </div>
@@ -44,13 +56,12 @@ const PhotocopyRecorder = () => {
             <div className="w-auto h-9 justify-center items-end mr-2 bg-container w-contain rounded-br-md">
               <div className="flex flex-row justify-between gap-10 scale-75 object-contain">
                 <div className="flex flex-row text-sea font-medium text-2xl w-auto h-12 text-center -ml-8">
-                  QTY: <span className='text-high font-bold text-2xl' >{quantity}</span> 
+                  QTY: <span className="text-high font-bold text-2xl">{quantity}</span>
                 </div>
 
                 {/* Price */}
                 <div className="text-high text-right font-bold text-2xl h-12 w-1/2 w-contain -mr-3">
-                {/* {amount} */}
-
+                  {/* {amount} */}
                 </div>
               </div>
             </div>

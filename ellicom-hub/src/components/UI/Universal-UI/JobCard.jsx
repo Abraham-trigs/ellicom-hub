@@ -15,6 +15,7 @@ const JobCard = () => {
     setJobType,
     paperSize,
     quantity,
+    color,
     side,
     fileAttached,
     isPaperSizeModalOpen,
@@ -27,6 +28,8 @@ const JobCard = () => {
     setQuantity,
     colorType,
     setColorType,
+    sideType,
+    toggleSideType,
   } = useJobCardStore();
 
   const isJobSelected = Boolean(jobType);
@@ -102,7 +105,12 @@ const JobCard = () => {
                 </div>
               </div>
               <div className="flex flex-row gap-x-2 justify-center items-center scale-90">
-                <div className="w-14 h-8 rounded-md bg-coHead font-bold text-center flex justify-center items-center">
+                <div
+                  onClick={toggleSideType}
+                  className={`w-14 h-8 rounded-md text-center flex justify-center items-center font-bold cursor-pointer ${
+                    sideType === 'Front & Back' ? 'bg-green-500 text-container' : 'bg-coHead text-ground'
+                  }`}
+                >
                   F/B
                 </div>
                 <div className="w-14 h-8 rounded-md bg-green-500 text-container text-center flex justify-center items-center font-bold">
