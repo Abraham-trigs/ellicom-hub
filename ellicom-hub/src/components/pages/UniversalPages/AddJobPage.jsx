@@ -30,7 +30,6 @@ const  AddJobPage= () => {
      
         <div>
           < JobCard />
-          {/* <div className=' flex flex-col w-contain border border-t-0.5 border-sea mb-2 '></div> */}
           <JobRecorder />
         </div>
       </div>

@@ -58,15 +58,13 @@ function App() {
           <Route path="/client/dashboard" element={<CTJobList />} />
           <Route path="/client/job/:id/details" element={<JobDetailsPage />} />
           <Route path="/client/add-job" element={<AddJobPage />} />
-
         </Route>
 
         {/* 🧰 Staff Routes */}
         <Route element={<ProtectedRoute allowedRoles={['staff']} />}>
           <Route path="/staff/home" element={<Home />} />
           <Route path="/staff/dashboard" element={<SDashboard />} />
-          <Route path="/staff/add-job" element={<Home />} />
-
+          <Route path="/staff/add-job" element={<AddJobPage />} />
         </Route>
       
         {/* 🧰 Admin Routes */}
