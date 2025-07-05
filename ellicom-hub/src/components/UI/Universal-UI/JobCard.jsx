@@ -3,6 +3,7 @@ import useUserStore from '../../store/UserStore';
 import useJobCardStore from '../../store/JobCardStore';
 import JobTypeModal from './JobCardModals/JobTypeModal';
 import PaperSizeModal from './JobCardModals/PaperSizeModal';
+import QuantityModal from './JobCardModals/QuantityModal';
 
 const JobCard = () => {
   const { role, user } = useUserStore();
@@ -21,6 +22,10 @@ const JobCard = () => {
     openPaperSizeModal,
     closePaperSizeModal,
     setPaperSize,
+    isQuantityModalOpen,
+    openQuantityModal,
+    closeQuantityModal,
+    setQuantity,
   } = useJobCardStore();
 
   const isJobSelected = Boolean(jobType);
@@ -58,12 +63,14 @@ const JobCard = () => {
                 >
                   {isJobSelected ? 'Selected' : 'Job Type'}
                 </div>
-                <div className="flex flex-row justify-between items-center w-18 h-10 rounded-md bg-coHead">
-                  <div className="flex flex-row -ml-1 items-center w-10 h-12 rounded-md scale-75 font-bold bg-ground">
-                    <div className="mr-0.5 ml-1 text-coHead">QTY</div>
-                  </div>
-                  <div className="text-center text-2xl font-bold text-red-600 scale-90 mr-3">
-                    {isJobSelected ? quantity : '-'}
+                <div onClick={isJobSelected ? openQuantityModal : undefined} className="flex flex-row justify-between items-center w-18 h-10 rounded-md bg-coHead">
+                  <div
+                   
+                    className="flex flex-row -ml-1 items-center w-10 h-12 rounded-md scale-75 font-bold bg-ground cursor-pointer"
+                  >
+                    <div className="mr-0.5 ml-1 text-coHead">
+                      QTY
+                    </div>
                   </div>
                 </div>
               </div>
@@ -113,6 +120,12 @@ const JobCard = () => {
         open={isPaperSizeModalOpen}
         onClose={closePaperSizeModal}
         onSelect={setPaperSize}
+      />
+
+      <QuantityModal
+        open={isQuantityModalOpen}
+        onClose={closeQuantityModal}
+        onSelect={setQuantity}
       />
     </div>
   );

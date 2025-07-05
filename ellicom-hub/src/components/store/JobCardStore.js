@@ -3,13 +3,14 @@ import { create } from 'zustand';
 const useJobCardStore = create(set => ({
   jobType: '',
   paperSize: 'A4',
-  quantity: 50,
+  quantity: '',
   color: 'Black',
   side: 'F / B',
   fileAttached: false,
 
   isJobTypeModalOpen: false,
   isPaperSizeModalOpen: false,
+  isQuantityModalOpen: false,
 
   // Setters
   setJobType: (type) => set({ jobType: type }),
@@ -28,16 +29,20 @@ const useJobCardStore = create(set => ({
   openPaperSizeModal: () => set({ isPaperSizeModalOpen: true }),
   closePaperSizeModal: () => set({ isPaperSizeModalOpen: false }),
 
+  openQuantityModal: () => set({ isQuantityModalOpen: true }),
+  closeQuantityModal: () => set({ isQuantityModalOpen: false }),
+
   // Reset to default
   resetJobCard: () => set({
     jobType: '',
     paperSize: 'A4',
-    quantity: 50,
+    quantity: '',
     color: 'Black',
     side: 'F / B',
     fileAttached: false,
     isJobTypeModalOpen: false,
     isPaperSizeModalOpen: false,
+    isQuantityModalOpen: false,
   })
 }));
 

@@ -43,11 +43,13 @@ const PhotocopyRecorder = () => {
 
             <div className="w-auto h-9 justify-center items-end mr-2 bg-container w-contain rounded-br-md">
               <div className="flex flex-row justify-between gap-10 scale-75 object-contain">
-                <div className="text-sea font-medium text-2xl w-auto h-12 text-center -ml-8">
-                  QTY: 
+                <div className="flex flex-row text-sea font-medium text-2xl w-auto h-12 text-center -ml-8">
+                  QTY: <span className='text-high font-bold text-2xl' >{quantity}</span> 
                 </div>
+
+                {/* Price */}
                 <div className="text-high text-right font-bold text-2xl h-12 w-1/2 w-contain -mr-3">
-                {quantity}
+                {/* {amount} */}
 
                 </div>
               </div>
